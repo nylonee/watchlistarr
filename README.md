@@ -1,11 +1,11 @@
 Build the docker image:
 ```
-docker build -t nylonee/api-template .
+docker build -t nylonee/watchlistarr:latest -f docker/Dockerfile .
 ```
 
 Run the docker image:
 ```
-docker run -p8080:8080 nylonee/api-template
+docker run nylonee/watchlistarr
 ```
 
 Run the sbt version:
@@ -17,4 +17,4 @@ Make a fat jar:
 ```
 sbt assembly
 ```
-(look in target/scala-2.13/api-template-assembly-VERSION.jar)
+(look in target/scala-2.13/watchlistarr-assembly-VERSION.jar)

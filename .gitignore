@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Environment file for local variables
+.env
+
 *.txt
 
 ### IntelliJ IDEA ###
