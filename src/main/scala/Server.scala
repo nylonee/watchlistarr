@@ -1,8 +1,6 @@
 
 import cats.effect._
 
-import scala.concurrent.duration._
-
 object Server extends IOApp {
 
   val config = new Configuration
@@ -11,7 +9,7 @@ object Server extends IOApp {
 
     def periodicTask: IO[Unit] =
       WatchlistSync.run(config) >>
-        IO.sleep(2.seconds) >>
+        IO.sleep(config.refreshInterval) >>
         periodicTask
 
     periodicTask.foreverM.as(ExitCode.Success)
