@@ -7,8 +7,11 @@ import io.circe.generic.auto._
 import org.http4s.circe.CirceEntityDecoder._
 import io.circe.syntax._
 import model._
+import org.slf4j.LoggerFactory
 
 object WatchlistSync {
+
+  private val logger = LoggerFactory.getLogger(getClass)
   def run(config: Configuration): IO[Unit] = {
 
     for {
@@ -38,11 +41,11 @@ object WatchlistSync {
     ArrUtils.getToArr(baseUrl, apiKey, "movie").map {
       case Right(res) =>
         res.as[List[RadarrMovie]].getOrElse {
-          println("Unable to fetch movies from Radarr - decoding failure. Returning empty list instead")
+          logger.warn("Unable to fetch movies from Radarr - decoding failure. Returning empty list instead")
           List.empty
         }
       case Left(err) =>
-        println(s"Received error while trying to fetch movies from Radarr: $err")
+        logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
         throw err
     }
 
@@ -50,11 +53,11 @@ object WatchlistSync {
     ArrUtils.getToArr(baseUrl, apiKey, "series").map {
       case Right(res) =>
         res.as[List[SonarrSeries]].getOrElse {
-          println("Unable to fetch series from Sonarr - decoding failure. Returning empty list instead")
+          logger.warn("Unable to fetch series from Sonarr - decoding failure. Returning empty list instead")
           List.empty
         }
       case Left(err) =>
-        println(s"Received error while trying to fetch movies from Radarr: $err")
+        logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
         throw err
     }
 
@@ -72,16 +75,16 @@ object WatchlistSync {
 
       (watchlistIds.exists(allIds.contains), watchlistedItem.category) match {
         case (true, c) =>
-          println(s"$c \"${watchlistedItem.title}\" already exists in Sonarr/Radarr")
+          logger.debug(s"$c \"${watchlistedItem.title}\" already exists in Sonarr/Radarr")
           IO.unit
         case (false, "show") =>
-          println(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
+          logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
           addToSonarr(config)(watchlistedItem)
         case (false, "movie") =>
-          println(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
+          logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
           addToRadarr(config)(watchlistedItem)
         case (false, c) =>
-          println(s"Found $c \"${watchlistedItem.title}\", but I don't recognize the category")
+          logger.warn(s"Found $c \"${watchlistedItem.title}\", but I don't recognize the category")
           IO.unit
       }
     }.toList.sequence.map(_.toSet)
@@ -101,9 +104,9 @@ object WatchlistSync {
 
     ArrUtils.postToArr(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson).map {
       case Right(_) =>
-        println(s"Successfully added movie")
+        logger.info(s"Successfully added movie ${item.title} to Radarr")
       case Left(err) =>
-        println(s"Failed to add movie: $err")
+        logger.error(s"Failed to add movie ${item.title}: $err")
     }
   }
 
@@ -120,9 +123,9 @@ object WatchlistSync {
 
     ArrUtils.postToArr(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson).map {
       case Right(_) =>
-        println(s"Successfully added show")
+        logger.info(s"Successfully added show ${item.title} to Sonarr")
       case Left(err) =>
-        println(s"Failed to add show: $err")
+        logger.info(s"Failed to add show ${item.title}: $err")
     }
   }
 

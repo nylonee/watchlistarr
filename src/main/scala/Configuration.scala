@@ -2,10 +2,13 @@ import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import model.QualityProfile
 import io.circe.generic.auto._
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 
 class Configuration {
+
+  private val logger = LoggerFactory.getLogger(getClass)
 
   val refreshInterval: FiniteDuration = getConfigOption("interval.seconds").flatMap(_.toIntOption).getOrElse(60).seconds
 
@@ -23,12 +26,14 @@ class Configuration {
 
     ArrUtils.getToArr(url, apiKey, "qualityprofile").map {
       case Right(res) =>
-        println("Successfully connected to Sonarr")
+        logger.info("Successfully connected to Sonarr")
         val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
         val chosenQualityProfile = getConfigOption("sonarr.qualityProfile")
         (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile))
       case Left(err) =>
-        throw new IllegalArgumentException(s"Unable to connect to Sonarr at $url, with error $err")
+        val message = s"Unable to connect to Sonarr at $url, with error $err"
+        logger.error(message)
+        throw new IllegalArgumentException(message)
     }
   }
 
@@ -38,30 +43,34 @@ class Configuration {
 
     ArrUtils.getToArr(url, apiKey, "qualityprofile").map {
       case Right(res) =>
-        println("Successfully connected to Radarr")
+        logger.info("Successfully connected to Radarr")
         val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
         val chosenQualityProfile = getConfigOption("radarr.qualityProfile")
         (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile))
       case Left(err) =>
-        throw new IllegalArgumentException(s"Unable to connect to Radarr at $url, with error $err")
+        val message = s"Unable to connect to Radarr at $url, with error $err"
+        logger.error(message)
+        throw new IllegalArgumentException(message)
     }
   }
 
   private def getQualityProfileId(allProfiles: List[QualityProfile], maybeEnvVariable: Option[String]): Int =
     (allProfiles, maybeEnvVariable) match {
       case (Nil, _) =>
-        println("Could not find any quality profiles defined, check your Sonarr/Radarr settings")
+        logger.error("Could not find any quality profiles defined, check your Sonarr/Radarr settings")
         throw new IllegalArgumentException("Unable to fetch quality profiles from Sonarr or Radarr")
       case (List(one), _) =>
-        println(s"Only one quality profile defined: ${one.name}")
+        logger.debug(s"Only one quality profile defined: ${one.name}")
         one.id
       case (_, None) =>
-        println("Multiple quality profiles found, selecting the first one in the list.")
+        logger.debug("Multiple quality profiles found, selecting the first one in the list.")
         allProfiles.head.id
       case (_, Some(profileName)) =>
-        allProfiles.find(_.name.toLowerCase == profileName.toLowerCase).map(_.id).getOrElse(
-          throw new IllegalArgumentException(s"Unable to find quality profile $profileName. Possible values are $allProfiles")
-        )
+        allProfiles.find(_.name.toLowerCase == profileName.toLowerCase).map(_.id).getOrElse {
+          val message = s"Unable to find quality profile $profileName. Possible values are $allProfiles"
+          logger.error(message)
+          throw new IllegalArgumentException(message)
+        }
     }
 
   private def getPlexWatchlistUrls: List[String] =
@@ -71,12 +80,14 @@ class Configuration {
     ).toList.collect {
       case Some(url) => url
     } match {
-      case Nil => throw new IllegalArgumentException("Missing plex watchlist URL")
+      case Nil =>
+        logger.error("Missing plex watchlist URL")
+        throw new IllegalArgumentException("Missing plex watchlist URL")
       case ok => ok
     }
 
   private def getConfig(key: String): String = getConfigOption(key).getOrElse {
-    println(s"Unable to find configuration for $key, have you set the environment variable?")
+    logger.error(s"Unable to find configuration for $key, have you set the environment variable?")
     throw new IllegalArgumentException(s"Missing argument for $key")
   }
 

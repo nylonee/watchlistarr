@@ -1,5 +1,7 @@
 # Watchlistarr
 
+<img src="watchlistarr.png" alt="Alternate Text" width="240"/>
+
 Sync plex watchlists in realtime with Sonarr and Radarr. **Requires Plex Pass**
 
 ## Getting Started

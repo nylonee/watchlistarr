@@ -15,10 +15,12 @@ val fs2Version = "3.7.0"
 val circeVersion = "0.14.5"
 val circeGenericExtrasVersion = "0.14.3"
 val scalatestVersion = "3.2.15"
+val slf4jVersion = "2.0.9"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-library" % scalaVersion.value % "provided",
   "ch.qos.logback" % "logback-classic" % logbackVersion,
+  "org.slf4j" % "slf4j-api" % slf4jVersion,
   "org.http4s" %% "http4s-ember-client" % http4sVersion,
   "org.http4s" %% "http4s-ember-server" % http4sVersion,
   "org.http4s" %% "http4s-circe" % http4sVersion,
