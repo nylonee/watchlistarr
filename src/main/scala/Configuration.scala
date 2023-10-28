@@ -1,7 +1,11 @@
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 
+import scala.concurrent.duration._
+
 class Configuration {
+
+  val refreshInterval: FiniteDuration = getConfigOption("interval.seconds").flatMap(_.toIntOption).getOrElse(60).seconds
 
   val (sonarrBaseUrl, sonarrApiKey) = getAndTestSonarrUrlAndApiKey.unsafeRunSync()
   // TODO: Grab the quality profile ID automatically if it's not set

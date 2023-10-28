@@ -42,4 +42,8 @@ if [ -n "$PLEX_WATCHLIST_URL_2" ]; then
   CMD="$CMD -Dplex.watchlist2=$PLEX_WATCHLIST_URL_2"
 fi
 
+if [ -n "$REFRESH_INTERVAL_SECONDS" ]; then
+  CMD="$CMD -Dinterval.seconds=$REFRESH_INTERVAL_SECONDS"
+fi
+
 exec $CMD
