@@ -1,5 +1,7 @@
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
+import model.QualityProfile
+import io.circe.generic.auto._
 
 import scala.concurrent.duration._
 
@@ -7,42 +9,60 @@ class Configuration {
 
   val refreshInterval: FiniteDuration = getConfigOption("interval.seconds").flatMap(_.toIntOption).getOrElse(60).seconds
 
-  val (sonarrBaseUrl, sonarrApiKey) = getAndTestSonarrUrlAndApiKey.unsafeRunSync()
-  // TODO: Grab the quality profile ID automatically if it's not set
-  val sonarrQualityProfileId: Option[Int] = getConfigOption("sonarr.qualityProfile").flatMap(_.toIntOption)
+  val (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId) = getAndTestSonarrUrlAndApiKey.unsafeRunSync()
   val sonarrRootFolder: String = getConfigOption("sonarr.rootFolder").getOrElse("/data/")
 
-  val (radarrBaseUrl, radarrApiKey) = getAndTestRadarrUrlAndApiKey.unsafeRunSync()
-  val radarrQualityProfileId: Option[Int] = getConfigOption("radarr.qualityProfile").flatMap(_.toIntOption)
+  val (radarrBaseUrl, radarrApiKey, radarrQualityProfileId) = getAndTestRadarrUrlAndApiKey.unsafeRunSync()
   val radarrRootFolder: String = getConfigOption("radarr.rootFolder").getOrElse("/data/")
 
   val plexWatchlistUrls: List[String] = getPlexWatchlistUrls
 
-  private def getAndTestSonarrUrlAndApiKey: IO[(String, String)] = {
+  private def getAndTestSonarrUrlAndApiKey: IO[(String, String, Int)] = {
     val url = getConfigOption("sonarr.baseUrl").getOrElse("http://localhost:8989")
     val apiKey = getConfig("sonarr.apikey")
 
-    ArrUtils.getToArr(url, apiKey, "health").map {
-      case Right(_) =>
-        println("Successfully tested the connection to Sonarr!")
-        (url, apiKey)
+    ArrUtils.getToArr(url, apiKey, "qualityprofile").map {
+      case Right(res) =>
+        println("Successfully connected to Sonarr")
+        val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+        val chosenQualityProfile = getConfigOption("sonarr.qualityProfile")
+        (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile))
       case Left(err) =>
         throw new IllegalArgumentException(s"Unable to connect to Sonarr at $url, with error $err")
     }
   }
 
-  private def getAndTestRadarrUrlAndApiKey: IO[(String, String)] = {
+  private def getAndTestRadarrUrlAndApiKey: IO[(String, String, Int)] = {
     val url = getConfigOption("radarr.baseUrl").getOrElse("http://localhost:7878")
     val apiKey = getConfig("radarr.apikey")
 
-    ArrUtils.getToArr(url, apiKey, "health").map {
-      case Right(_) =>
-        println("Successfully tested the connection to Radarr!")
-        (url, apiKey)
+    ArrUtils.getToArr(url, apiKey, "qualityprofile").map {
+      case Right(res) =>
+        println("Successfully connected to Radarr")
+        val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+        val chosenQualityProfile = getConfigOption("radarr.qualityProfile")
+        (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile))
       case Left(err) =>
         throw new IllegalArgumentException(s"Unable to connect to Radarr at $url, with error $err")
     }
   }
+
+  private def getQualityProfileId(allProfiles: List[QualityProfile], maybeEnvVariable: Option[String]): Int =
+    (allProfiles, maybeEnvVariable) match {
+      case (Nil, _) =>
+        println("Could not find any quality profiles defined, check your Sonarr/Radarr settings")
+        throw new IllegalArgumentException("Unable to fetch quality profiles from Sonarr or Radarr")
+      case (List(one), _) =>
+        println(s"Only one quality profile defined: ${one.name}")
+        one.id
+      case (_, None) =>
+        println("Multiple quality profiles found, selecting the first one in the list.")
+        allProfiles.head.id
+      case (_, Some(profileName)) =>
+        allProfiles.find(_.name.toLowerCase == profileName.toLowerCase).map(_.id).getOrElse(
+          throw new IllegalArgumentException(s"Unable to find quality profile $profileName. Possible values are $allProfiles")
+        )
+    }
 
   private def getPlexWatchlistUrls: List[String] =
     Set(

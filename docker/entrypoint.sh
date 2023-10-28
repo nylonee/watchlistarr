@@ -10,8 +10,8 @@ if [ -n "$SONARR_BASE_URL" ]; then
   CMD="$CMD -Dsonarr.baseUrl=$SONARR_BASE_URL"
 fi
 
-if [ -n "$SONARR_QUALITY_PROFILE_ID" ]; then
-  CMD="$CMD -Dsonarr.qualityProfile=$SONARR_QUALITY_PROFILE_ID"
+if [ -n "$SONARR_QUALITY_PROFILE" ]; then
+  CMD="$CMD -Dsonarr.qualityProfile=$SONARR_QUALITY_PROFILE"
 fi
 
 if [ -n "$SONARR_ROOT_FOLDER" ]; then
@@ -26,8 +26,8 @@ if [ -n "$RADARR_BASE_URL" ]; then
   CMD="$CMD -Dradarr.baseUrl=$RADARR_BASE_URL"
 fi
 
-if [ -n "$RADARR_QUALITY_PROFILE_ID" ]; then
-  CMD="$CMD -Dradarr.qualityProfile=$RADARR_QUALITY_PROFILE_ID"
+if [ -n "$RADARR_QUALITY_PROFILE" ]; then
+  CMD="$CMD -Dradarr.qualityProfile=$RADARR_QUALITY_PROFILE"
 fi
 
 if [ -n "$RADARR_ROOT_FOLDER" ]; then

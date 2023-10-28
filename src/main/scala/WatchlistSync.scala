@@ -97,7 +97,7 @@ object WatchlistSync {
 
   private def addToRadarr(config: Configuration)(item: Item): IO[Unit] = {
 
-    val movie = RadarrPost(item.title, findTmdbId(item.guids).getOrElse(0L), config.radarrQualityProfileId.getOrElse(0), config.radarrRootFolder)
+    val movie = RadarrPost(item.title, findTmdbId(item.guids).getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder)
 
     ArrUtils.postToArr(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson).map {
       case Right(_) =>
@@ -116,7 +116,7 @@ object WatchlistSync {
 
   private def addToSonarr(config: Configuration)(item: Item): IO[Unit] = {
 
-    val show = SonarrPost(item.title, findTvdbId(item.guids).getOrElse(0L), config.sonarrQualityProfileId.getOrElse(0), config.sonarrRootFolder)
+    val show = SonarrPost(item.title, findTvdbId(item.guids).getOrElse(0L), config.sonarrQualityProfileId, config.sonarrRootFolder)
 
     ArrUtils.postToArr(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson).map {
       case Right(_) =>
