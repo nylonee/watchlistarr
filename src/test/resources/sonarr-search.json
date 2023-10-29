@@ -1,0 +1,475 @@
+[
+  {
+    "title": "One Piece",
+    "sortTitle": "one piece",
+    "status": "continuing",
+    "ended": false,
+    "overview": "The adventures of Monkey D. Luffy and his pirate crew in order to find the greatest treasure ever left by the legendary Pirate, Gold Roger. The famous mystery treasure named \"One Piece\".",
+    "network": "Fuji TV",
+    "airTime": "09:30",
+    "images": [
+      {
+        "coverType": "banner",
+        "url": "/MediaCover/75/banner.jpg?lastWrite=638329522687986232",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/graphical/81797-g2.jpg"
+      },
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/75/poster.jpg?lastWrite=638329522688516261",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/series/81797/posters/5eec847d52a04.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/75/fanart.jpg?lastWrite=638329522688816277",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/81797/backgrounds/616009a8bd688.jpg"
+      },
+      {
+        "coverType": "clearlogo",
+        "url": "/MediaCover/75/clearlogo.png?lastWrite=638329522689026289",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/81797/clearlogo/611b6189d88b6.png"
+      }
+    ],
+    "originalLanguage": {
+      "id": 8,
+      "name": "Japanese"
+    },
+    "remotePoster": "https://artworks.thetvdb.com/banners/series/81797/posters/5eec847d52a04.jpg",
+    "seasons": [
+      {
+        "seasonNumber": 0,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 1,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 2,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 3,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 4,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 5,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 6,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 7,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 8,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 9,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 10,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 11,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 12,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 13,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 14,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 15,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 16,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 17,
+        "monitored": true
+      },
+      {
+        "seasonNumber": 18,
+        "monitored": true
+      },
+      {
+        "seasonNumber": 19,
+        "monitored": true
+      },
+      {
+        "seasonNumber": 20,
+        "monitored": true
+      },
+      {
+        "seasonNumber": 21,
+        "monitored": true
+      }
+    ],
+    "year": 1999,
+    "path": "/data/One Piece",
+    "qualityProfileId": 6,
+    "seasonFolder": true,
+    "monitored": true,
+    "useSceneNumbering": true,
+    "runtime": 25,
+    "tvdbId": 81797,
+    "tvRageId": 8205,
+    "tvMazeId": 1505,
+    "firstAired": "1999-10-20T00:00:00Z",
+    "seriesType": "anime",
+    "cleanTitle": "onepiece",
+    "imdbId": "tt0388629",
+    "titleSlug": "one-piece",
+    "folder": "One Piece",
+    "certification": "TV-Y7",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Animation",
+      "Anime",
+      "Comedy",
+      "Drama",
+      "Fantasy"
+    ],
+    "tags": [],
+    "added": "2023-10-15T07:37:45Z",
+    "ratings": {
+      "votes": 0,
+      "value": 0
+    },
+    "statistics": {
+      "seasonCount": 21,
+      "episodeFileCount": 0,
+      "episodeCount": 0,
+      "totalEpisodeCount": 0,
+      "sizeOnDisk": 0,
+      "percentOfEpisodes": 0
+    },
+    "languageProfileId": 1,
+    "id": 75
+  },
+  {
+    "title": "ONE PIECE (2023)",
+    "sortTitle": "one piece 2023",
+    "status": "continuing",
+    "ended": false,
+    "overview": "With his straw hat and ragtag crew, young pirate Monkey D. Luffy goes on an epic voyage for treasure in this live-action adaptation of the popular manga.",
+    "network": "Netflix",
+    "airTime": "03:00",
+    "images": [
+      {
+        "coverType": "banner",
+        "url": "/MediaCover/83/banner.jpg?lastWrite=638338753517002207",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/392276/banners/64f03e2609d69.jpg"
+      },
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/83/poster.jpg?lastWrite=638338753517142215",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/392276/posters/64c9042dd7d44.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/83/fanart.jpg?lastWrite=638338753517412229",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/392276/backgrounds/64c113625ee67.jpg"
+      },
+      {
+        "coverType": "clearlogo",
+        "url": "/MediaCover/83/clearlogo.png?lastWrite=638338753517572238",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/392276/clearlogo/64c112a3357ce.png"
+      }
+    ],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    },
+    "remotePoster": "https://artworks.thetvdb.com/banners/v4/series/392276/posters/64c9042dd7d44.jpg",
+    "seasons": [
+      {
+        "seasonNumber": 0,
+        "monitored": false
+      },
+      {
+        "seasonNumber": 1,
+        "monitored": true
+      }
+    ],
+    "year": 2023,
+    "path": "/data/ONE PIECE (2023)",
+    "qualityProfileId": 6,
+    "seasonFolder": false,
+    "monitored": true,
+    "useSceneNumbering": false,
+    "runtime": 57,
+    "tvdbId": 392276,
+    "tvRageId": 0,
+    "tvMazeId": 46065,
+    "firstAired": "2023-08-31T00:00:00Z",
+    "seriesType": "standard",
+    "cleanTitle": "onepiece2023",
+    "imdbId": "tt11737520",
+    "titleSlug": "one-piece-2023",
+    "folder": "ONE PIECE (2023)",
+    "certification": "TV-14",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama",
+      "Fantasy"
+    ],
+    "tags": [],
+    "added": "2023-10-26T00:02:31Z",
+    "ratings": {
+      "votes": 0,
+      "value": 0
+    },
+    "statistics": {
+      "seasonCount": 1,
+      "episodeFileCount": 0,
+      "episodeCount": 0,
+      "totalEpisodeCount": 0,
+      "sizeOnDisk": 0,
+      "percentOfEpisodes": 0
+    },
+    "languageProfileId": 1,
+    "id": 83
+  },
+  {
+    "title": "One Piece D&D",
+    "sortTitle": "one piece dd",
+    "status": "ended",
+    "ended": true,
+    "overview": "One Piece D&D is produced and streamed by\u00A0Rustage, it is a D&D inspired One Piece Adventure streamed on his\u00A0twitch\u00A0and uploaded to his\u00A0second channel, it stars four anime YouTube personalities!\r\nWilliam, played by\u00A0Tekking101 - Duros, played by\u00A0Lost Pause - Verona, played by\u00A02Spooky - Ragnar, played by\u00A0All Day",
+    "airTime": "00:00",
+    "images": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    },
+    "seasons": [
+      {
+        "seasonNumber": 1,
+        "monitored": true
+      }
+    ],
+    "year": 2020,
+    "qualityProfileId": 0,
+    "seasonFolder": false,
+    "monitored": true,
+    "useSceneNumbering": false,
+    "runtime": 0,
+    "tvdbId": 424413,
+    "tvRageId": 0,
+    "tvMazeId": 0,
+    "firstAired": "2020-04-12T00:00:00Z",
+    "seriesType": "standard",
+    "cleanTitle": "onepiecedd",
+    "imdbId": "tt16788668",
+    "titleSlug": "one-piece-dandd",
+    "folder": "One Piece D&D",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Fantasy",
+      "Podcast"
+    ],
+    "tags": [],
+    "added": "0001-01-01T00:00:00Z",
+    "ratings": {
+      "votes": 0,
+      "value": 0
+    },
+    "statistics": {
+      "seasonCount": 1,
+      "episodeFileCount": 0,
+      "episodeCount": 0,
+      "totalEpisodeCount": 0,
+      "sizeOnDisk": 0,
+      "percentOfEpisodes": 0
+    },
+    "languageProfileId": 1
+  },
+  {
+    "title": "Cursed One-Piece",
+    "sortTitle": "cursed onepiece",
+    "status": "ended",
+    "ended": true,
+    "overview": "An omnibus horror that unfolds the story of three girls around a floral dress,  that causes strange events to happen to those who wear it.",
+    "airTime": "00:00",
+    "images": [
+      {
+        "coverType": "poster",
+        "url": "/MediaCoverProxy/8baeda89917685ab159dc48b720d5578e8a43d4550996004f5f0dd1dbf85ef42/630e4a4044f7c.jpg",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/422877/posters/630e4a4044f7c.jpg"
+      }
+    ],
+    "originalLanguage": {
+      "id": 8,
+      "name": "Japanese"
+    },
+    "remotePoster": "https://artworks.thetvdb.com/banners/v4/series/422877/posters/630e4a4044f7c.jpg",
+    "seasons": [
+      {
+        "seasonNumber": 1,
+        "monitored": true
+      }
+    ],
+    "year": 1992,
+    "qualityProfileId": 0,
+    "seasonFolder": false,
+    "monitored": true,
+    "useSceneNumbering": false,
+    "runtime": 8,
+    "tvdbId": 422877,
+    "tvRageId": 0,
+    "tvMazeId": 0,
+    "firstAired": "1992-08-25T00:00:00Z",
+    "seriesType": "standard",
+    "cleanTitle": "cursedonepiece",
+    "titleSlug": "cursed-one-piece",
+    "folder": "Cursed One-Piece",
+    "genres": [
+      "Horror",
+      "Romance"
+    ],
+    "tags": [],
+    "added": "0001-01-01T00:00:00Z",
+    "ratings": {
+      "votes": 0,
+      "value": 0
+    },
+    "statistics": {
+      "seasonCount": 1,
+      "episodeFileCount": 0,
+      "episodeCount": 0,
+      "totalEpisodeCount": 0,
+      "sizeOnDisk": 0,
+      "percentOfEpisodes": 0
+    },
+    "languageProfileId": 1
+  },
+  {
+    "title": "WE ARE ONE.",
+    "sortTitle": "we are one",
+    "status": "ended",
+    "ended": true,
+    "overview": "This work is a short drama of 5 episodes directed by Mika Ninagawa. Director Nagikawa, who is famous for his colorful video works, challenged an unprecedented video composition in which the live-action part, which is directed by the cast of gorgeous actors, and the new animation part produced by Toei Animation are interlaced. With the sprinting feeling and vitality sound of RADWIMPS's theme song \"TWILIGHT\" as the background, the charm of \"ONE PIECE\" is drawn from a new perspective and world view.",
+    "network": "YouTube",
+    "airTime": "00:00",
+    "images": [
+      {
+        "coverType": "fanart",
+        "url": "/MediaCoverProxy/5f9eda3d09c21894bdfcb254d702cdd8c7bf2457f44a18214191b220fe9acbba/6132665ccf556.jpg",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/409531/backgrounds/6132665ccf556.jpg"
+      }
+    ],
+    "originalLanguage": {
+      "id": 8,
+      "name": "Japanese"
+    },
+    "seasons": [
+      {
+        "seasonNumber": 1,
+        "monitored": true
+      }
+    ],
+    "year": 2021,
+    "qualityProfileId": 0,
+    "seasonFolder": false,
+    "monitored": true,
+    "useSceneNumbering": false,
+    "runtime": 9,
+    "tvdbId": 409531,
+    "tvRageId": 0,
+    "tvMazeId": 0,
+    "firstAired": "2021-08-30T00:00:00Z",
+    "seriesType": "standard",
+    "cleanTitle": "weareone",
+    "titleSlug": "we-are-one",
+    "folder": "WE ARE ONE",
+    "genres": [
+      "Anime",
+      "Drama"
+    ],
+    "tags": [],
+    "added": "0001-01-01T00:00:00Z",
+    "ratings": {
+      "votes": 0,
+      "value": 0
+    },
+    "statistics": {
+      "seasonCount": 1,
+      "episodeFileCount": 0,
+      "episodeCount": 0,
+      "totalEpisodeCount": 0,
+      "sizeOnDisk": 0,
+      "percentOfEpisodes": 0
+    },
+    "languageProfileId": 1
+  },
+  {
+    "title": "Insight for Living on OnePlace.com",
+    "sortTitle": "insight for living on oneplacecom",
+    "status": "upcoming",
+    "ended": false,
+    "overview": "Insight for Living is the Bible-teaching ministry of author and pastor Charles R. Swindoll. Insight for Living is committed to excellence in communicating biblical truth and its application.",
+    "airTime": "00:00",
+    "images": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    },
+    "seasons": [],
+    "year": 0,
+    "qualityProfileId": 0,
+    "seasonFolder": false,
+    "monitored": true,
+    "useSceneNumbering": false,
+    "runtime": 0,
+    "tvdbId": 433352,
+    "tvRageId": 0,
+    "tvMazeId": 0,
+    "seriesType": "standard",
+    "cleanTitle": "insightforlivingononeplacecom",
+    "imdbId": "tt24550314",
+    "titleSlug": "insight-for-living-on-oneplacecom",
+    "folder": "Insight for Living on OnePlace.com",
+    "genres": [
+      "Documentary",
+      "Family"
+    ],
+    "tags": [],
+    "added": "0001-01-01T00:00:00Z",
+    "ratings": {
+      "votes": 0,
+      "value": 0
+    },
+    "statistics": {
+      "seasonCount": 0,
+      "episodeFileCount": 0,
+      "episodeCount": 0,
+      "totalEpisodeCount": 0,
+      "sizeOnDisk": 0,
+      "percentOfEpisodes": 0
+    },
+    "languageProfileId": 1
+  }
+]

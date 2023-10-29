@@ -1,3 +1,3 @@
 package model
 
-case class SonarrSeries(title: String, imdbId: Option[String], tvdbId: Option[Long])
+case class SonarrSeries(title: String, imdbId: Option[String], tvdbId: Option[Long], path: Option[String])
