@@ -1,7 +1,7 @@
 
-ThisBuild / version := "0.1.1-SNAPSHOT"
+ThisBuild / version := "0.0.3-SNAPSHOT"
 
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 
 lazy val root = (project in file("."))
   .settings(
@@ -9,24 +9,38 @@ lazy val root = (project in file("."))
     assembly / mainClass := Some("Server"),
   )
 
-val http4sVersion = "0.23.23"
-val logbackVersion = "1.4.7"
-val fs2Version = "3.7.0"
-val circeVersion = "0.14.5"
+val caseInsensitiveVersion = "1.4.0"
+val catsCoreVersion = "2.9.0"
+val catsEffectVersion = "3.5.0"
+val catsEffectKernelVersion = "3.5.1"
 val circeGenericExtrasVersion = "0.14.3"
-val slf4jVersion = "2.0.9"
-val scalatestVersion = "3.2.15"
+val circeVersion = "0.14.6"
+val fs2Version = "3.7.0"
+val http4sVersion = "0.23.23"
+val logbackVersion = "1.4.11"
 val scalamockVersion = "5.2.0"
+val scalatestVersion = "3.2.17"
+val shapelessVersion = "2.3.10"
+val slf4jVersion = "2.0.9"
+val vaultVersion = "3.5.0"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-library" % scalaVersion.value % "provided",
-  "ch.qos.logback" % "logback-classic" % logbackVersion,
+  "ch.qos.logback" % "logback-classic" % logbackVersion % Runtime,
   "org.slf4j" % "slf4j-api" % slf4jVersion,
   "org.http4s" %% "http4s-ember-client" % http4sVersion,
-  "org.http4s" %% "http4s-ember-server" % http4sVersion,
   "org.http4s" %% "http4s-circe" % http4sVersion,
-  "org.http4s" %% "http4s-dsl" % http4sVersion,
+  "org.http4s" %% "http4s-client" % http4sVersion,
+  "org.http4s" %% "http4s-core" % http4sVersion,
   "co.fs2" %% "fs2-core" % fs2Version,
+  "co.fs2" %% "fs2-io" % fs2Version,
+  "com.chuusai" %% "shapeless" % shapelessVersion,
+  "io.circe" %% "circe-core" % circeVersion,
+  "org.typelevel" %% "case-insensitive" % caseInsensitiveVersion,
+  "org.typelevel" %% "cats-core" % catsCoreVersion,
+  "org.typelevel" %% "cats-effect" % catsEffectVersion,
+  "org.typelevel" %% "cats-effect-kernel" % catsEffectKernelVersion,
+  "org.typelevel" %% "vault" % vaultVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion % Test,
   "io.circe" %% "circe-generic-extras" % circeGenericExtrasVersion % Test,
