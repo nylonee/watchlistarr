@@ -25,8 +25,8 @@ jobs:
     - name: Check for dependency updates
       run: sbt dependencyUpdatesFailBuild
     - name: Check for unused dependencies
-      run: unusedCompileDependenciesTest
+      run: sbt unusedCompileDependenciesTest
     - name: Check for transitive dependencies
-      run: undeclaredCompileDependenciesTest
+      run: sbt undeclaredCompileDependenciesTest
     - name: Run tests
       run: sbt test
