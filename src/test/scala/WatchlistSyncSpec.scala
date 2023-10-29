@@ -49,4 +49,32 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers {
         fail(s"Failed to decode JSON: $error")
     }
   }
+
+  it should "correctly deserialize Sonarr exclusions" in {
+    val jsonStr = Source.fromResource("importlistexclusion.json").getLines().mkString("\n")
+
+    val decodedExclusions = decode[List[SonarrSeries]](jsonStr)
+
+    decodedExclusions match {
+      case Right(exclusions) =>
+        exclusions should not be empty
+        exclusions.head should be (SonarrSeries("The Test", None, Some(372848)))
+      case Left(error) =>
+        fail(s"Failed to decode JSON: $error")
+    }
+  }
+
+  it should "correctly deserialize Radarr exclusions" in {
+    val jsonStr = Source.fromResource("exclusions.json").getLines().mkString("\n")
+
+    val decodedExclusions = decode[List[RadarrMovieExclusion]](jsonStr)
+
+    decodedExclusions match {
+      case Right(exclusions) =>
+        exclusions should not be empty
+        exclusions.head.toRadarrMovie should be (RadarrMovie("Test", None, Some(226979)))
+      case Left(error) =>
+        fail(s"Failed to decode JSON: $error")
+    }
+  }
 }

@@ -9,7 +9,10 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import utils.HttpClient
 import io.circe.generic.auto._
+import io.circe.parser._
 import io.circe.syntax.EncoderOps
+
+import scala.io.Source
 
 class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
   "A configuration.Configuration" should "start with all required values provided" in {
@@ -71,8 +74,87 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     ))
   }
 
+  it should "fetch the first accessible root folder of sonarr if none is provided" in {
+
+    val mockConfigReader = createMockConfigReader()
+    val mockHttpClient = createMockHttpClient()
+
+    val config = new Configuration(mockConfigReader, mockHttpClient)
+    noException should be thrownBy config
+    config.sonarrRootFolder shouldBe "/data2"
+  }
+
+  it should "find the root folder provided in sonarr config" in {
+
+    val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/data3"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = new Configuration(mockConfigReader, mockHttpClient)
+    noException should be thrownBy config
+    config.sonarrRootFolder shouldBe "/data3"
+  }
+
+  it should "find the root folder with a trailing slash provided in sonarr config" in {
+
+    val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/data3/"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = new Configuration(mockConfigReader, mockHttpClient)
+    noException should be thrownBy config
+    config.sonarrRootFolder shouldBe "/data3"
+  }
+
+  it should "throw an error if the sonarr root folder provided can't be found" in {
+
+    val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/unknown"))
+    val mockHttpClient = createMockHttpClient()
+
+    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+  }
+
+  it should "fetch the first accessible root folder of radarr if none is provided" in {
+
+    val mockConfigReader = createMockConfigReader()
+    val mockHttpClient = createMockHttpClient()
+
+    val config = new Configuration(mockConfigReader, mockHttpClient)
+    noException should be thrownBy config
+    config.radarrRootFolder shouldBe "/data2"
+  }
+
+
+  it should "find the root folder provided in radarr config" in {
+
+    val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/data3"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = new Configuration(mockConfigReader, mockHttpClient)
+    noException should be thrownBy config
+    config.radarrRootFolder shouldBe "/data3"
+  }
+
+  it should "find the root folder with a trailing slash provided in radarr config" in {
+
+    val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/data3/"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = new Configuration(mockConfigReader, mockHttpClient)
+    noException should be thrownBy config
+    config.radarrRootFolder shouldBe "/data3"
+  }
+
+  it should "throw an error if the radarr root folder provided can't be found" in {
+
+    val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/unknown"))
+    val mockHttpClient = createMockHttpClient()
+
+    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+  }
+
   private def createMockConfigReader(
                                       sonarrApiKey: Option[String] = Some("sonarr-api-key"),
+                                      sonarrRootFolder: Option[String] = None,
+                                      radarrRootFolder: Option[String] = None,
                                       radarrApiKey: Option[String] = Some("radarr-api-key"),
                                       plexWatchlist1: Option[String] = Some(s"https://rss.plex.tv/1"),
                                       plexWatchlist2: Option[String] = None
@@ -84,12 +166,12 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrBaseUrl).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrApiKey).returning(sonarrApiKey).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrQualityProfile).returning(unset).anyNumberOfTimes()
-    (mockConfigReader.getConfigOption _).expects(Keys.sonarrRootFolder).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.sonarrRootFolder).returning(sonarrRootFolder).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrBypassIgnored).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrBaseUrl).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrApiKey).returning(radarrApiKey).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrQualityProfile).returning(unset).anyNumberOfTimes()
-    (mockConfigReader.getConfigOption _).expects(Keys.radarrRootFolder).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.radarrRootFolder).returning(radarrRootFolder).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrBypassIgnored).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.plexWatchlist1).returning(plexWatchlist1).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.plexWatchlist2).returning(plexWatchlist2).anyNumberOfTimes()
@@ -112,6 +194,18 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
       Some("radarr-api-key"),
       None
     ).returning(IO.pure(Right(defaultQualityProfileResponse.asJson))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/rootFolder")),
+      Some("sonarr-api-key"),
+      None
+    ).returning(IO.pure(parse(Source.fromResource("rootFolder.json").getLines().mkString("\n")))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("http://localhost:7878").withPath(Uri.Path.unsafeFromString("/api/v3/rootFolder")),
+      Some("radarr-api-key"),
+      None
+    ).returning(IO.pure(parse(Source.fromResource("rootFolder.json").getLines().mkString("\n")))).anyNumberOfTimes()
     mockHttpClient
   }
 }

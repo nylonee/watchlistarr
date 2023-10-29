@@ -1,0 +1,30 @@
+[
+  {
+    "path": "/data1",
+    "accessible": false,
+    "freeSpace": 6942155677696,
+    "unmappedFolders": [],
+    "id": 1
+  },
+  {
+    "path": "/data2",
+    "accessible": true,
+    "freeSpace": 6942155677696,
+    "unmappedFolders": [],
+    "id": 2
+  },
+  {
+    "path": "/data3",
+    "accessible": true,
+    "freeSpace": 6942155677696,
+    "unmappedFolders": [],
+    "id": 3
+  },
+  {
+    "path": "/data4",
+    "accessible": false,
+    "freeSpace": 6942155677696,
+    "unmappedFolders": [],
+    "id": 4
+  }
+]
