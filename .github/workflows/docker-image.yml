@@ -13,6 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:$(date +%s)
+      - uses: actions/checkout@v3
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the Docker image
+        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:$(date +%s)
+      - name: Push Docker image
+        run: |
+          docker tag nylonee/watchlistarr:$(date +%s) nylonee/watchlistarr:alpha
+          docker push nylonee/watchlistarr:$(date +%s)
+          docker push nylonee/watchlistarr:alpha
