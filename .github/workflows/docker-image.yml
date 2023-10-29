@@ -27,5 +27,5 @@ jobs:
       - name: Push Docker image
         run: |
           docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:alpha
-          docker push nylonee/watchlistarr:$${DOCKER_TAG}
+          docker push nylonee/watchlistarr:${DOCKER_TAG}
           docker push nylonee/watchlistarr:alpha
