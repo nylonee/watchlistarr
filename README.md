@@ -12,6 +12,7 @@ While Sonarr and Radarr have built-in functionality (in v4 and v3 respectively),
 While Ombi and Overseer have built-in functionality, there are two problems with this:
  * They are customizable down to 5 minute intervals, so doesn't allow the "real-time" sync that Watchlistarr does
  * They rely on Plex tokens, which expire and break the sync if you're not regularly logging into Ombi/Overseer
+ * They can only sync the current user's watchlist. If you have friends you've added to your Plex server, you won't be able to sync their watchlist
 
 ## Getting Started
 
