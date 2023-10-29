@@ -147,7 +147,7 @@ object WatchlistSync {
     }
   }
 
-  private case class SonarrPost(title: String, tvdbId: Long, qualityProfileId: Int, rootFolderPath: String, addOptions: SonarrAddOptions = SonarrAddOptions())
+  private case class SonarrPost(title: String, tvdbId: Long, qualityProfileId: Int, rootFolderPath: String, addOptions: SonarrAddOptions = SonarrAddOptions(), monitored: Boolean = true)
 
   private case class SonarrAddOptions(monitor: String = "all", searchForCutoffUnmetEpisodes: Boolean = true, searchForMissingEpisodes: Boolean = true)
 
