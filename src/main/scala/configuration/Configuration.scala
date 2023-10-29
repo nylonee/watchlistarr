@@ -22,6 +22,7 @@ class Configuration(configReader: ConfigurationReader, val client: HttpClient)(i
   val (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = getRadarrConfig.unsafeRunSync()
   val radarrBypassIgnored: Boolean = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
 
+  val plexToken: Option[String] = configReader.getConfigOption(Keys.plexToken)
   val plexWatchlistUrls: List[Uri] = getPlexWatchlistUrls
 
   private def getSonarrConfig: IO[(Uri, String, Int, String)] = {

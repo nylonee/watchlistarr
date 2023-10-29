@@ -21,7 +21,7 @@ object WatchlistSync {
       watchlistData = watchlistDatas.fold(Watchlist(Set.empty))(mergeWatchLists)
       movies <- fetchMovies(config.client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
       series <- fetchSeries(config.client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
-      allIds = merge(movies, series)
+      allIds = mergeMoviesAndSeries(movies, series)
       _ <- missingIds(config.client)(config)(allIds, watchlistData.items)
     } yield ()
   }
@@ -41,7 +41,7 @@ object WatchlistSync {
         }
     }
 
-  private def fetchMovies(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[RadarrMovie]] =
+  def fetchMovies(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[RadarrMovie]] =
     for {
       movies <- ArrUtils.getToArr(client)(baseUrl, apiKey, "movie").map {
         case Right(res) =>
@@ -69,7 +69,7 @@ object WatchlistSync {
       }
     } yield movies ++ exclusions.map(_.toRadarrMovie)
 
-  private def fetchSeries(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[SonarrSeries]] =
+  def fetchSeries(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[SonarrSeries]] =
     for {
       shows <- ArrUtils.getToArr(client)(baseUrl, apiKey, "series").map {
         case Right(res) =>
@@ -98,7 +98,7 @@ object WatchlistSync {
     } yield shows ++ exclusions
 
 
-  private def merge(r: List[RadarrMovie], s: List[SonarrSeries]): Set[String] = {
+  private def mergeMoviesAndSeries(r: List[RadarrMovie], s: List[SonarrSeries]): Set[String] = {
     val allIds = r.map(_.imdbId) ++ r.map(_.tmdbId) ++ s.map(_.imdbId) ++ s.map(_.tvdbId)
 
     allIds.collect {
@@ -147,7 +147,7 @@ object WatchlistSync {
     }
   }
 
-  private case class SonarrPost(title: String, tvdbId: Long, qualityProfileId: Int, rootFolderPath: String, addOptions: SonarrAddOptions = SonarrAddOptions())
+  private case class SonarrPost(title: String, tvdbId: Long, qualityProfileId: Int, rootFolderPath: String, addOptions: SonarrAddOptions = SonarrAddOptions(), monitored: Boolean = true)
 
   private case class SonarrAddOptions(monitor: String = "all", searchForCutoffUnmetEpisodes: Boolean = true, searchForMissingEpisodes: Boolean = true)
 

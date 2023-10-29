@@ -54,4 +54,8 @@ if [ -n "$RADARR_BYPASS_IGNORED" ]; then
   CMD="$CMD -Dradarr.bypassIgnored=$RADARR_BYPASS_IGNORED"
 fi
 
+if [ -n "$PLEX_TOKEN" ]; then
+  CMD="$CMD -Dplex.token=$PLEX_TOKEN"
+fi
+
 exec $CMD

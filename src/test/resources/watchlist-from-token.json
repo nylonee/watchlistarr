@@ -1,0 +1,664 @@
+{
+  "MediaContainer" : {
+    "librarySectionID" : "watchlist",
+    "librarySectionTitle" : "Watchlist",
+    "offset" : 0,
+    "totalSize" : 11,
+    "identifier" : "tv.plex.provider.metadata",
+    "size" : 11,
+    "Metadata" : [
+      {
+        "art" : "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg",
+        "guid" : "plex://show/5df46a38237002001dce338d",
+        "key" : "/library/metadata/5df46a38237002001dce338d/children",
+        "rating" : 8.8,
+        "ratingKey" : "5df46a38237002001dce338d",
+        "studio" : "CA Film",
+        "tagline" : "A New Era for Australia's Team",
+        "type" : "show",
+        "thumb" : "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
+        "addedAt" : 1583884800,
+        "duration" : 2580000,
+        "publicPagesURL" : "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team",
+        "slug" : "the-test-a-new-era-for-australias-team",
+        "userState" : false,
+        "title" : "The Test",
+        "leafCount" : 12,
+        "childCount" : 2,
+        "isContinuingSeries" : true,
+        "contentRating" : "TV-14",
+        "originallyAvailableAt" : "2020-03-11",
+        "year" : 2020,
+        "ratingImage" : "imdb://image.rating",
+        "imdbRatingCount" : 3455,
+        "Image" : [
+          {
+            "alt" : "The Test",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/a/gracenote/aaa03c4a33fedc650e9f882e62834bb6.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/0/gracenote/003496a06f7738c98a32f947b6926914.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/xvzxqKWltnj6qSiWBXRq6ZCdcrw.jpg",
+        "banner" : "http://assets.fanart.tv/fanart/movies/1151534/moviebanner/nowhere-652724e79f726.jpg",
+        "guid" : "plex://movie/617d3ab142705b2183b1b20b",
+        "key" : "/library/metadata/617d3ab142705b2183b1b20b",
+        "primaryExtraKey" : "/library/metadata/617d3ab142705b2183b1b20b/extras/6504ffbc6859cd3ba9adb619",
+        "rating" : 6.2,
+        "ratingKey" : "617d3ab142705b2183b1b20b",
+        "studio" : "Rock & Ruz",
+        "tagline" : "Attempting to survive in the middle of nowhere is her only option.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/zwKaPkkLizCg1onpHQq89LWugkS.jpg",
+        "addedAt" : 1695945600,
+        "duration" : 6540000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/nowhere-17",
+        "slug" : "nowhere-17",
+        "userState" : false,
+        "title" : "Nowhere",
+        "contentRating" : "R",
+        "originallyAvailableAt" : "2023-09-29",
+        "year" : 2023,
+        "audienceRating" : 6.2,
+        "audienceRatingImage" : "rottentomatoes://image.rating.upright",
+        "ratingImage" : "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount" : 22485,
+        "Image" : [
+          {
+            "alt" : "Nowhere",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/xvzxqKWltnj6qSiWBXRq6ZCdcrw.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "banner",
+            "url" : "http://assets.fanart.tv/fanart/movies/1151534/moviebanner/nowhere-652724e79f726.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/1151534/hdmovielogo/nowhere-651b207542604.png"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/8/gracenote/895c9c368de4e83c752791eaa362b96d.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/zwKaPkkLizCg1onpHQq89LWugkS.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/d/gracenote/d26f1f2c7ff370a7c27345248c3e6888.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/2/gracenote/29bdff575ed2ac00d7e86c75a7d6c943.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/H6j5smdpRqP9a8UnhWp6zfl0SC.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/movie/156176/banners/648663a3e9004.jpg",
+        "guid" : "plex://movie/5d7770a5fb0d55001f5f59bb",
+        "key" : "/library/metadata/5d7770a5fb0d55001f5f59bb",
+        "primaryExtraKey" : "/library/metadata/5d7770a5fb0d55001f5f59bb/extras/642cb5c7028daf065e96db46",
+        "rating" : 7.8,
+        "ratingKey" : "5d7770a5fb0d55001f5f59bb",
+        "studio" : "Warner Bros. Pictures",
+        "tagline" : "Jaime Reyes is a superhero whether he likes it or not.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/vNfL4DYnonltukBrrgMmw94zMYL.jpg",
+        "addedAt" : 1692144000,
+        "duration" : 7620000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/blue-beetle",
+        "slug" : "blue-beetle",
+        "userState" : false,
+        "title" : "Blue Beetle",
+        "contentRating" : "PG-13",
+        "originallyAvailableAt" : "2023-08-16",
+        "year" : 2023,
+        "audienceRating" : 9.2,
+        "audienceRatingImage" : "rottentomatoes://image.rating.upright",
+        "ratingImage" : "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount" : 56556,
+        "Image" : [
+          {
+            "alt" : "Blue Beetle",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/H6j5smdpRqP9a8UnhWp6zfl0SC.jpg"
+          },
+          {
+            "alt" : "Blue Beetle",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/movie/156176/banners/648663a3e9004.jpg"
+          },
+          {
+            "alt" : "Blue Beetle",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/565770/hdmovielogo/blue-beetle-642c73f81cd09.png"
+          },
+          {
+            "alt" : "Blue Beetle",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/b/gracenote/b8d42f4943815f35afb363e081f5810d.jpg"
+          },
+          {
+            "alt" : "Blue Beetle",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/vNfL4DYnonltukBrrgMmw94zMYL.jpg"
+          },
+          {
+            "alt" : "Blue Beetle",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/e/gracenote/ef4015dce5168c88deb20c5caa5e91ed.jpg"
+          },
+          {
+            "alt" : "Blue Beetle",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/9/gracenote/9143aec36913e6736eb468fc11d143ca.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/aRKQdF6AGbhnF9IAyJbte5epH5R.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/series/392276/banners/64f03e2609d69.jpg",
+        "guid" : "plex://show/5f7c9b1c9b958e00415de6bb",
+        "key" : "/library/metadata/5f7c9b1c9b958e00415de6bb/children",
+        "primaryExtraKey" : "/library/metadata/5f7c9b1c9b958e00415de6bb/extras/64bc79b0d10f4a2f43a2573b",
+        "rating" : 8.4,
+        "ratingKey" : "5f7c9b1c9b958e00415de6bb",
+        "studio" : "Tomorrow Studios",
+        "tagline" : "Come on board and bring along all your hopes and dreams",
+        "type" : "show",
+        "thumb" : "https://image.tmdb.org/t/p/original/rVX05xRKS5JhEYQFObCi4lAnZT4.jpg",
+        "addedAt" : 1693440000,
+        "duration" : 3600000,
+        "publicPagesURL" : "https://watch.plex.tv/show/one-piece-2",
+        "slug" : "one-piece-2",
+        "userState" : false,
+        "title" : "ONE PIECE (2023)",
+        "leafCount" : 8,
+        "childCount" : 1,
+        "isContinuingSeries" : true,
+        "contentRating" : "TV-14",
+        "originallyAvailableAt" : "2023-08-31",
+        "year" : 2023,
+        "ratingImage" : "imdb://image.rating",
+        "imdbRatingCount" : 116606,
+        "Image" : [
+          {
+            "alt" : "ONE PIECE (2023)",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/aRKQdF6AGbhnF9IAyJbte5epH5R.jpg"
+          },
+          {
+            "alt" : "ONE PIECE (2023)",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/series/392276/banners/64f03e2609d69.jpg"
+          },
+          {
+            "alt" : "ONE PIECE (2023)",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/tv/392276/hdtvlogo/one-piece-2022-641b9f7b3aff6.png"
+          },
+          {
+            "alt" : "ONE PIECE (2023)",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/d/gracenote/dffd81ea6bdf25c71b06453bc81b4d2d.jpg"
+          },
+          {
+            "alt" : "ONE PIECE (2023)",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/yEtSBgugED8XyhqjcKgF6j2zDMf.jpg"
+          },
+          {
+            "alt" : "ONE PIECE (2023)",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/c/gracenote/caec1f4bcef1a18f07ca2954deeb2afa.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/3JCR5pQgCniNpflq47BqBVAKKyN.jpg",
+        "guid" : "plex://movie/5d7770b2594b2b001e74fb7e",
+        "key" : "/library/metadata/5d7770b2594b2b001e74fb7e",
+        "primaryExtraKey" : "/library/metadata/5d7770b2594b2b001e74fb7e/extras/6503594ab447237c92e7523c",
+        "ratingKey" : "5d7770b2594b2b001e74fb7e",
+        "studio" : "Warner Bros. Pictures",
+        "tagline" : "The tide is turning.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/vCbguyLsg3wJt2rdMMFfJ5zacr1.jpg",
+        "addedAt" : 1702512000,
+        "duration" : 6900000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/aquaman-2",
+        "slug" : "aquaman-2",
+        "userState" : false,
+        "title" : "Aquaman and the Lost Kingdom",
+        "contentRating" : "PG-13",
+        "originallyAvailableAt" : "2023-12-14",
+        "year" : 2023,
+        "Image" : [
+          {
+            "alt" : "Aquaman and the Lost Kingdom",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/3JCR5pQgCniNpflq47BqBVAKKyN.jpg"
+          },
+          {
+            "alt" : "Aquaman and the Lost Kingdom",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/572802/hdmovielogo/aquaman-and-the-lost-kingdom-62360561890c4.png"
+          },
+          {
+            "alt" : "Aquaman and the Lost Kingdom",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/8/gracenote/823b54ed641c11074996ede69dcf899d.jpg"
+          },
+          {
+            "alt" : "Aquaman and the Lost Kingdom",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/vCbguyLsg3wJt2rdMMFfJ5zacr1.jpg"
+          },
+          {
+            "alt" : "Aquaman and the Lost Kingdom",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/3/gracenote/37168660371f8391e05b14a546ab4523.jpg"
+          },
+          {
+            "alt" : "Aquaman and the Lost Kingdom",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/f/gracenote/f64a4fd8cb5cdcea9f342f32da3b5e3d.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/rron9HAuS9s7zBF8iCX1tsafxUo.jpg",
+        "banner" : "http://assets.fanart.tv/fanart/movies/666277/moviebanner/past-lives-64e78291b2bcc.jpg",
+        "guid" : "plex://movie/5f86722f2556d100412f614d",
+        "key" : "/library/metadata/5f86722f2556d100412f614d",
+        "primaryExtraKey" : "/library/metadata/5f86722f2556d100412f614d/extras/63f6c7bdc101700cb341f93a",
+        "rating" : 9.8,
+        "ratingKey" : "5f86722f2556d100412f614d",
+        "studio" : "A24",
+        "tagline" : "What a good story this is.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/rzO71VFu7CpJMfF5TQNMj0d1lSV.jpg",
+        "addedAt" : 1685664000,
+        "duration" : 6300000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/past-lives-3",
+        "slug" : "past-lives-3",
+        "userState" : false,
+        "title" : "Past Lives",
+        "contentRating" : "PG-13",
+        "originallyAvailableAt" : "2023-06-02",
+        "year" : 2023,
+        "audienceRating" : 9.2,
+        "audienceRatingImage" : "rottentomatoes://image.rating.upright",
+        "ratingImage" : "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount" : 35630,
+        "Image" : [
+          {
+            "alt" : "Past Lives",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/rron9HAuS9s7zBF8iCX1tsafxUo.jpg"
+          },
+          {
+            "alt" : "Past Lives",
+            "type" : "banner",
+            "url" : "http://assets.fanart.tv/fanart/movies/666277/moviebanner/past-lives-64e78291b2bcc.jpg"
+          },
+          {
+            "alt" : "Past Lives",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/666277/hdmovielogo/past-lives-642b07e00a28e.png"
+          },
+          {
+            "alt" : "Past Lives",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/4/gracenote/43f956985cf12b2d07733b74f159a2a5.jpg"
+          },
+          {
+            "alt" : "Past Lives",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/rzO71VFu7CpJMfF5TQNMj0d1lSV.jpg"
+          },
+          {
+            "alt" : "Past Lives",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/0/gracenote/0a1ac0ca4802104d7d540736c7eaf3b4.jpg"
+          },
+          {
+            "alt" : "Past Lives",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/0/gracenote/04afa409f2075d3e226c95bc20ddb2d8.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/x9tsSyltV2N814LtABb41NjVMd7.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/movie/349541/banners/6514ede129282.jpg",
+        "guid" : "plex://movie/64ce38a43c64e3111391ee9d",
+        "key" : "/library/metadata/64ce38a43c64e3111391ee9d",
+        "primaryExtraKey" : "/library/metadata/64ce38a43c64e3111391ee9d/extras/64f2081572f51dc063409b08",
+        "rating" : 9.9,
+        "ratingKey" : "64ce38a43c64e3111391ee9d",
+        "studio" : "Taylor Swift Productions",
+        "tagline" : "It’s been a long time coming.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/a5EreVlyB9fXzZ2Rf9ugOLrW5YI.jpg",
+        "addedAt" : 1697068800,
+        "duration" : 10140000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/taylor-swift-the-eras-tour-movie",
+        "slug" : "taylor-swift-the-eras-tour-movie",
+        "userState" : false,
+        "title" : "Taylor Swift: The Eras Tour",
+        "contentRating" : "PG-13",
+        "originallyAvailableAt" : "2023-10-12",
+        "year" : 2023,
+        "audienceRating" : 9.8,
+        "audienceRatingImage" : "rottentomatoes://image.rating.upright",
+        "ratingImage" : "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount" : 9165,
+        "Image" : [
+          {
+            "alt" : "Taylor Swift: The Eras Tour",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/x9tsSyltV2N814LtABb41NjVMd7.jpg"
+          },
+          {
+            "alt" : "Taylor Swift: The Eras Tour",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/movie/349541/banners/6514ede129282.jpg"
+          },
+          {
+            "alt" : "Taylor Swift: The Eras Tour",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/1160164/hdmovielogo/taylor-swift--the-eras-tour-650c6d342cc84.png"
+          },
+          {
+            "alt" : "Taylor Swift: The Eras Tour",
+            "type" : "coverArt",
+            "url" : "https://image.tmdb.org/t/p/original/A5yngqjWsUggUZHDc60I3O5nmNu.jpg"
+          },
+          {
+            "alt" : "Taylor Swift: The Eras Tour",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/fcWEbKJIBdClaZ4ovTMOrrQLWBS.jpg"
+          },
+          {
+            "alt" : "Taylor Swift: The Eras Tour",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/6/gracenote/6162de2c938016d125d1d511d7dd59eb.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/2K84O2cr0jRH7ROeeHJ3zbTR8Uf.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/series/369301/banners/5eb4c60ab818d.jpg",
+        "guid" : "plex://show/5e2ae04287304c003e612d49",
+        "key" : "/library/metadata/5e2ae04287304c003e612d49/children",
+        "primaryExtraKey" : "/library/metadata/5e2ae04287304c003e612d49/extras/6204944306b37970e13c50df",
+        "rating" : 8.2,
+        "ratingKey" : "5e2ae04287304c003e612d49",
+        "studio" : "MRC",
+        "tagline" : "If the crown fits... take it.",
+        "type" : "show",
+        "theme" : "https://tvthemes.plexapp.com/369301.mp3",
+        "thumb" : "https://image.tmdb.org/t/p/original/tpz9UQ3hUwYufNcKWVW00FCjWyc.jpg",
+        "addedAt" : 1589414400,
+        "duration" : 95640000,
+        "publicPagesURL" : "https://watch.plex.tv/show/the-great",
+        "slug" : "the-great",
+        "userState" : false,
+        "title" : "The Great",
+        "leafCount" : 30,
+        "childCount" : 3,
+        "contentRating" : "TV-MA",
+        "originallyAvailableAt" : "2020-05-14",
+        "year" : 2020,
+        "ratingImage" : "imdb://image.rating",
+        "imdbRatingCount" : 51545,
+        "Image" : [
+          {
+            "alt" : "The Great",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/2K84O2cr0jRH7ROeeHJ3zbTR8Uf.jpg"
+          },
+          {
+            "alt" : "The Great",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/series/369301/banners/5eb4c60ab818d.jpg"
+          },
+          {
+            "alt" : "The Great",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/tv/369301/hdtvlogo/the-great-5ea2790f41b74.png"
+          },
+          {
+            "alt" : "The Great",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/2/gracenote/27810c3235b0c50f3868ee68f7fad267.jpg"
+          },
+          {
+            "alt" : "The Great",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/tpz9UQ3hUwYufNcKWVW00FCjWyc.jpg"
+          },
+          {
+            "alt" : "The Great",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/1/gracenote/16d4b1f7e5450ddeb4080931fa27bb77.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/oahCTL082gwu6fYrxEOBe546uvB.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/series/355730/banners/6184099bf091e.jpg",
+        "guid" : "plex://show/5d9c08e6ba6eb9001fbac2bb",
+        "key" : "/library/metadata/5d9c08e6ba6eb9001fbac2bb/children",
+        "primaryExtraKey" : "/library/metadata/5d9c08e6ba6eb9001fbac2bb/extras/6204944443b1eec43b424177",
+        "rating" : 7.1,
+        "ratingKey" : "5d9c08e6ba6eb9001fbac2bb",
+        "studio" : "Sony Pictures Television Studios",
+        "type" : "show",
+        "theme" : "https://tvthemes.plexapp.com/355730.mp3",
+        "thumb" : "https://image.tmdb.org/t/p/original/ihBi24EIr5kwAeY2PqmsgAcCj4n.jpg",
+        "addedAt" : 1637193600,
+        "duration" : 3360000,
+        "publicPagesURL" : "https://watch.plex.tv/show/the-wheel-of-time",
+        "slug" : "the-wheel-of-time",
+        "userState" : false,
+        "title" : "The Wheel of Time",
+        "leafCount" : 36,
+        "childCount" : 2,
+        "isContinuingSeries" : true,
+        "contentRating" : "TV-MA",
+        "originallyAvailableAt" : "2021-11-18",
+        "year" : 2021,
+        "ratingImage" : "imdb://image.rating",
+        "imdbRatingCount" : 128452,
+        "Image" : [
+          {
+            "alt" : "The Wheel of Time",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/oahCTL082gwu6fYrxEOBe546uvB.jpg"
+          },
+          {
+            "alt" : "The Wheel of Time",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/series/355730/banners/6184099bf091e.jpg"
+          },
+          {
+            "alt" : "The Wheel of Time",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/tv/355730/hdtvlogo/the-wheel-of-time-6197d9392faba.png"
+          },
+          {
+            "alt" : "The Wheel of Time",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/b/gracenote/b06ee290163a9d3e37c831c912a1f938.jpg"
+          },
+          {
+            "alt" : "The Wheel of Time",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/ihBi24EIr5kwAeY2PqmsgAcCj4n.jpg"
+          },
+          {
+            "alt" : "The Wheel of Time",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/0/gracenote/0806a5d01a0959ef9b8b032bbfd826e1.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
+        "banner" : "http://assets.fanart.tv/fanart/movies/872585/moviebanner/oppenheimer-639d665316a27.jpg",
+        "guid" : "plex://movie/613b69464d1516c90af83633",
+        "key" : "/library/metadata/613b69464d1516c90af83633",
+        "primaryExtraKey" : "/library/metadata/613b69464d1516c90af83633/extras/63a091a9244cd201463e9fd4",
+        "rating" : 9.3,
+        "ratingKey" : "613b69464d1516c90af83633",
+        "studio" : "Syncopy",
+        "tagline" : "The world forever changes.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",
+        "addedAt" : 1689724800,
+        "duration" : 10800000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/untitled-oppenheimer-biopic",
+        "slug" : "untitled-oppenheimer-biopic",
+        "userState" : false,
+        "title" : "Oppenheimer",
+        "contentRating" : "R",
+        "originallyAvailableAt" : "2023-07-19",
+        "year" : 2023,
+        "audienceRating" : 9.1,
+        "audienceRatingImage" : "rottentomatoes://image.rating.upright",
+        "ratingImage" : "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount" : 468574,
+        "Image" : [
+          {
+            "alt" : "Oppenheimer",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg"
+          },
+          {
+            "alt" : "Oppenheimer",
+            "type" : "banner",
+            "url" : "http://assets.fanart.tv/fanart/movies/872585/moviebanner/oppenheimer-639d665316a27.jpg"
+          },
+          {
+            "alt" : "Oppenheimer",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/872585/hdmovielogo/oppenheimer-63faf70a676ac.png"
+          },
+          {
+            "alt" : "Oppenheimer",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/3/gracenote/30adfeebbbe05aabb7dcafb8d3108c68.jpg"
+          },
+          {
+            "alt" : "Oppenheimer",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/ptpr0kGAckfQkJeJIt8st5dglvd.jpg"
+          },
+          {
+            "alt" : "Oppenheimer",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/e/gracenote/e1f331127d8d42a265f0e281b9a755a4.jpg"
+          },
+          {
+            "alt" : "Oppenheimer",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/0/gracenote/00fab01de9cbecf7af68e458be122c26.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/zxfBtHz5UmSTfIEC4O4GngyjHwa.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/series/421555/banners/64287525abbe9.jpg",
+        "guid" : "plex://show/62b355e8c2185650f860644f",
+        "key" : "/library/metadata/62b355e8c2185650f860644f/children",
+        "rating" : 7.7,
+        "ratingKey" : "62b355e8c2185650f860644f",
+        "studio" : "Tencent Penguin Pictures",
+        "subtype" : "miniSeries",
+        "type" : "show",
+        "theme" : "https://tvthemes.plexapp.com/421555.mp3",
+        "thumb" : "https://image.tmdb.org/t/p/original/buXHm2shttFRQIBsCFlv5L2TmKh.jpg",
+        "addedAt" : 1673740800,
+        "duration" : 2580000,
+        "publicPagesURL" : "https://watch.plex.tv/show/the-three-body-problem-2",
+        "slug" : "the-three-body-problem-2",
+        "userState" : false,
+        "title" : "Three-Body",
+        "originalTitle" : "三体",
+        "leafCount" : 30,
+        "childCount" : 1,
+        "skipChildren" : true,
+        "contentRating" : "TV-14",
+        "originallyAvailableAt" : "2023-01-15",
+        "year" : 2023,
+        "ratingImage" : "imdb://image.rating",
+        "imdbRatingCount" : 3210,
+        "Image" : [
+          {
+            "alt" : "Three-Body",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/zxfBtHz5UmSTfIEC4O4GngyjHwa.jpg"
+          },
+          {
+            "alt" : "Three-Body",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/series/421555/banners/64287525abbe9.jpg"
+          },
+          {
+            "alt" : "Three-Body",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/tv/421555/hdtvlogo/three-body-641091fc40aa5.png"
+          },
+          {
+            "alt" : "Three-Body",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/2/gracenote/2ce22bcfd4e6a3d1b97c88e4e355d7d7.jpg"
+          },
+          {
+            "alt" : "Three-Body",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/buXHm2shttFRQIBsCFlv5L2TmKh.jpg"
+          },
+          {
+            "alt" : "Three-Body",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/4/gracenote/4dd4ba00ac051d1fbc084b605ebeb175.jpg"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "data" : {
+    "allFriendsV2" : [
+      {
+        "user" : {
+          "id" : "12345",
+          "username" : "nylonee1"
+        }
+      },
+      {
+        "user" : {
+          "id" : "67890",
+          "username" : "nylonee2"
+        }
+      },
+      {
+        "user" : {
+          "id" : "45678",
+          "username" : "nylonee3"
+        }
+      }
+    ]
+  }
+}
