@@ -14,8 +14,9 @@ val logbackVersion = "1.4.7"
 val fs2Version = "3.7.0"
 val circeVersion = "0.14.5"
 val circeGenericExtrasVersion = "0.14.3"
-val scalatestVersion = "3.2.15"
 val slf4jVersion = "2.0.9"
+val scalatestVersion = "3.2.15"
+val scalamockVersion = "5.2.0"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-library" % scalaVersion.value % "provided",
@@ -29,6 +30,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion % Test,
   "io.circe" %% "circe-generic-extras" % circeGenericExtrasVersion % Test,
+  "org.scalamock" %% "scalamock" % scalamockVersion % Test,
   "org.scalatest" %% "scalatest" % scalatestVersion % Test
 )
 

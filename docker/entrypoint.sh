@@ -46,4 +46,12 @@ if [ -n "$REFRESH_INTERVAL_SECONDS" ]; then
   CMD="$CMD -Dinterval.seconds=$REFRESH_INTERVAL_SECONDS"
 fi
 
+if [ -n "$SONARR_BYPASS_IGNORED" ]; then
+  CMD="$CMD -Dsonarr.bypassIgnored=$SONARR_BYPASS_IGNORED"
+fi
+
+if [ -n "$RADARR_BYPASS_IGNORED" ]; then
+  CMD="$CMD -Dradarr.bypassIgnored=$RADARR_BYPASS_IGNORED"
+fi
+
 exec $CMD

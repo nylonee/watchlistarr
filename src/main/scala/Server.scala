@@ -1,9 +1,13 @@
 
 import cats.effect._
+import configuration.{Configuration, SystemPropertyReader}
+import utils.HttpClient
 
 object Server extends IOApp {
 
-  val config = new Configuration
+  val configReader = SystemPropertyReader
+  val httpClient = new HttpClient()
+  val config = new Configuration(configReader, httpClient)
 
   def run(args: List[String]): IO[ExitCode] = {
 
