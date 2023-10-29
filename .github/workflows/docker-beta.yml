@@ -1,9 +1,7 @@
-name: Docker Image CI
+name: Push to beta tag
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -26,6 +24,6 @@ jobs:
         run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG}
       - name: Push Docker image
         run: |
-          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:alpha
+          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:beta
           docker push nylonee/watchlistarr:${DOCKER_TAG}
-          docker push nylonee/watchlistarr:alpha
+          docker push nylonee/watchlistarr:beta
