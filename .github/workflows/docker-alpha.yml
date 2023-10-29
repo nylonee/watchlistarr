@@ -1,4 +1,4 @@
-name: Push to alpha tag
+name: Update Docker alpha tag
 
 on:
   pull_request:

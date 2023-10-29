@@ -1,4 +1,4 @@
-name: Push to beta tag
+name: Update Docker beta tag
 
 on:
   push:
