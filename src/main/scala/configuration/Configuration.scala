@@ -1,7 +1,7 @@
 package configuration
 
 import cats.effect.IO
-import cats.effect.unsafe.implicits.global
+import cats.effect.unsafe.IORuntime
 import io.circe.generic.auto._
 import model.QualityProfile
 import org.http4s.Uri
@@ -10,7 +10,7 @@ import utils.{ArrUtils, HttpClient}
 
 import scala.concurrent.duration._
 
-class Configuration(configReader: ConfigurationReader, val client: HttpClient) {
+class Configuration(configReader: ConfigurationReader, val client: HttpClient)(implicit runtime: IORuntime) {
 
   private val logger = LoggerFactory.getLogger(getClass)
 

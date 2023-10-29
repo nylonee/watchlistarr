@@ -4,12 +4,10 @@ import configuration.{Configuration, SystemPropertyReader}
 import utils.HttpClient
 
 object Server extends IOApp {
-
-  val configReader = SystemPropertyReader
-  val httpClient = new HttpClient()
-  val config = new Configuration(configReader, httpClient)
-
   def run(args: List[String]): IO[ExitCode] = {
+    val configReader = SystemPropertyReader
+    val httpClient = new HttpClient()
+    val config = new Configuration(configReader, httpClient)(runtime)
 
     def periodicTask: IO[Unit] =
       WatchlistSync.run(config) >>

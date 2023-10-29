@@ -1,6 +1,7 @@
 package configuration
 
 import cats.effect.IO
+import cats.effect.unsafe.implicits.global
 import model.QualityProfile
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
