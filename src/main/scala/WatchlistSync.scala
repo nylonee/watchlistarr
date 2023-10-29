@@ -51,23 +51,23 @@ object WatchlistSync {
           }
         case Left(err) =>
           logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
-          throw err
+          List.empty
       }
       exclusions <- if (bypass) {
         IO.pure(List.empty)
       } else {
-        ArrUtils.getToArr(client)(baseUrl, apiKey, "importlistexclusion").map {
+        ArrUtils.getToArr(client)(baseUrl, apiKey, "exclusions").map {
           case Right(res) =>
-            res.as[List[RadarrMovie]].getOrElse {
+            res.as[List[RadarrMovieExclusion]].getOrElse {
               logger.warn("Unable to fetch movie exclusions from Radarr - decoding failure. Returning empty list instead")
               List.empty
             }
           case Left(err) =>
             logger.warn(s"Received error while trying to fetch movie exclusions from Radarr: $err")
-            throw err
+            List.empty
         }
       }
-    } yield movies diff exclusions
+    } yield movies ++ exclusions.map(_.toRadarrMovie)
 
   private def fetchSeries(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[SonarrSeries]] =
     for {
@@ -79,23 +79,23 @@ object WatchlistSync {
           }
         case Left(err) =>
           logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
-          throw err
+          List.empty
       }
       exclusions <- if (bypass) {
         IO.pure(List.empty)
       } else {
         ArrUtils.getToArr(client)(baseUrl, apiKey, "importlistexclusion").map {
           case Right(res) =>
-            res.as[List[RadarrMovie]].getOrElse {
+            res.as[List[SonarrSeries]].getOrElse {
               logger.warn("Unable to fetch show exclusions from Sonarr - decoding failure. Returning empty list instead")
               List.empty
             }
           case Left(err) =>
             logger.warn(s"Received error while trying to fetch show exclusions from Sonarr: $err")
-            throw err
+            List.empty
         }
       }
-    } yield shows diff exclusions
+    } yield shows ++ exclusions
 
 
   private def merge(r: List[RadarrMovie], s: List[SonarrSeries]): Set[String] = {
