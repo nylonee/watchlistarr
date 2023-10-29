@@ -25,6 +25,11 @@ docker run \
   nylonee/watchlistarr
 ```
 
+Docker tag options:
+ * `latest` - Stable version, follows the Releases
+ * `beta` - Beta version, follows the main branch
+ * `alpha` - Experimental version, follows the latest successful PR build
+
 | Key                      | Example Value                    | Optional | Description                                                              |
 |--------------------------|----------------------------------|----------|--------------------------------------------------------------------------|
 | REFRESH_INTERVAL_SECONDS | 60                               | Yes      | Number of seconds to wait in between checking the watchlist              |
