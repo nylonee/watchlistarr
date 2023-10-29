@@ -1,0 +1,29 @@
+name: Update Docker alpha tag
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up environment
+        run: echo "DOCKER_TAG=$(date +%s)" >> $GITHUB_ENV
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the Docker image
+        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG}
+      - name: Push Docker image
+        run: |
+          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:alpha
+          docker push nylonee/watchlistarr:${DOCKER_TAG}
+          docker push nylonee/watchlistarr:alpha
