@@ -18,9 +18,11 @@ class Configuration(configReader: ConfigurationReader, val client: HttpClient) {
 
   val (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId) = getAndTestSonarrUrlAndApiKey.unsafeRunSync()
   val sonarrRootFolder: String = configReader.getConfigOption(Keys.sonarrRootFolder).getOrElse("/data/")
+  val sonarrBypassIgnored: Boolean = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
 
   val (radarrBaseUrl, radarrApiKey, radarrQualityProfileId) = getAndTestRadarrUrlAndApiKey.unsafeRunSync()
   val radarrRootFolder: String = configReader.getConfigOption(Keys.radarrRootFolder).getOrElse("/data/")
+  val radarrBypassIgnored: Boolean = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
 
   val plexWatchlistUrls: List[Uri] = getPlexWatchlistUrls
 
