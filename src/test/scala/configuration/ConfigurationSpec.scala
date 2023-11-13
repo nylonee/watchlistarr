@@ -20,7 +20,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader()
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.radarrApiKey shouldBe "radarr-api-key"
     config.sonarrApiKey shouldBe "sonarr-api-key"
@@ -32,7 +32,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(sonarrApiKey = None)
     val mockHttpClient = createMockHttpClient()
 
-    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+    an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
   it should "fail if missing radarr API key" in {
@@ -40,7 +40,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(radarrApiKey = None)
     val mockHttpClient = createMockHttpClient()
 
-    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+    an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
   it should "fail if missing plex watchlist 1 and 2" in {
@@ -48,7 +48,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(plexWatchlist1 = None)
     val mockHttpClient = createMockHttpClient()
 
-    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+    an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
   it should "pass if missing plex watchlist 1 but there's a plex watchlist 2" in {
@@ -56,7 +56,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(plexWatchlist1 = None, plexWatchlist2 = Some(s"https://rss.plex.tv/2"))
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.plexWatchlistUrls shouldBe inAnyOrder(List(Uri.unsafeFromString("https://rss.plex.tv/2")))
   }
@@ -66,7 +66,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(plexWatchlist1 = Some(s"https://rss.plex.tv/1"), plexWatchlist2 = Some(s"https://rss.plex.tv/2"))
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.plexWatchlistUrls shouldBe inAnyOrder(List(
       Uri.unsafeFromString("https://rss.plex.tv/1"),
@@ -79,7 +79,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader()
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.sonarrRootFolder shouldBe "/data2"
   }
@@ -89,7 +89,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/data3"))
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.sonarrRootFolder shouldBe "/data3"
   }
@@ -99,7 +99,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/data3/"))
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.sonarrRootFolder shouldBe "/data3"
   }
@@ -109,7 +109,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/unknown"))
     val mockHttpClient = createMockHttpClient()
 
-    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+    an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
   it should "fetch the first accessible root folder of radarr if none is provided" in {
@@ -117,7 +117,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader()
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.radarrRootFolder shouldBe "/data2"
   }
@@ -128,7 +128,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/data3"))
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.radarrRootFolder shouldBe "/data3"
   }
@@ -138,7 +138,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/data3/"))
     val mockHttpClient = createMockHttpClient()
 
-    val config = new Configuration(mockConfigReader, mockHttpClient)
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
     config.radarrRootFolder shouldBe "/data3"
   }
@@ -148,7 +148,7 @@ class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/unknown"))
     val mockHttpClient = createMockHttpClient()
 
-    an[IllegalArgumentException] should be thrownBy new Configuration(mockConfigReader, mockHttpClient)
+    an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
   private def createMockConfigReader(

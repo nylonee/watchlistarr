@@ -12,17 +12,17 @@ object WatchlistSync {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def run(config: Configuration): IO[Unit] = {
+  def run(config: Configuration, client: HttpClient): IO[Unit] = {
 
     logger.debug("Starting watchlist sync")
 
     for {
-      watchlistDatas <- config.plexWatchlistUrls.map(fetchWatchlist(config.client)).sequence
+      watchlistDatas <- config.plexWatchlistUrls.map(fetchWatchlist(client)).sequence
       watchlistData = watchlistDatas.fold(Watchlist(Set.empty))(mergeWatchLists)
-      movies <- fetchMovies(config.client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
-      series <- fetchSeries(config.client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
+      movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
+      series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
       allIds = merge(movies, series)
-      _ <- missingIds(config.client)(config)(allIds, watchlistData.items)
+      _ <- missingIds(client)(config)(allIds, watchlistData.items)
     } yield ()
   }
 

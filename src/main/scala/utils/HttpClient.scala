@@ -6,10 +6,11 @@ import org.http4s.{Header, Method, Request, Uri}
 import org.http4s.ember.client.EmberClientBuilder
 import org.typelevel.ci.CIString
 import org.http4s.circe._
-
-import scala.concurrent.duration.DurationInt
+import org.slf4j.LoggerFactory
 
 class HttpClient {
+  private val logger = LoggerFactory.getLogger(getClass)
+
   private val clientResource = EmberClientBuilder
     .default[IO]
     .build
@@ -19,6 +20,7 @@ class HttpClient {
     val requestWithApiKey = apiKey.fold(baseRequest)(key => baseRequest.withHeaders(Header.Raw(CIString("X-Api-Key"), key)))
     val requestWithPayload = payload.fold(requestWithApiKey)(p => requestWithApiKey.withEntity(p))
 
+    logger.warn(s"Current thread: ${Thread.currentThread()}")
     clientResource.use(_.expect[Json](requestWithPayload).attempt)
   }
 }

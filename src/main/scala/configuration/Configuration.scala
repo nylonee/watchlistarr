@@ -1,7 +1,6 @@
 package configuration
 
 import cats.effect.IO
-import cats.effect.unsafe.IORuntime
 import io.circe.generic.auto._
 import model.{QualityProfile, RootFolder}
 import org.http4s.Uri
@@ -10,21 +9,51 @@ import utils.{ArrUtils, HttpClient}
 
 import scala.concurrent.duration._
 
-class Configuration(configReader: ConfigurationReader, val client: HttpClient)(implicit runtime: IORuntime) {
+case class Configuration(
+                          refreshInterval: FiniteDuration,
+                          sonarrBaseUrl: Uri,
+                          sonarrApiKey: String,
+                          sonarrQualityProfileId: Int,
+                          sonarrRootFolder: String,
+                          sonarrBypassIgnored: Boolean,
+                          radarrBaseUrl: Uri,
+                          radarrApiKey: String,
+                          radarrQualityProfileId: Int,
+                          radarrRootFolder: String,
+                          radarrBypassIgnored: Boolean,
+                          plexWatchlistUrls: List[Uri]
+                        )
+
+object ConfigurationUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  val refreshInterval: FiniteDuration = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
+  def create(configReader: ConfigurationReader, client: HttpClient): IO[Configuration] =
+    for {
+      sonarrConfig <- getSonarrConfig(configReader, client)
+      refreshInterval = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
+      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder) = sonarrConfig
+      sonarrBypassIgnored = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
+      radarrConfig <- getRadarrConfig(configReader, client)
+      (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = radarrConfig
+      radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
+      plexWatchlistUrls = getPlexWatchlistUrls(configReader)
+    } yield Configuration(
+      refreshInterval,
+      sonarrBaseUrl,
+      sonarrApiKey,
+      sonarrQualityProfileId,
+      sonarrRootFolder,
+      sonarrBypassIgnored,
+      radarrBaseUrl,
+      radarrApiKey,
+      radarrQualityProfileId,
+      radarrRootFolder,
+      radarrBypassIgnored,
+      plexWatchlistUrls
+    )
 
-  val (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder) = getSonarrConfig.unsafeRunSync()
-  val sonarrBypassIgnored: Boolean = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
-
-  val (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = getRadarrConfig.unsafeRunSync()
-  val radarrBypassIgnored: Boolean = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
-
-  val plexWatchlistUrls: List[Uri] = getPlexWatchlistUrls
-
-  private def getSonarrConfig: IO[(Uri, String, Int, String)] = {
+  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
     val url = configReader.getConfigOption(Keys.sonarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
       val default = "http://localhost:8989"
       logger.warn(s"Unable to fetch sonarr baseUrl, using default $default")
@@ -39,7 +68,7 @@ class Configuration(configReader: ConfigurationReader, val client: HttpClient)(i
         selectRootFolder(allRootFolders, configReader.getConfigOption(Keys.sonarrRootFolder))
       case Left(err) =>
         throwError(s"Unable to connect to Sonarr at $url, with error $err")
-    }.flatMap ( rootFolder =>
+    }.flatMap(rootFolder =>
       ArrUtils.getToArr(client)(url, apiKey, "qualityprofile").map {
         case Right(res) =>
           val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
@@ -51,7 +80,7 @@ class Configuration(configReader: ConfigurationReader, val client: HttpClient)(i
     )
   }
 
-  private def getRadarrConfig: IO[(Uri, String, Int, String)] = {
+  private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
     val url = configReader.getConfigOption(Keys.radarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
       val default = "http://localhost:7878"
       logger.warn(s"Unable to fetch radarr baseUrl, using default $default")
@@ -67,32 +96,16 @@ class Configuration(configReader: ConfigurationReader, val client: HttpClient)(i
       case Left(err) =>
         throwError(s"Unable to connect to Radarr at $url, with error $err")
     }.flatMap(rootFolder =>
-    ArrUtils.getToArr(client)(url, apiKey, "qualityprofile").map {
-      case Right(res) =>
-        val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
-        val chosenQualityProfile = configReader.getConfigOption(Keys.radarrQualityProfile)
-        (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile), rootFolder)
-      case Left(err) =>
-        throwError(s"Unable to connect to Radarr at $url, with error $err")
-    }
+      ArrUtils.getToArr(client)(url, apiKey, "qualityprofile").map {
+        case Right(res) =>
+          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+          val chosenQualityProfile = configReader.getConfigOption(Keys.radarrQualityProfile)
+          (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile), rootFolder)
+        case Left(err) =>
+          throwError(s"Unable to connect to Radarr at $url, with error $err")
+      }
     )
   }
-
-  private def selectRootFolder(allRootFolders: List[RootFolder], maybeEnvVariable: Option[String]): String =
-    (allRootFolders, maybeEnvVariable) match {
-      case (Nil, _) =>
-        throwError("Could not find any root folders, check your Sonarr/Radarr settings")
-      case (_, Some(path)) =>
-        allRootFolders.filter(_.accessible).find(r => normalizePath(r.path) == normalizePath(path)).map(_.path).getOrElse(
-          throwError(s"Unable to find root folder $path. Possible values are ${allRootFolders.filter(_.accessible).map(_.path)}")
-        )
-      case (_, None) =>
-        allRootFolders.find(_.accessible).map(_.path).getOrElse(
-          throwError("Found root folders, but they are not accessible by Sonarr/Radarr")
-        )
-    }
-
-  private def normalizePath(path: String): String = if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path
 
   private def getQualityProfileId(allProfiles: List[QualityProfile], maybeEnvVariable: Option[String]): Int =
     (allProfiles, maybeEnvVariable) match {
@@ -110,7 +123,23 @@ class Configuration(configReader: ConfigurationReader, val client: HttpClient)(i
         )
     }
 
-  private def getPlexWatchlistUrls: List[Uri] =
+  private def selectRootFolder(allRootFolders: List[RootFolder], maybeEnvVariable: Option[String]): String =
+    (allRootFolders, maybeEnvVariable) match {
+      case (Nil, _) =>
+        throwError("Could not find any root folders, check your Sonarr/Radarr settings")
+      case (_, Some(path)) =>
+        allRootFolders.filter(_.accessible).find(r => normalizePath(r.path) == normalizePath(path)).map(_.path).getOrElse(
+          throwError(s"Unable to find root folder $path. Possible values are ${allRootFolders.filter(_.accessible).map(_.path)}")
+        )
+      case (_, None) =>
+        allRootFolders.find(_.accessible).map(_.path).getOrElse(
+          throwError("Found root folders, but they are not accessible by Sonarr/Radarr")
+        )
+    }
+
+  private def normalizePath(path: String): String = if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path
+
+  private def getPlexWatchlistUrls(configReader: ConfigurationReader): List[Uri] =
     Set(
       configReader.getConfigOption(Keys.plexWatchlist1),
       configReader.getConfigOption(Keys.plexWatchlist2)

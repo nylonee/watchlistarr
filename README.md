@@ -15,7 +15,7 @@ intervals, and cannot be customized
 
 ### Ombi/Overseer limitation
 
-While Ombi and Overseer have built-in functionality, there are two problems with this:
+While Ombi and Overseer have built-in functionality, there are a few problems with this:
 
 * They are customizable down to 5 minute intervals, so doesn't allow the "real-time" sync that Watchlistarr does
 * They rely on Plex tokens, which expire and break the sync if you're not regularly logging into Ombi/Overseer
