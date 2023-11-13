@@ -20,6 +20,7 @@ class HttpClient {
     val requestWithApiKey = apiKey.fold(baseRequest)(key => baseRequest.withHeaders(Header.Raw(CIString("X-Api-Key"), key)))
     val requestWithPayload = payload.fold(requestWithApiKey)(p => requestWithApiKey.withEntity(p))
 
+    logger.info(s"Thread: ${Thread.currentThread()}")
     clientResource.use(_.expect[Json](requestWithPayload).attempt)
   }
 }
