@@ -4,6 +4,8 @@
 
 Sync plex watchlists in realtime with Sonarr and Radarr. **Requires Plex Pass**
 
+**Requires Sonarr v4**
+
 ## Why?
 ### Sonarr/Radarr limitation
 While Sonarr and Radarr have built-in functionality (in v4 and v3 respectively), they are set at 6 hour refresh intervals, and cannot be customized
