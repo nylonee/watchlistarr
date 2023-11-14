@@ -25,7 +25,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: 'sbt'
-      - name: Check for dependency updates
+      - name: sbt validation
         run: sbt "dependencyUpdatesFailBuild; unusedCompileDependenciesTest; undeclaredCompileDependenciesTest; test"
       - name: Build fat JAR
         if: startsWith(github.ref, 'refs/tags/')
