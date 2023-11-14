@@ -10,6 +10,7 @@ val caseInsensitiveVersion = "1.4.0"
 val catsCoreVersion = "2.9.0"
 val catsEffectVersion = "3.5.0"
 val catsEffectKernelVersion = "3.5.1"
+val log4CatsVersion = "2.6.0"
 val circeGenericExtrasVersion = "0.14.3"
 val circeVersion = "0.14.6"
 val fs2Version = "3.7.0"
@@ -38,6 +39,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % catsEffectVersion,
   "org.typelevel" %% "cats-effect-kernel" % catsEffectKernelVersion,
   "org.typelevel" %% "cats-effect-std" % catsEffectKernelVersion,
+  "org.typelevel" %% "log4cats-slf4j" % log4CatsVersion,
   "org.typelevel" %% "vault" % vaultVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion % Test,
