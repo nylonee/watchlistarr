@@ -3,6 +3,8 @@ name: Docker Release CI
 on:
   release:
     types: [published]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
 
@@ -52,4 +54,3 @@ jobs:
           docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:latest
           docker push nylonee/watchlistarr:${DOCKER_TAG}
           docker push nylonee/watchlistarr:latest
-          steps:
