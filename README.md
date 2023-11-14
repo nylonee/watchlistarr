@@ -24,6 +24,7 @@ While Ombi and Overseer have built-in functionality, there are a few problems wi
 
 ## Getting Started
 
+### Docker
 The easiest way to try this code is using docker:
 
 ```bash
@@ -39,6 +40,8 @@ Docker tag options:
 * `latest` - Stable version, follows the Releases
 * `beta` - Beta version, follows the main branch
 * `alpha` - Experimental version, follows the latest successful PR build
+
+### Environment Variables (For Docker only)
 
 | Key                      | Example Value                    | Optional | Description                                                                                                                                                                                |
 |--------------------------|----------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -56,6 +59,17 @@ Docker tag options:
 | RADARR_BYPASS_IGNORED    | true                             | Yes      | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                        |
 | PLEX_WATCHLIST_URL_1     | https://rss.plex.tv/UUID         | No       | First Plex Watchlist URL                                                                                                                                                                   |
 | PLEX_WATCHLIST_URL_2     | https://rss.plex.tv/UUID         | Yes      | Second Plex Watchlist URL (if applicable)                                                                                                                                                  |
+
+
+### Java
+Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
+```bash
+java -jar watchlistarr.java\
+  -Dsonarr.apikey=YOUR_API_KEY\
+  -Dradarr.apikey=YOUR_API_KEY\
+  -Dplex.watchlist1=YOUR_PLEX_WATCHLIST_URL
+```
+For a full list of options to pass in and how they relate to the environment variable, see [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entrypoint.sh)
 
 ### Getting your Plex Watchlist URLs
 
