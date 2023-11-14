@@ -6,11 +6,16 @@ import org.http4s.ember.client.EmberClientBuilder
 import org.slf4j.LoggerFactory
 import utils.HttpClient
 
+import java.nio.channels.ClosedChannelException
+
 object Server extends IOApp {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  override protected def reportFailure(err: Throwable): IO[Unit] = IO.pure(logger.error("IOApp reported a failure", err))
+  override protected def reportFailure(err: Throwable): IO[Unit] = err match {
+    case ClosedChannelException => IO.pure(logger.debug("Suppressing ClosedChannelException error", err))
+    case _ => IO.pure(logger.error("Failure caught and handled by IOApp", err))
+  }
 
   def run(args: List[String]): IO[ExitCode] = {
     val maxConcurrentOutgoingRequests = 2
