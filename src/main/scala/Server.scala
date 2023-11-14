@@ -3,16 +3,19 @@ import cats.effect._
 import cats.effect.std.Semaphore
 import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
 import org.http4s.ember.client.EmberClientBuilder
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 import utils.HttpClient
 
 object Server extends IOApp {
+
+  private val logger = Slf4jLogger.getLogger[IO]
   def run(args: List[String]): IO[ExitCode] = {
-    val maxConcurrentOutgoingRequests = 1
+    val maxConcurrentOutgoingRequests = 2
 
     for {
       semaphore <- Semaphore[IO](maxConcurrentOutgoingRequests)
       configReader = SystemPropertyReader
-      clientResource = EmberClientBuilder.default[IO].build
+      clientResource = EmberClientBuilder.default[IO].withLogger(logger).build
       httpClient = new HttpClient(clientResource, semaphore)
       memoizedConfigIo <- ConfigurationUtils.create(configReader, httpClient).memoize
       result <- periodicTask(memoizedConfigIo, httpClient).foreverM.as(ExitCode.Success)
