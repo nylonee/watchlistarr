@@ -11,22 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up docker environment
-        run: echo "DOCKER_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build the Docker image
-        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG}
-      - name: Push Docker image
-        run: |
-          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:latest
-          docker push nylonee/watchlistarr:${DOCKER_TAG}
-          docker push nylonee/watchlistarr:latest
-          steps:
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
@@ -52,3 +36,20 @@ jobs:
           asset_path: ./target/scala-2.13/watchlistarr-assembly-0.1.0-SNAPSHOT.jar
           asset_name: watchlistarr-assembly-0.1.0-SNAPSHOT.jar
           asset_content_type: application/java-archive
+
+      - uses: actions/checkout@v2
+      - name: Set up docker environment
+        run: echo "DOCKER_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the Docker image
+        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG}
+      - name: Push Docker image
+        run: |
+          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:latest
+          docker push nylonee/watchlistarr:${DOCKER_TAG}
+          docker push nylonee/watchlistarr:latest
+          steps:
