@@ -35,8 +35,10 @@ jobs:
         run: sbt test
       - name: Build fat JAR
         run: sbt assembly
+      - name: Rename fat JAR
+        run: cp ./target/scala-2.13/watchlistarr-assembly-0.1.0-SNAPSHOT.jar ./target/scala-2.13/watchlistarr.jar
       - name: Upload JAR to GitHub Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ./target/scala-2.13/watchlistarr-assembly-0.1.0-SNAPSHOT.jar
+          files: ./target/scala-2.13/watchlistarr.jar
