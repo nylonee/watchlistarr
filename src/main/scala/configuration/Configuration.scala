@@ -16,6 +16,7 @@ case class Configuration(
                           sonarrQualityProfileId: Int,
                           sonarrRootFolder: String,
                           sonarrBypassIgnored: Boolean,
+                          sonarrSeasonMonitoring: String,
                           radarrBaseUrl: Uri,
                           radarrApiKey: String,
                           radarrQualityProfileId: Int,
@@ -34,6 +35,7 @@ object ConfigurationUtils {
       refreshInterval = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
       (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder) = sonarrConfig
       sonarrBypassIgnored = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
+      sonarrSeasonMonitoring = configReader.getConfigOption(Keys.sonarrSeasonMonitoring).getOrElse("all")
       radarrConfig <- getRadarrConfig(configReader, client)
       (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
@@ -45,6 +47,7 @@ object ConfigurationUtils {
       sonarrQualityProfileId,
       sonarrRootFolder,
       sonarrBypassIgnored,
+      sonarrSeasonMonitoring,
       radarrBaseUrl,
       radarrApiKey,
       radarrQualityProfileId,
