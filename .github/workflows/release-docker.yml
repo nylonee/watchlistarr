@@ -1,0 +1,28 @@
+name: Docker Release CI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up environment
+        run: echo "DOCKER_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the Docker image
+        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG}
+      - name: Push Docker image
+        run: |
+          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:latest
+          docker push nylonee/watchlistarr:${DOCKER_TAG}
+          docker push nylonee/watchlistarr:latest
