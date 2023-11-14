@@ -37,6 +37,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsCoreVersion,
   "org.typelevel" %% "cats-effect" % catsEffectVersion,
   "org.typelevel" %% "cats-effect-kernel" % catsEffectKernelVersion,
+  "org.typelevel" %% "cats-effect-std" % catsEffectKernelVersion,
   "org.typelevel" %% "vault" % vaultVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion % Test,
