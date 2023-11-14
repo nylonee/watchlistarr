@@ -54,4 +54,8 @@ if [ -n "$RADARR_BYPASS_IGNORED" ]; then
   CMD="$CMD -Dradarr.bypassIgnored=$RADARR_BYPASS_IGNORED"
 fi
 
+if [ -n "$SONARR_SEASON_MONITORING" ]; then
+  CMD="$CMD -Dsonarr.seasonMonitoring=$SONARR_SEASON_MONITORING"
+fi
+
 exec $CMD
