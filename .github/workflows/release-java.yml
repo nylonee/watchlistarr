@@ -1,10 +1,8 @@
-name: Docker Release CI
+name: Java Release CI
 
 on:
   release:
     types: [published]
-  pull_request:
-    branches: [ "main" ]
 
 permissions:
   contents: read
