@@ -1,7 +1,10 @@
-name: Java Release CI
+name: Test and Release
 
 on:
-  push
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
