@@ -1,8 +1,10 @@
-name: Java Release CI
+name: Test and Release
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -32,11 +34,7 @@ jobs:
       - name: Build fat JAR
         run: sbt assembly
       - name: Upload JAR to GitHub Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./target/scala-2.13/watchlistarr-assembly-0.1.0-SNAPSHOT.jar
-          asset_name: watchlistarr-assembly-0.1.0-SNAPSHOT.jar
-          asset_content_type: application/java-archive
+          files: ./target/scala-2.13/watchlistarr-assembly-0.1.0-SNAPSHOT.jar
