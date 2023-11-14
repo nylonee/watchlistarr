@@ -13,7 +13,7 @@ object Server extends IOApp {
   private val logger = LoggerFactory.getLogger(getClass)
 
   override protected def reportFailure(err: Throwable): IO[Unit] = err match {
-    case ClosedChannelException => IO.pure(logger.debug("Suppressing ClosedChannelException error", err))
+    case _: ClosedChannelException => IO.pure(logger.debug("Suppressing ClosedChannelException error", err))
     case _ => IO.pure(logger.error("Failure caught and handled by IOApp", err))
   }
 
