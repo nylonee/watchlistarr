@@ -8,6 +8,7 @@ object Keys {
   val sonarrQualityProfile = "sonarr.qualityProfile"
   val sonarrRootFolder = "sonarr.rootFolder"
   val sonarrBypassIgnored = "sonarr.bypassIgnored"
+  val sonarrSeasonMonitoring = "sonarr.seasonMonitoring"
 
   val radarrBaseUrl = "radarr.baseUrl"
   val radarrApiKey = "radarr.apikey"

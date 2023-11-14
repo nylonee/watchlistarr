@@ -43,21 +43,23 @@ Docker tag options:
 
 ### Environment Variables (For Docker only)
 
-| Key                      | Example Value                    | Optional | Description                                                                   |
-|--------------------------|----------------------------------|----------|-------------------------------------------------------------------------------|
-| REFRESH_INTERVAL_SECONDS | 60                               | Yes      | Number of seconds to wait in between checking the watchlist                   |
-| SONARR_API_KEY           | 7a392fb4817a46e59f2e84e7d5f021bc | No       | API key for Sonarr, found in your Sonarr UI -> General settings               |
-| SONARR_BASE_URL          | http://localhost:8989            | Yes      | Base URL for Sonarr, including the 'http' and port and any configured urlbase |
-| SONARR_QUALITY_PROFILE   | 1080p                            | Yes      | Quality profile for Sonarr, found in your Sonarr UI -> Profiles settings      |
-| SONARR_ROOT_FOLDER       | /data/                           | Yes      | Root folder for Sonarr                                                        |
-| SONARR_BYPASS_IGNORED    | true                             | Yes      | Boolean flag to bypass tv shows that are on the Sonarr Exclusion List         |
-| RADARR_API_KEY           | 7a392fb4817a46e59f2e84e7d5f021bc | No       | API key for Radarr, found in your Radarr UI -> General settings               |
-| RADARR_BASE_URL          | http://127.0.0.1:7878            | Yes      | Base URL for Radarr, including the 'http' and port and any configured urlbase |
-| RADARR_QUALITY_PROFILE   | 1080p                            | Yes      | Quality profile for Radarr, found in your Radarr UI -> Profiles settings      |
-| RADARR_ROOT_FOLDER       | /data/                           | Yes      | Root folder for Radarr                                                        |
-| RADARR_BYPASS_IGNORED    | true                             | Yes      | Boolean flag to bypass movies that are on the Radarr Exclusion List           |
-| PLEX_WATCHLIST_URL_1     | https://rss.plex.tv/UUID         | No       | First Plex Watchlist URL                                                      |
-| PLEX_WATCHLIST_URL_2     | https://rss.plex.tv/UUID         | Yes      | Second Plex Watchlist URL (if applicable)                                     |
+| Key                      | Example Value                    | Optional | Description                                                                                                                                                                                |
+|--------------------------|----------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| REFRESH_INTERVAL_SECONDS | 60                               | Yes      | Number of seconds to wait in between checking the watchlist                                                                                                                                |
+| SONARR_API_KEY           | 7a392fb4817a46e59f2e84e7d5f021bc | No       | API key for Sonarr, found in your Sonarr UI -> General settings                                                                                                                            |
+| SONARR_BASE_URL          | http://localhost:8989            | Yes      | Base URL for Sonarr, including the 'http' and port and any configured urlbase                                                                                                              |
+| SONARR_QUALITY_PROFILE   | 1080p                            | Yes      | Quality profile for Sonarr, found in your Sonarr UI -> Profiles settings                                                                                                                   |
+| SONARR_ROOT_FOLDER       | /data/                           | Yes      | Root folder for Sonarr                                                                                                                                                                     |
+| SONARR_BYPASS_IGNORED    | true                             | Yes      | Boolean flag to bypass tv shows that are on the Sonarr Exclusion List                                                                                                                      |
+| SONARR_SEASON_MONITORING | all | Yes | Default monitoring for new seasons added to Sonarr. Full list of options are found in the [Sonarr API Docs](https://sonarr.tv/docs/api/#/Series/post_api_v3_series) under **MonitorTypes** |
+| RADARR_API_KEY           | 7a392fb4817a46e59f2e84e7d5f021bc | No       | API key for Radarr, found in your Radarr UI -> General settings                                                                                                                            |
+| RADARR_BASE_URL          | http://127.0.0.1:7878            | Yes      | Base URL for Radarr, including the 'http' and port and any configured urlbase                                                                                                              |
+| RADARR_QUALITY_PROFILE   | 1080p                            | Yes      | Quality profile for Radarr, found in your Radarr UI -> Profiles settings                                                                                                                   |
+| RADARR_ROOT_FOLDER       | /data/                           | Yes      | Root folder for Radarr                                                                                                                                                                     |
+| RADARR_BYPASS_IGNORED    | true                             | Yes      | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                        |
+| PLEX_WATCHLIST_URL_1     | https://rss.plex.tv/UUID         | No       | First Plex Watchlist URL                                                                                                                                                                   |
+| PLEX_WATCHLIST_URL_2     | https://rss.plex.tv/UUID         | Yes      | Second Plex Watchlist URL (if applicable)                                                                                                                                                  |
+
 
 ### Java
 Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
