@@ -14,7 +14,7 @@ import io.circe.syntax.EncoderOps
 import scala.io.Source
 
 class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory {
-  "A model.Configuration" should "start with all required values provided" in {
+  "ConfigurationUtils.create" should "start with all required values provided" in {
 
     val mockConfigReader = createMockConfigReader()
     val mockHttpClient = createMockHttpClient()
