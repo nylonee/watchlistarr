@@ -39,7 +39,7 @@ object Server extends IOApp {
     for {
       config <- configIO
       _ <- PlexTokenSync.run(config, httpClient)
-      _ <- IO.sleep(24.seconds)
+      _ <- IO.sleep(24.hours)
       _ <- plexTokenSync(configIO, httpClient)
     } yield ()
 }
