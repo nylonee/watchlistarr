@@ -150,13 +150,24 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
+  it should "allow an optional plex token to be passed in" in {
+
+    val mockConfigReader = createMockConfigReader(plexToken = Some("test-token"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
+    noException should be thrownBy config
+    config.plexToken shouldBe Some("test-token")
+  }
+
   private def createMockConfigReader(
                                       sonarrApiKey: Option[String] = Some("sonarr-api-key"),
                                       sonarrRootFolder: Option[String] = None,
                                       radarrRootFolder: Option[String] = None,
                                       radarrApiKey: Option[String] = Some("radarr-api-key"),
                                       plexWatchlist1: Option[String] = Some(s"https://rss.plex.tv/1"),
-                                      plexWatchlist2: Option[String] = None
+                                      plexWatchlist2: Option[String] = None,
+                                      plexToken: Option[String] = None
                                     ): ConfigurationReader = {
     val unset = None
 
@@ -175,6 +186,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     (mockConfigReader.getConfigOption _).expects(Keys.plexWatchlist1).returning(plexWatchlist1).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.plexWatchlist2).returning(plexWatchlist2).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrSeasonMonitoring).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.plexToken).returning(plexToken).anyNumberOfTimes()
     mockConfigReader
   }
 
