@@ -24,6 +24,7 @@ object ConfigurationUtils {
       (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
       plexWatchlistUrls = getPlexWatchlistUrls(configReader)
+      plexToken = configReader.getConfigOption(Keys.plexToken)
     } yield Configuration(
       refreshInterval,
       sonarrBaseUrl,
@@ -37,7 +38,8 @@ object ConfigurationUtils {
       radarrQualityProfileId,
       radarrRootFolder,
       radarrBypassIgnored,
-      plexWatchlistUrls
+      plexWatchlistUrls,
+      plexToken
     )
 
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {

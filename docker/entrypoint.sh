@@ -58,4 +58,8 @@ if [ -n "$SONARR_SEASON_MONITORING" ]; then
   CMD="$CMD -Dsonarr.seasonMonitoring=$SONARR_SEASON_MONITORING"
 fi
 
+if [ -n "$PLEX_TOKEN" ]; then
+  CMD="$CMD -Dplex.token=$PLEX_TOKEN"
+fi
+
 exec $CMD

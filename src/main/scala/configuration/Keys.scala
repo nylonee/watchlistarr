@@ -18,4 +18,5 @@ private[configuration] object Keys {
 
   val plexWatchlist1 = "plex.watchlist1"
   val plexWatchlist2 = "plex.watchlist2"
+  val plexToken = "plex.token"
 }

@@ -2,6 +2,7 @@ package plex
 
 import io.circe.generic.auto._
 import cats.effect.IO
+import configuration.Configuration
 import http.HttpClient
 import model.Item
 import org.http4s.{Method, Uri}
@@ -23,4 +24,19 @@ trait PlexUtils {
           Set.empty
         }
     }
+
+  protected def ping(client: HttpClient)(config: Configuration): IO[Unit] =
+    config.plexToken.map { token =>
+      val url = Uri
+        .unsafeFromString("https://plex.tv/api/v2/ping")
+        .withQueryParam("X-Plex-Token", token)
+        .withQueryParam("X-Plex-Client-Identifier", "watchlistarr")
+
+      client.httpRequest(Method.GET, url).map {
+        case Right(_) =>
+          logger.info(s"Refreshed the access token expiry")
+        case Left(err) =>
+          logger.warn(s"Unable to ping plex.tv: $err")
+      }
+    }.getOrElse(IO.unit)
 }

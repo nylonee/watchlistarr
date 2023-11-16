@@ -17,5 +17,6 @@ case class Configuration(
                           radarrQualityProfileId: Int,
                           radarrRootFolder: String,
                           radarrBypassIgnored: Boolean,
-                          plexWatchlistUrls: List[Uri]
+                          plexWatchlistUrls: List[Uri],
+                          plexToken: Option[String]
                         )
