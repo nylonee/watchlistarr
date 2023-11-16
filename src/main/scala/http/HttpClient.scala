@@ -1,11 +1,11 @@
-package utils
+package http
 
 import cats.effect.IO
 import io.circe.Json
-import org.http4s.{Header, Method, Request, Uri}
-import org.typelevel.ci.CIString
 import org.http4s.circe._
 import org.http4s.ember.client.EmberClientBuilder
+import org.http4s.{Header, Method, Request, Uri}
+import org.typelevel.ci.CIString
 
 class HttpClient {
 

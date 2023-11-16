@@ -1,14 +1,15 @@
 import cats.effect.IO
-import org.http4s.{Method, Uri}
 import cats.implicits._
 import configuration.Configuration
-import io.circe.generic.auto._
-import io.circe.syntax._
-import model._
+import http.HttpClient
+import model.Item
 import org.slf4j.LoggerFactory
-import utils.{ArrUtils, HttpClient}
+import plex.PlexUtils
+import radarr.RadarrUtils
+import sonarr.SonarrUtils
 
-object WatchlistSync {
+object WatchlistSync
+  extends SonarrUtils with RadarrUtils with PlexUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
@@ -17,100 +18,18 @@ object WatchlistSync {
     logger.debug("Starting watchlist sync")
 
     for {
-      watchlistDatas <- config.plexWatchlistUrls.map(fetchWatchlist(client)).sequence
-      watchlistData = watchlistDatas.fold(Watchlist(Set.empty))(mergeWatchLists)
+      watchlistDatas <- config.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).sequence
+      watchlistData = watchlistDatas.flatten.toSet
       movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
-      allIds = merge(movies, series)
-      _ <- missingIds(client)(config)(allIds, watchlistData.items)
+      allIds = movies ++ series
+      _ <- missingIds(client)(config)(allIds, watchlistData)
     } yield ()
   }
 
-  private def mergeWatchLists(l: Watchlist, r: Watchlist): Watchlist = Watchlist(l.items ++ r.items)
-
-  private def fetchWatchlist(client: HttpClient)(url: Uri): IO[Watchlist] =
-    client.httpRequest(Method.GET, url).map {
-      case Left(err) =>
-        logger.warn(s"Unable to fetch watchlist from Plex: $err")
-        Watchlist(Set.empty)
-      case Right(json) =>
-        logger.debug("Found Json from Plex watchlist, attempting to decode")
-        json.as[Watchlist].getOrElse {
-          logger.warn("Unable to fetch watchlist from Plex - decoding failure. Returning empty list instead")
-          Watchlist(Set.empty)
-        }
-    }
-
-  private def fetchMovies(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[RadarrMovie]] =
-    for {
-      movies <- ArrUtils.getToArr(client)(baseUrl, apiKey, "movie").map {
-        case Right(res) =>
-          res.as[List[RadarrMovie]].getOrElse {
-            logger.warn("Unable to fetch movies from Radarr - decoding failure. Returning empty list instead")
-            List.empty
-          }
-        case Left(err) =>
-          logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
-          List.empty
-      }
-      exclusions <- if (bypass) {
-        IO.pure(List.empty)
-      } else {
-        ArrUtils.getToArr(client)(baseUrl, apiKey, "exclusions").map {
-          case Right(res) =>
-            res.as[List[RadarrMovieExclusion]].getOrElse {
-              logger.warn("Unable to fetch movie exclusions from Radarr - decoding failure. Returning empty list instead")
-              List.empty
-            }
-          case Left(err) =>
-            logger.warn(s"Received error while trying to fetch movie exclusions from Radarr: $err")
-            List.empty
-        }
-      }
-    } yield movies ++ exclusions.map(_.toRadarrMovie)
-
-  private def fetchSeries(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[List[SonarrSeries]] =
-    for {
-      shows <- ArrUtils.getToArr(client)(baseUrl, apiKey, "series").map {
-        case Right(res) =>
-          res.as[List[SonarrSeries]].getOrElse {
-            logger.warn("Unable to fetch series from Sonarr - decoding failure. Returning empty list instead")
-            List.empty
-          }
-        case Left(err) =>
-          logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
-          List.empty
-      }
-      exclusions <- if (bypass) {
-        IO.pure(List.empty)
-      } else {
-        ArrUtils.getToArr(client)(baseUrl, apiKey, "importlistexclusion").map {
-          case Right(res) =>
-            res.as[List[SonarrSeries]].getOrElse {
-              logger.warn("Unable to fetch show exclusions from Sonarr - decoding failure. Returning empty list instead")
-              List.empty
-            }
-          case Left(err) =>
-            logger.warn(s"Received error while trying to fetch show exclusions from Sonarr: $err")
-            List.empty
-        }
-      }
-    } yield shows ++ exclusions
-
-
-  private def merge(r: List[RadarrMovie], s: List[SonarrSeries]): Set[String] = {
-    val allIds = r.map(_.imdbId) ++ r.map(_.tmdbId) ++ s.map(_.imdbId) ++ s.map(_.tvdbId)
-
-    allIds.collect {
-      case Some(x) => x.toString
-    }.toSet
-  }
-
-  private def missingIds(client: HttpClient)(config: Configuration)(allIds: Set[String], watchlist: Set[Item]): IO[Set[Unit]] =
+  private def missingIds(client: HttpClient)(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): IO[Set[Unit]] =
     watchlist.map { watchlistedItem =>
-      val watchlistIds = watchlistedItem.guids.map(cleanId).toSet
-
-      (watchlistIds.exists(allIds.contains), watchlistedItem.category) match {
+      (existingItems.exists(_.matches(watchlistedItem)), watchlistedItem.category) match {
         case (true, c) =>
           logger.debug(s"$c \"${watchlistedItem.title}\" already exists in Sonarr/Radarr")
           IO.unit
@@ -125,46 +44,5 @@ object WatchlistSync {
           IO.unit
       }
     }.toList.sequence.map(_.toSet)
-
-  private def cleanId: String => String = _.split("://").last
-
-  private case class RadarrPost(title: String, tmdbId: Long, qualityProfileId: Int = 6, rootFolderPath: String, addOptions: AddOptions = AddOptions())
-
-  private case class AddOptions(searchForMovie: Boolean = true)
-
-  private def findTmdbId(strings: List[String]): Option[Long] =
-    strings.find(_.startsWith("tmdb://")).flatMap(_.stripPrefix("tmdb://").toLongOption)
-
-  private def addToRadarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
-
-    val movie = RadarrPost(item.title, findTmdbId(item.guids).getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder)
-
-    ArrUtils.postToArr(client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson).map {
-      case Right(_) =>
-        logger.info(s"Successfully added movie ${item.title} to Radarr")
-      case Left(err) =>
-        logger.error(s"Failed to add movie ${item.title}: $err")
-    }
-  }
-
-  private case class SonarrPost(title: String, tvdbId: Long, qualityProfileId: Int, rootFolderPath: String, addOptions: SonarrAddOptions, monitored: Boolean = true)
-
-  private case class SonarrAddOptions(monitor: String, searchForCutoffUnmetEpisodes: Boolean = true, searchForMissingEpisodes: Boolean = true)
-
-  private def findTvdbId(strings: List[String]): Option[Long] =
-    strings.find(_.startsWith("tvdb://")).flatMap(_.stripPrefix("tvdb://").toLongOption)
-
-  private def addToSonarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
-
-    val sonarrAddOptions = SonarrAddOptions(config.sonarrSeasonMonitoring)
-    val show = SonarrPost(item.title, findTvdbId(item.guids).getOrElse(0L), config.sonarrQualityProfileId, config.sonarrRootFolder, sonarrAddOptions)
-
-    ArrUtils.postToArr(client)(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson).map {
-      case Right(_) =>
-        logger.info(s"Successfully added show ${item.title} to Sonarr")
-      case Left(err) =>
-        logger.info(s"Failed to add show ${item.title}: $err")
-    }
-  }
 
 }

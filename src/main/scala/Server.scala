@@ -1,8 +1,8 @@
 
 import cats.effect._
 import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
+import http.HttpClient
 import org.slf4j.LoggerFactory
-import utils.HttpClient
 
 import java.nio.channels.ClosedChannelException
 

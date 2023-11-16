@@ -2,20 +2,19 @@ package configuration
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import model.QualityProfile
+import http.HttpClient
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import utils.HttpClient
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 
 import scala.io.Source
 
-class ConfigurationSpec extends AnyFlatSpec with Matchers with MockFactory {
-  "A configuration.Configuration" should "start with all required values provided" in {
+class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory {
+  "ConfigurationUtils.create" should "start with all required values provided" in {
 
     val mockConfigReader = createMockConfigReader()
     val mockHttpClient = createMockHttpClient()

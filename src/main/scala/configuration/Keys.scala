@@ -1,6 +1,6 @@
 package configuration
 
-object Keys {
+private[configuration] object Keys {
   val intervalSeconds = "interval.seconds"
 
   val sonarrBaseUrl = "sonarr.baseUrl"
