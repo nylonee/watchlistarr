@@ -31,8 +31,10 @@ class SonarrUtilsSpec extends AnyFlatSpec with Matchers with SonarrUtils with Mo
       None
     ).returning(IO.pure(parse(exclusionsJsonStr))).once()
 
-    val result = fetchSeries(mockClient)("sonarr-api-key", Uri.unsafeFromString("http://localhost:8989"), false).unsafeRunSync()
+    val eitherResult = fetchSeries(mockClient)("sonarr-api-key", Uri.unsafeFromString("http://localhost:8989"), false).value.unsafeRunSync()
 
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty)
     result.size shouldBe 76
     result.head shouldBe Item("The Secret Life of 4, 5 and 6 Year Olds", List("tt6620876", "tvdb://304746"), "show")
     result.last shouldBe Item("Maternal", List("tt21636214", "tvdb://424724"), "show")
@@ -55,8 +57,8 @@ class SonarrUtilsSpec extends AnyFlatSpec with Matchers with SonarrUtils with Mo
       None
     ).returning(IO.pure(parse("[]"))).once()
 
-    val result = fetchSeries(mockClient)("sonarr-api-key", Uri.unsafeFromString("http://localhost:8989"), false).unsafeRunSync()
+    val eitherResult = fetchSeries(mockClient)("sonarr-api-key", Uri.unsafeFromString("http://localhost:8989"), false).value.unsafeRunSync()
 
-    result.size shouldBe 0
+    eitherResult shouldBe Right(Set.empty)
   }
 }

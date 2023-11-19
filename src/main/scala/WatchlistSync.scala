@@ -1,3 +1,4 @@
+import cats.data.EitherT
 import cats.effect.IO
 import cats.implicits._
 import configuration.Configuration
@@ -17,32 +18,43 @@ object WatchlistSync
 
     logger.debug("Starting watchlist sync")
 
-    for {
-      watchlistDatas <- config.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).sequence
+    val result = for {
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).sequence.map(Right(_)))
       watchlistData = watchlistDatas.flatten.toSet
       movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
       allIds = movies ++ series
       _ <- missingIds(client)(config)(allIds, watchlistData)
     } yield ()
+
+    result.value.map {
+      case Left(err) =>
+        logger.warn(s"An error occured while attempting to sync: $err")
+      case Right(_) =>
+        logger.debug("Watchlist sync complete")
+    }
   }
 
-  private def missingIds(client: HttpClient)(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): IO[Set[Unit]] =
-    watchlist.map { watchlistedItem =>
-      (existingItems.exists(_.matches(watchlistedItem)), watchlistedItem.category) match {
+  private def missingIds(client: HttpClient)(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): EitherT[IO, Throwable, Set[Unit]] = {
+    for {
+      watchlistedItem <- watchlist
+      maybeExistingItem = existingItems.exists(_.matches(watchlistedItem))
+      category = watchlistedItem.category
+      task = EitherT.fromEither[IO]((maybeExistingItem, category) match {
         case (true, c) =>
           logger.debug(s"$c \"${watchlistedItem.title}\" already exists in Sonarr/Radarr")
-          IO.unit
+          Right(IO.unit)
         case (false, "show") =>
           logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
-          addToSonarr(client)(config)(watchlistedItem)
+          Right(addToSonarr(client)(config)(watchlistedItem))
         case (false, "movie") =>
           logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
-          addToRadarr(client)(config)(watchlistedItem)
+          Right(addToRadarr(client)(config)(watchlistedItem))
         case (false, c) =>
           logger.warn(s"Found $c \"${watchlistedItem.title}\", but I don't recognize the category")
-          IO.unit
-      }
-    }.toList.sequence.map(_.toSet)
+          Left(new Throwable(s"Unknown category $c"))
+      })
+    } yield task.flatMap(EitherT.liftF[IO, Throwable, Unit])
+  }.toList.sequence.map(_.toSet)
 
 }

@@ -31,8 +31,10 @@ class RadarrUtilsSpec extends AnyFlatSpec with Matchers with RadarrUtils with Mo
       None
     ).returning(IO.pure(parse(exclusionsJsonStr))).once()
 
-    val result = fetchMovies(mockClient)("radarr-api-key", Uri.unsafeFromString("http://localhost:7878"), false).unsafeRunSync()
+    val eitherResult = fetchMovies(mockClient)("radarr-api-key", Uri.unsafeFromString("http://localhost:7878"), false).value.unsafeRunSync()
 
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty)
     result.size shouldBe 157
     result.head shouldBe Item("Judy", List("tt7549996", "tmdb://491283"), "movie")
     result.last shouldBe Item("Ghosted", List("tt15326988", "tmdb://868759"), "movie")
@@ -55,8 +57,8 @@ class RadarrUtilsSpec extends AnyFlatSpec with Matchers with RadarrUtils with Mo
       None
     ).returning(IO.pure(parse("[]"))).once()
 
-    val result = fetchMovies(mockClient)("radarr-api-key", Uri.unsafeFromString("http://localhost:7878"), false).unsafeRunSync()
+    val eitherResult = fetchMovies(mockClient)("radarr-api-key", Uri.unsafeFromString("http://localhost:7878"), false).value.unsafeRunSync()
 
-    result.size shouldBe 0
+    eitherResult shouldBe Right(Set.empty)
   }
 }

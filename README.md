@@ -2,9 +2,14 @@
 
 <img src="watchlistarr.png" alt="Alternate Text" width="240"/>
 
-Sync plex watchlists in realtime with Sonarr and Radarr. **Requires Plex Pass**
+Sync plex watchlists in realtime with Sonarr and Radarr.
 
-**Requires Sonarr v4**
+### Requirements
+ * Plex Pass Subscription for main user
+ * Sonarr v4 or higher
+ * Radarr v3 or higher
+ * Friends must change privacy settings so that the main user can see their watchlists
+ * Docker or Java
 
 ## Why?
 
