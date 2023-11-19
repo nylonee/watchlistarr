@@ -1,0 +1,798 @@
+{
+  "MediaContainer": {
+    "offset": 0,
+    "totalSize": 2,
+    "identifier": "tv.plex.provider.discover",
+    "size": 2,
+    "Metadata": [
+      {
+        "art": "https://metadata-static.plex.tv/b/gracenote/b979e3d2e6051166be8d2025baa0c5b1.jpg",
+        "guid": "plex://season/5df475e5578f84001d121dbe",
+        "key": "/library/metadata/5df475e5578f84001d121dbe/children",
+        "ratingKey": "5df475e5578f84001d121dbe",
+        "summary": "Australian Cricket has suffered the most significant crisis in living memory when team members are suspended after being caught cheating. New coach Justin Langer is charged with rebuilding the team's culture and regain their place on top of the cricket world.",
+        "type": "season",
+        "thumb": "https://image.tmdb.org/t/p/original/hPA9lZO7PhVIe35YNkIbysd9thm.jpg",
+        "addedAt": 1583971200,
+        "publicPagesURL": "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team/season/1",
+        "userState": false,
+        "title": "A New Era for Australia's Team",
+        "parentSlug": "the-test-a-new-era-for-australias-team",
+        "parentTitle": "The Test",
+        "parentType": "show",
+        "parentArt": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
+        "parentThumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
+        "parentRatingKey": "5df46a38237002001dce338d",
+        "parentGuid": "plex://show/5df46a38237002001dce338d",
+        "parentKey": "/library/metadata/5df46a38237002001dce338d",
+        "leafCount": 8,
+        "index": 1,
+        "contentRating": "TV-14",
+        "originallyAvailableAt": "2020-03-12",
+        "year": 2020,
+        "source": "provider://tv.plex.provider.metadata",
+        "Image": [
+          {
+            "alt": "A New Era for Australia's Team",
+            "type": "background",
+            "url": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg"
+          },
+          {
+            "alt": "A New Era for Australia's Team",
+            "type": "banner",
+            "url": "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg"
+          },
+          {
+            "alt": "A New Era for Australia's Team",
+            "type": "coverArt",
+            "url": "https://metadata-static.plex.tv/d/gracenote/dd1f8e46e511af96787e9c22c13471b8.jpg"
+          },
+          {
+            "alt": "A New Era for Australia's Team",
+            "type": "coverPoster",
+            "url": "https://image.tmdb.org/t/p/original/hPA9lZO7PhVIe35YNkIbysd9thm.jpg"
+          },
+          {
+            "alt": "A New Era for Australia's Team",
+            "type": "coverSquare",
+            "url": "https://metadata-static.plex.tv/2/gracenote/208da28e56b5ccf99585b768b8aad248.jpg"
+          }
+        ],
+        "Guid": [
+          {
+            "id": "tmdb://136525"
+          }
+        ],
+        "Role": [
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce724",
+            "id": "5e6b19d04a9324003e3ce724",
+            "order": 1,
+            "slug": "justin-langer-2",
+            "tag": "Justin Langer",
+            "thumb": "https://metadata-static.plex.tv/8/people/8b10bf4e65aab17e45522ea4ca9a2939.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/64244910c1b1e8c90306a82f",
+            "id": "64244910c1b1e8c90306a82f",
+            "order": 2,
+            "slug": "tim-paine",
+            "tag": "Tim Paine",
+            "thumb": "https://metadata-static.plex.tv/6/people/63e0ec57a91790da840a70ee5f3e7afb.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce728",
+            "id": "5e6b19d04a9324003e3ce728",
+            "order": 3,
+            "slug": "nathan-lyon-2",
+            "tag": "Nathan Lyon",
+            "thumb": "https://metadata-static.plex.tv/people/5e6b19d04a9324003e3ce728.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba3daccac6597c5fdd0",
+            "id": "6422fba3daccac6597c5fdd0",
+            "order": 4,
+            "slug": "pat-cummins",
+            "tag": "Pat Cummins",
+            "thumb": "https://metadata-static.plex.tv/3/people/3579106a24d31618fcc33ee244a81adc.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba30aa86146adbc1d75",
+            "id": "6422fba30aa86146adbc1d75",
+            "order": 5,
+            "slug": "usman-khawaja",
+            "tag": "Usman Khawaja",
+            "thumb": "https://metadata-static.plex.tv/0/people/04b345cc5400d346a12fba2ae3b8a89d.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce72e",
+            "id": "5e6b19d04a9324003e3ce72e",
+            "order": 6,
+            "slug": "frank-dimasi",
+            "tag": "Frank Dimasi",
+            "thumb": "https://metadata-static.plex.tv/people/5e6b19d04a9324003e3ce72e.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce730",
+            "id": "5e6b19d04a9324003e3ce730",
+            "order": 7,
+            "slug": "gavin-dovey",
+            "tag": "Gavin Dovey",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba26ede054e178ffb18",
+            "id": "6422fba26ede054e178ffb18",
+            "order": 8,
+            "slug": "brad-haddin",
+            "tag": "Brad Haddin",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce734",
+            "id": "5e6b19d04a9324003e3ce734",
+            "order": 9,
+            "slug": "graeme-hick-2",
+            "tag": "Graeme Hick",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce736",
+            "id": "5e6b19d04a9324003e3ce736",
+            "order": 10,
+            "slug": "dene-hills",
+            "tag": "Dene Hills",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce738",
+            "id": "5e6b19d04a9324003e3ce738",
+            "order": 11,
+            "slug": "aaron-kellett",
+            "tag": "Aaron Kellett",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce73a",
+            "id": "5e6b19d04a9324003e3ce73a",
+            "order": 12,
+            "slug": "peter-lalor-2",
+            "tag": "Peter Lalor",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce73c",
+            "id": "5e6b19d04a9324003e3ce73c",
+            "order": 13,
+            "slug": "michael-lloyd-6",
+            "tag": "Michael Lloyd",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce73e",
+            "id": "5e6b19d04a9324003e3ce73e",
+            "order": 14,
+            "slug": "sridharan-sriram",
+            "tag": "Sridharan Sriram",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce740",
+            "id": "5e6b19d04a9324003e3ce740",
+            "order": 15,
+            "slug": "simon-allport",
+            "tag": "Simon Allport",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce742",
+            "id": "5e6b19d04a9324003e3ce742",
+            "order": 16,
+            "slug": "david-beakley",
+            "tag": "David Beakley",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce744",
+            "id": "5e6b19d04a9324003e3ce744",
+            "order": 17,
+            "slug": "richard-saw",
+            "tag": "Richard Saw",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba3a9bcbd44a8f0e34e",
+            "id": "6422fba3a9bcbd44a8f0e34e",
+            "order": 18,
+            "slug": "peter-siddle",
+            "tag": "Peter Siddle",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/64b82e4214830689cd89efcd",
+            "id": "64b82e4214830689cd89efcd",
+            "order": 19,
+            "slug": "aaron-finch-4",
+            "tag": "Aaron Finch",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba374943c45b409dd20",
+            "id": "6422fba374943c45b409dd20",
+            "order": 20,
+            "slug": "josh-hazlewood",
+            "tag": "Josh Hazlewood",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba20aa86146adbc1d69",
+            "id": "6422fba20aa86146adbc1d69",
+            "order": 21,
+            "slug": "travis-head",
+            "tag": "Travis Head",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba37a6bb2a9fb18bddd",
+            "id": "6422fba37a6bb2a9fb18bddd",
+            "order": 22,
+            "slug": "shaun-marsh",
+            "tag": "Shaun Marsh",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba38e20c4112b28740a",
+            "id": "6422fba38e20c4112b28740a",
+            "order": 23,
+            "slug": "mitchell-starc",
+            "tag": "Mitchell Starc",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/64b82e42e385fced13b19456",
+            "id": "64b82e42e385fced13b19456",
+            "order": 24,
+            "slug": "peter-handscomb-3",
+            "tag": "Peter Handscomb",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba26ede054e178ffb2c",
+            "id": "6422fba26ede054e178ffb2c",
+            "order": 25,
+            "slug": "marnus-labuschagne",
+            "tag": "Marnus Labuschagne",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba339745eb987ce3339",
+            "id": "6422fba339745eb987ce3339",
+            "order": 26,
+            "slug": "mitch-marsh",
+            "tag": "Mitch Marsh",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba2c63a751d4c14eece",
+            "id": "6422fba2c63a751d4c14eece",
+            "order": 27,
+            "slug": "glenn-maxwell",
+            "tag": "Glenn Maxwell",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba2ee86dcd7c7c2b6f7",
+            "id": "6422fba2ee86dcd7c7c2b6f7",
+            "order": 28,
+            "slug": "david-saker-3",
+            "tag": "David Saker",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce75c",
+            "id": "5e6b19d04a9324003e3ce75c",
+            "order": 29,
+            "slug": "steve-smith-20",
+            "tag": "Steve Smith",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba374943c45b409dd10",
+            "id": "6422fba374943c45b409dd10",
+            "order": 30,
+            "slug": "david-warner-2",
+            "tag": "David Warner",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce760",
+            "id": "5e6b19d04a9324003e3ce760",
+            "order": 31,
+            "slug": "gideon-haigh-2",
+            "tag": "Gideon Haigh",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba2daccac6597c5fd81",
+            "id": "6422fba2daccac6597c5fd81",
+            "order": 32,
+            "slug": "marcus-harris-3",
+            "tag": "Marcus Harris",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba4797c090ecbe3b291",
+            "id": "6422fba4797c090ecbe3b291",
+            "order": 33,
+            "slug": "jhye-richardson-2",
+            "tag": "Jhye Richardson",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce766",
+            "id": "5e6b19d04a9324003e3ce766",
+            "order": 34,
+            "slug": "ricky-ponting-2",
+            "tag": "Ricky Ponting",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba2193259ff0c8083d2",
+            "id": "6422fba2193259ff0c8083d2",
+            "order": 35,
+            "slug": "cameron-bancroft-2",
+            "tag": "Cameron Bancroft",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba32e5a73ee3a0cd2f3",
+            "id": "6422fba32e5a73ee3a0cd2f3",
+            "order": 36,
+            "slug": "joe-burns-2",
+            "tag": "Joe Burns",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba2d79cdf86b6e82889",
+            "id": "6422fba2d79cdf86b6e82889",
+            "order": 37,
+            "slug": "alex-carey",
+            "tag": "Alex Carey",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba36ede054e178ffb7f",
+            "id": "6422fba36ede054e178ffb7f",
+            "order": 38,
+            "slug": "michael-neser-2",
+            "tag": "Michael Neser",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba356ba0c09c523e91b",
+            "id": "6422fba356ba0c09c523e91b",
+            "order": 39,
+            "slug": "kurtis-patterson-2",
+            "tag": "Kurtis Patterson",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce772",
+            "id": "5e6b19d04a9324003e3ce772",
+            "order": 40,
+            "slug": "kane-richardson-2",
+            "tag": "Kane Richardson",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba3dab4e53cd1948ee8",
+            "id": "6422fba3dab4e53cd1948ee8",
+            "order": 41,
+            "slug": "marcus-stoinis",
+            "tag": "Marcus Stoinis",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba3797c090ecbe3b0cd",
+            "id": "6422fba3797c090ecbe3b0cd",
+            "order": 42,
+            "slug": "jofra-archer",
+            "tag": "Jofra Archer",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/64b82e42f4bc5a50c3b3810c",
+            "id": "64b82e42f4bc5a50c3b3810c",
+            "order": 43,
+            "slug": "jason-behrendorff-3",
+            "tag": "Jason Behrendorff",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba374943c45b409dd11",
+            "id": "6422fba374943c45b409dd11",
+            "order": 44,
+            "slug": "troy-cooley-2",
+            "tag": "Troy Cooley",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba274943c45b409dcdd",
+            "id": "6422fba274943c45b409dcdd",
+            "order": 45,
+            "slug": "nathan-coulter-nile",
+            "tag": "Nathan Coulter-Nile",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce77e",
+            "id": "5e6b19d04a9324003e3ce77e",
+            "order": 46,
+            "slug": "stephen-day-4",
+            "tag": "Stephen Day",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce780",
+            "id": "5e6b19d04a9324003e3ce780",
+            "order": 47,
+            "slug": "trever-hohns",
+            "tag": "Trever Hohns",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba24717c82eaffb8d17",
+            "id": "6422fba24717c82eaffb8d17",
+            "order": 48,
+            "slug": "michael-hussey-4",
+            "tag": "Michael Hussey",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba2797c090ecbe3b0b4",
+            "id": "6422fba2797c090ecbe3b0b4",
+            "order": 49,
+            "slug": "james-pattinson",
+            "tag": "James Pattinson",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce786",
+            "id": "5e6b19d04a9324003e3ce786",
+            "order": 50,
+            "slug": "ben-stokes-2",
+            "tag": "Ben Stokes",
+            "thumb": "https://metadata-static.plex.tv/9/people/90577ff75cd9e544587abaeda581505b.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba1797c090ecbe3af8d",
+            "id": "6422fba1797c090ecbe3af8d",
+            "order": 51,
+            "slug": "ashton-turner-2",
+            "tag": "Ashton Turner",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/64b0188f3624649dc3bc9c2d",
+            "id": "64b0188f3624649dc3bc9c2d",
+            "order": 52,
+            "slug": "adam-zampa",
+            "tag": "Adam Zampa",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce78c",
+            "id": "5e6b19d04a9324003e3ce78c",
+            "order": 53,
+            "slug": "ashton-agar-2",
+            "tag": "Ashton Agar",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce78e",
+            "id": "5e6b19d04a9324003e3ce78e",
+            "order": 54,
+            "slug": "michael-atherton-2",
+            "tag": "Michael Atherton",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6426ea3dbaa07f1f9bcfaccd",
+            "id": "6426ea3dbaa07f1f9bcfaccd",
+            "order": 55,
+            "slug": "isa-guha",
+            "tag": "Isa Guha",
+            "thumb": "https://metadata-static.plex.tv/a/people/a33cbde0e5a7b72574b88f0b0efda38b.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba26ede054e178ffaf7",
+            "id": "6422fba26ede054e178ffaf7",
+            "order": 56,
+            "slug": "kim-harris-3",
+            "tag": "Kim Harris",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce794",
+            "id": "5e6b19d04a9324003e3ce794",
+            "order": 57,
+            "slug": "matthew-hayden-2",
+            "tag": "Matthew Hayden",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce796",
+            "id": "5e6b19d04a9324003e3ce796",
+            "order": 58,
+            "slug": "darren-lehmann-2",
+            "tag": "Darren Lehmann",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce798",
+            "id": "5e6b19d04a9324003e3ce798",
+            "order": 59,
+            "slug": "eoin-morgan-2",
+            "tag": "Eoin Morgan",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba3ee86dcd7c7c2b726",
+            "id": "6422fba3ee86dcd7c7c2b726",
+            "order": 60,
+            "slug": "cheteshwar-pujara",
+            "tag": "Cheteshwar Pujara",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce79c",
+            "id": "5e6b19d04a9324003e3ce79c",
+            "order": 61,
+            "slug": "james-sutherland-4",
+            "tag": "James Sutherland",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6422fba3d79cdf86b6e8288d",
+            "id": "6422fba3d79cdf86b6e8288d",
+            "order": 62,
+            "slug": "julia-wade-2",
+            "tag": "Julia Wade",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e40c40c024f96003fd69e48",
+            "id": "5e40c40c024f96003fd69e48",
+            "order": 63,
+            "slug": "jonathan-agnew-2",
+            "tag": "Jonathan Agnew",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/63209be13d13cad66af02555",
+            "id": "63209be13d13cad66af02555",
+            "order": 64,
+            "slug": "ian-botham-2",
+            "tag": "Ian Botham",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776d89ad5437001f7d8a3e",
+            "id": "5d776d89ad5437001f7d8a3e",
+            "order": 65,
+            "slug": "gerard-whateley-2",
+            "tag": "Gerard Whateley",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776c3751dd69001fe38dde",
+            "id": "5d776c3751dd69001fe38dde",
+            "order": 66,
+            "slug": "scott-morrison",
+            "tag": "Scott Morrison",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776d857a53e9001e75be32",
+            "id": "5d776d857a53e9001e75be32",
+            "order": 67,
+            "slug": "shane-warne",
+            "tag": "Shane Warne",
+            "thumb": "https://metadata-static.plex.tv/1/people/10dd3558737bb31f1f180da872905648.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e1659af2d4d84003e4b424f",
+            "id": "5e1659af2d4d84003e4b424f",
+            "order": 68,
+            "slug": "malcolm-turnbull",
+            "tag": "Malcolm Turnbull",
+            "thumb": "https://metadata-static.plex.tv/people/5e1659af2d4d84003e4b424f.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/64945957410b71cef637e2b2",
+            "id": "64945957410b71cef637e2b2",
+            "order": 69,
+            "slug": "adam-gilchrist",
+            "tag": "Adam Gilchrist",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6426eeaf6ee60a5677b740ca",
+            "id": "6426eeaf6ee60a5677b740ca",
+            "order": 70,
+            "slug": "steve-waugh",
+            "tag": "Steve Waugh",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e165531fef2d4003e8b626d",
+            "id": "5e165531fef2d4003e8b626d",
+            "order": 71,
+            "slug": "virat-kohli-2",
+            "tag": "Virat Kohli",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/642b2871d6f07c6ff01e2d28",
+            "id": "642b2871d6f07c6ff01e2d28",
+            "order": 72,
+            "slug": "matthew-wade",
+            "tag": "Matthew Wade",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776d85fb0d55001f5a27b2",
+            "id": "5d776d85fb0d55001f5a27b2",
+            "order": 73,
+            "slug": "allan-border-2",
+            "tag": "Allan Border",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d77682ae6d55c002040b5c0",
+            "id": "5d77682ae6d55c002040b5c0",
+            "order": 74,
+            "slug": "brendan-cowell",
+            "tag": "Brendan Cowell",
+            "thumb": "https://metadata-static.plex.tv/people/5d77682ae6d55c002040b5c0.jpg",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776916fb0d55001f521452",
+            "id": "5d776916fb0d55001f521452",
+            "order": 75,
+            "slug": "harsha-bhogle",
+            "tag": "Harsha Bhogle",
+            "thumb": "https://metadata-static.plex.tv/4/people/4616c963e2b05982c8805b3b51f0a90d.jpg",
+            "type": "person"
+          }
+        ],
+        "Director": [
+          {
+            "key": "/library/people/5de910f8c62c49001e3b96ca",
+            "id": "5de910f8c62c49001e3b96ca",
+            "slug": "adrian-brown-4",
+            "tag": "Adrian Brown",
+            "thumb": "https://metadata-static.plex.tv/5/people/57964d898c4990efd472c20d319772d3.jpg",
+            "role": "Director",
+            "type": "person"
+          }
+        ],
+        "Producer": [
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce7a0",
+            "id": "5e6b19d04a9324003e3ce7a0",
+            "slug": "dan-allan",
+            "tag": "Dan Allan",
+            "role": "Associate Producer",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776c577a53e9001e740817",
+            "id": "5d776c577a53e9001e740817",
+            "slug": "mish-armstrong-2",
+            "tag": "Mish Armstrong",
+            "role": "Supervising Producer",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce7a2",
+            "id": "5e6b19d04a9324003e3ce7a2",
+            "slug": "adelle-boglis",
+            "tag": "Adelle Boglis",
+            "role": "Associate Producer",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5de910f8c62c49001e3b96ca",
+            "id": "5de910f8c62c49001e3b96ca",
+            "slug": "adrian-brown-4",
+            "tag": "Adrian Brown",
+            "thumb": "https://metadata-static.plex.tv/5/people/57964d898c4990efd472c20d319772d3.jpg",
+            "role": "Executive Producer",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5e6b19d04a9324003e3ce7a4",
+            "id": "5e6b19d04a9324003e3ce7a4",
+            "slug": "dan-colless-2",
+            "tag": "Dan Colless",
+            "role": "Post Producer",
+            "type": "person"
+          }
+        ]
+      },
+      {
+        "art": "https://metadata-static.plex.tv/2/gracenote/2159083f3032189c1ea7bf61c423bd7a.jpg",
+        "guid": "plex://season/6390967bf589a88ebaaa011d",
+        "key": "/library/metadata/6390967bf589a88ebaaa011d/children",
+        "primaryExtraKey": "/library/metadata/6390967bf589a88ebaaa011d/extras/63c833845f2bc6af9c211d44",
+        "ratingKey": "6390967bf589a88ebaaa011d",
+        "summary": "The Test returns for a second season with the journey of the Australian Men’s Cricket Team after the exits of Captain Tim Paine and the subsequent departure of Coach Justin Langer. Navigating their way through scandal, discontent and an uncertain world, the players pull back the curtain to the inner-workings of the team.",
+        "type": "season",
+        "thumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
+        "addedAt": 1673568000,
+        "publicPagesURL": "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team/season/2",
+        "userState": false,
+        "title": "Season 2",
+        "hasGenericTitle": true,
+        "parentSlug": "the-test-a-new-era-for-australias-team",
+        "parentTitle": "The Test",
+        "parentType": "show",
+        "parentArt": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
+        "parentThumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
+        "parentRatingKey": "5df46a38237002001dce338d",
+        "parentGuid": "plex://show/5df46a38237002001dce338d",
+        "parentKey": "/library/metadata/5df46a38237002001dce338d",
+        "leafCount": 4,
+        "index": 2,
+        "contentRating": "TV-14",
+        "originallyAvailableAt": "2023-01-13",
+        "year": 2023,
+        "source": "provider://tv.plex.provider.metadata",
+        "Image": [
+          {
+            "alt": "Season 2",
+            "type": "background",
+            "url": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg"
+          },
+          {
+            "alt": "Season 2",
+            "type": "banner",
+            "url": "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg"
+          },
+          {
+            "alt": "Season 2",
+            "type": "coverArt",
+            "url": "https://metadata-static.plex.tv/a/gracenote/aaa03c4a33fedc650e9f882e62834bb6.jpg"
+          },
+          {
+            "alt": "Season 2",
+            "type": "coverPoster",
+            "url": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg"
+          },
+          {
+            "alt": "Season 2",
+            "type": "coverSquare",
+            "url": "https://metadata-static.plex.tv/0/gracenote/003496a06f7738c98a32f947b6926914.jpg"
+          }
+        ],
+        "Guid": [
+          {
+            "id": "tmdb://319190"
+          }
+        ]
+      }
+    ]
+  }
+}
