@@ -1,9 +1,10 @@
 package radarr
 
+import cats.data.EitherT
 import cats.effect.IO
 import configuration.Configuration
 import http.HttpClient
-import io.circe.Json
+import io.circe.{Decoder, Json}
 import io.circe.generic.auto._
 import io.circe.syntax.EncoderOps
 import model.Item
@@ -14,49 +15,35 @@ trait RadarrUtils extends RadarrConversions {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  protected def fetchMovies(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): IO[Set[Item]] =
+  protected def fetchMovies(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): EitherT[IO, Throwable, Set[Item]] =
     for {
-      movies <- getToArr(client)(baseUrl, apiKey, "movie").map {
-        case Right(res) =>
-          res.as[List[RadarrMovie]].getOrElse {
-            logger.warn("Unable to fetch movies from Radarr - decoding failure. Returning empty list instead")
-            List.empty
-          }
-        case Left(err) =>
-          logger.warn(s"Received error while trying to fetch movies from Radarr: $err")
-          List.empty
-      }
+      movies <- getToArr[List[RadarrMovie]](client)(baseUrl, apiKey, "movie")
       exclusions <- if (bypass) {
-        IO.pure(List.empty)
+        EitherT.pure[IO, Throwable](List.empty[RadarrMovieExclusion])
       } else {
-        getToArr(client)(baseUrl, apiKey, "exclusions").map {
-          case Right(res) =>
-            res.as[List[RadarrMovieExclusion]].getOrElse {
-              logger.warn("Unable to fetch movie exclusions from Radarr - decoding failure. Returning empty list instead")
-              List.empty
-            }
-          case Left(err) =>
-            logger.warn(s"Received error while trying to fetch movie exclusions from Radarr: $err")
-            List.empty
-        }
+        getToArr[List[RadarrMovieExclusion]](client)(baseUrl, apiKey, "exclusions")
       }
     } yield (movies.map(toItem) ++ exclusions.map(toItem)).toSet
 
   protected def addToRadarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
-
     val movie = RadarrPost(item.title, item.getTmdbId.getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder)
 
-    postToArr(client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson).map {
-      case Right(_) =>
-        logger.info(s"Successfully added movie ${item.title} to Radarr")
-      case Left(err) =>
-        logger.error(s"Failed to add movie ${item.title}: $err")
-    }
+    postToArr[Unit](client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson).getOrElse(
+      logger.warn(s"Unable to send ${item.title} to Radarr")
+    )
   }
 
-  private def getToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): IO[Either[Throwable, Json]] =
-    client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey))
+  private def getToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =
+    for {
+      response <- EitherT(client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey)))
+      maybeDecoded <- EitherT.pure[IO, Throwable](response.as[T])
+      decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Radarr"))
+    } yield decoded
 
-  private def postToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): IO[Either[Throwable, Json]] =
-    client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), Some(payload))
+  private def postToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] =
+    for {
+      response <- EitherT(client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), Some(payload)))
+      maybeDecoded <- EitherT.pure[IO, Throwable](response.as[T])
+      decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Radarr"))
+    } yield decoded
 }
