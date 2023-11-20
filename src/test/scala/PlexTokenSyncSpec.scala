@@ -5,6 +5,9 @@ import cats.effect.unsafe.implicits.global
 import configuration.Configuration
 import http.HttpClient
 import io.circe.parser._
+import io.circe.generic.auto._
+import io.circe.syntax.EncoderOps
+import model.GraphQLQuery
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
@@ -65,6 +68,45 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       None,
       None
     ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
+    val query = GraphQLQuery(
+      """query GetAllFriends {
+        |        allFriendsV2 {
+        |          user {
+        |            id
+        |            username
+        |          }
+        |        }
+        |      }""".stripMargin)
+    (httpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://community.plex.tv/api"),
+      Some("plex-token"),
+      Some(query.asJson)
+    ).returning(IO.pure(parse(Source.fromResource("plex-get-all-friends.json").getLines().mkString("\n")))).once()
+    (httpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://community.plex.tv/api"),
+      Some("plex-token"),
+      *
+    ).returning(IO.pure(parse(Source.fromResource("plex-get-watchlist-from-friend.json").getLines().mkString("\n")))).twice()
+    (httpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5d77688b9ab54400214e789b?X-Plex-Token=plex-token"),
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
+    (httpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5d77688b594b2b001e68f2f0?X-Plex-Token=plex-token"),
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).anyNumberOfTimes()
+    (httpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5d77688b9ab54400214e789b?X-Plex-Token=plex-token"),
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
     httpClient
   }
 
@@ -78,6 +120,26 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
                        |    "searchForMovie" : true
                        |  }
                        |}""".stripMargin
+    val movieToAdd2 =
+      """{
+        |  "title" : "The Twilight Saga: Breaking Dawn - Part 2",
+        |  "tmdbId" : 1151534,
+        |  "qualityProfileId" : 1,
+        |  "rootFolderPath" : "/root/",
+        |  "addOptions" : {
+        |    "searchForMovie" : true
+        |  }
+        |}""".stripMargin
+    val movieToAdd3 =
+      """{
+        |  "title" : "The Twilight Saga: Breaking Dawn - Part 1",
+        |  "tmdbId" : 1151534,
+        |  "qualityProfileId" : 1,
+        |  "rootFolderPath" : "/root/",
+        |  "addOptions" : {
+        |    "searchForMovie" : true
+        |  }
+        |}""".stripMargin
     (httpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
@@ -95,6 +157,18 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
       Some("radarr-api-key"),
       parse(movieToAdd).toOption
+    ).returning(IO.pure(parse("{}"))).once()
+    (httpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+      Some("radarr-api-key"),
+      parse(movieToAdd2).toOption
+    ).returning(IO.pure(parse("{}"))).once()
+    (httpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+      Some("radarr-api-key"),
+      parse(movieToAdd3).toOption
     ).returning(IO.pure(parse("{}"))).once()
     httpClient
   }
