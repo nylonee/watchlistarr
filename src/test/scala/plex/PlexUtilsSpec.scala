@@ -72,7 +72,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     ).returning(IO.pure(parse(Source.fromResource("self-watchlist-from-token.json").getLines().mkString("\n")))).once()
     (mockClient.httpRequest _).expects(
       Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d/children?X-Plex-Token=test-token"),
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d?X-Plex-Token=test-token"),
       None,
       None
     ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n")))).once()
@@ -88,7 +88,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     eitherResult shouldBe a[Right[_, _]]
     val result = eitherResult.getOrElse(Set.empty[Item])
     result.size shouldBe 2
-    result.head shouldBe Item("The Test", List("imdb://tt15789472", "tmdb://1151534", "tvdb://347900"), "show")
+    result.head shouldBe Item("The Test", List("imdb://tt11347692", "tmdb://95837", "tvdb://372848"), "show")
   }
 
   private def createConfiguration(plexToken: Option[String]): Configuration = Configuration(
