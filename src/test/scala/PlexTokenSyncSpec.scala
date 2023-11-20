@@ -55,7 +55,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     ).returning(IO.pure(parse(Source.fromResource("self-watchlist-from-token.json").getLines().mkString("\n")))).once()
     (httpClient.httpRequest _).expects(
       Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d/children?X-Plex-Token=plex-token"),
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d?X-Plex-Token=plex-token"),
       None,
       None
     ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n")))).once()
@@ -64,11 +64,20 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/617d3ab142705b2183b1b20b?X-Plex-Token=plex-token"),
       None,
       None
-    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n")))).once()
+    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
     httpClient
   }
 
   private def defaultRadarrMock(httpClient: HttpClient): HttpClient = {
+    val movieToAdd = """{
+                       |  "title" : "Nowhere",
+                       |  "tmdbId" : 1151534,
+                       |  "qualityProfileId" : 1,
+                       |  "rootFolderPath" : "/root/",
+                       |  "addOptions" : {
+                       |    "searchForMovie" : true
+                       |  }
+                       |}""".stripMargin
     (httpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
@@ -81,6 +90,12 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       Some("radarr-api-key"),
       None
     ).returning(IO.pure(parse(Source.fromResource("exclusions.json").getLines().mkString("\n")))).once()
+    (httpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+      Some("radarr-api-key"),
+      parse(movieToAdd).toOption
+    ).returning(IO.pure(parse("{}"))).once()
     httpClient
   }
 

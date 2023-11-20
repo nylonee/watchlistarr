@@ -64,8 +64,9 @@ trait PlexUtils {
   // so we need to make additional calls to Plex to get more information
   private def toItems(config: Configuration, client: HttpClient)(plex: TokenWatchlist): EitherT[IO, Throwable, Set[Item]] = plex.MediaContainer.Metadata.map { i =>
 
+    val key = cleanKey(i.key)
     val url = Uri
-      .unsafeFromString(s"https://discover.provider.plex.tv${i.key}")
+      .unsafeFromString(s"https://discover.provider.plex.tv$key")
       .withQueryParam("X-Plex-Token", config.plexToken.get)
 
     val guids: EitherT[IO, Throwable, List[String]] = for {
@@ -76,4 +77,7 @@ trait PlexUtils {
 
     guids.map(ids => Item(i.title, ids, i.`type`))
   }.sequence.map(_.toSet)
+
+  private def cleanKey(path: String): String =
+    if (path.endsWith("/children")) path.dropRight(9) else path
 }

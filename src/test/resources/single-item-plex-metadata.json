@@ -1,66 +1,107 @@
 {
   "MediaContainer": {
     "offset": 0,
-    "totalSize": 2,
+    "totalSize": 1,
     "identifier": "tv.plex.provider.discover",
-    "size": 2,
+    "size": 1,
     "Metadata": [
       {
-        "art": "https://metadata-static.plex.tv/b/gracenote/b979e3d2e6051166be8d2025baa0c5b1.jpg",
-        "guid": "plex://season/5df475e5578f84001d121dbe",
-        "key": "/library/metadata/5df475e5578f84001d121dbe/children",
-        "ratingKey": "5df475e5578f84001d121dbe",
+        "art": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
+        "banner": "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg",
+        "guid": "plex://show/5df46a38237002001dce338d",
+        "key": "/library/metadata/5df46a38237002001dce338d/children",
+        "rating": 8.8,
+        "ratingKey": "5df46a38237002001dce338d",
+        "studio": "CA Film",
         "summary": "Australian Cricket has suffered the most significant crisis in living memory when team members are suspended after being caught cheating. New coach Justin Langer is charged with rebuilding the team's culture and regain their place on top of the cricket world.",
-        "type": "season",
-        "thumb": "https://image.tmdb.org/t/p/original/hPA9lZO7PhVIe35YNkIbysd9thm.jpg",
-        "addedAt": 1583971200,
-        "publicPagesURL": "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team/season/1",
+        "tagline": "A New Era for Australia's Team",
+        "type": "show",
+        "thumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
+        "addedAt": 1583884800,
+        "duration": 2580000,
+        "publicPagesURL": "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team",
+        "slug": "the-test-a-new-era-for-australias-team",
         "userState": false,
-        "title": "A New Era for Australia's Team",
-        "parentSlug": "the-test-a-new-era-for-australias-team",
-        "parentTitle": "The Test",
-        "parentType": "show",
-        "parentArt": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
-        "parentThumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
-        "parentRatingKey": "5df46a38237002001dce338d",
-        "parentGuid": "plex://show/5df46a38237002001dce338d",
-        "parentKey": "/library/metadata/5df46a38237002001dce338d",
-        "leafCount": 8,
-        "index": 1,
+        "title": "The Test",
+        "leafCount": 12,
+        "childCount": 2,
+        "isContinuingSeries": true,
         "contentRating": "TV-14",
-        "originallyAvailableAt": "2020-03-12",
+        "originallyAvailableAt": "2020-03-11",
         "year": 2020,
+        "ratingImage": "imdb://image.rating",
+        "imdbRatingCount": 3462,
         "source": "provider://tv.plex.provider.metadata",
         "Image": [
           {
-            "alt": "A New Era for Australia's Team",
+            "alt": "The Test",
             "type": "background",
             "url": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg"
           },
           {
-            "alt": "A New Era for Australia's Team",
+            "alt": "The Test",
             "type": "banner",
             "url": "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg"
           },
           {
-            "alt": "A New Era for Australia's Team",
+            "alt": "The Test",
             "type": "coverArt",
-            "url": "https://metadata-static.plex.tv/d/gracenote/dd1f8e46e511af96787e9c22c13471b8.jpg"
+            "url": "https://metadata-static.plex.tv/a/gracenote/aaa03c4a33fedc650e9f882e62834bb6.jpg"
           },
           {
-            "alt": "A New Era for Australia's Team",
+            "alt": "The Test",
             "type": "coverPoster",
-            "url": "https://image.tmdb.org/t/p/original/hPA9lZO7PhVIe35YNkIbysd9thm.jpg"
+            "url": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg"
           },
           {
-            "alt": "A New Era for Australia's Team",
+            "alt": "The Test",
             "type": "coverSquare",
-            "url": "https://metadata-static.plex.tv/2/gracenote/208da28e56b5ccf99585b768b8aad248.jpg"
+            "url": "https://metadata-static.plex.tv/0/gracenote/003496a06f7738c98a32f947b6926914.jpg"
+          }
+        ],
+        "Genre": [
+          {
+            "filter": "genre=5d9c046c705e7a001e6c8da3",
+            "id": "5d9c046c705e7a001e6c8da3",
+            "ratingKey": "genre_5d9c046c705e7a001e6c8da3",
+            "slug": "documentary",
+            "tag": "Documentary",
+            "directory": true,
+            "context": "tag.genre"
+          },
+          {
+            "filter": "genre=5da05bf9370f98001f4ddd95",
+            "id": "5da05bf9370f98001f4ddd95",
+            "ratingKey": "genre_5da05bf9370f98001f4ddd95",
+            "slug": "sport",
+            "tag": "Sport",
+            "directory": true,
+            "context": "tag.genre"
+          },
+          {
+            "filter": "genre=5d9c046c705e7a001e6c8d9a",
+            "id": "5d9c046c705e7a001e6c8d9a",
+            "ratingKey": "genre_5d9c046c705e7a001e6c8d9a",
+            "slug": "drama",
+            "tag": "Drama",
+            "directory": true,
+            "context": "tag.genre"
           }
         ],
         "Guid": [
           {
-            "id": "tmdb://136525"
+            "id": "imdb://tt11347692"
+          },
+          {
+            "id": "tmdb://95837"
+          },
+          {
+            "id": "tvdb://372848"
+          }
+        ],
+        "Country": [
+          {
+            "tag": "Australia"
           }
         ],
         "Role": [
@@ -690,106 +731,48 @@
         ],
         "Producer": [
           {
-            "key": "/library/people/5e6b19d04a9324003e3ce7a0",
-            "id": "5e6b19d04a9324003e3ce7a0",
-            "slug": "dan-allan",
-            "tag": "Dan Allan",
-            "role": "Associate Producer",
+            "key": "/library/people/5f3fe99a3e5306003e56df06",
+            "id": "5f3fe99a3e5306003e56df06",
+            "slug": "jake-avent",
+            "tag": "Jake Avent",
+            "role": "Producer",
             "type": "person"
           },
           {
-            "key": "/library/people/5d776c577a53e9001e740817",
-            "id": "5d776c577a53e9001e740817",
-            "slug": "mish-armstrong-2",
-            "tag": "Mish Armstrong",
-            "role": "Supervising Producer",
+            "key": "/library/people/5f40011f52f20000414df5be",
+            "id": "5f40011f52f20000414df5be",
+            "slug": "scot-edwards",
+            "tag": "Scot Edwards",
+            "role": "Producer",
             "type": "person"
-          },
-          {
-            "key": "/library/people/5e6b19d04a9324003e3ce7a2",
-            "id": "5e6b19d04a9324003e3ce7a2",
-            "slug": "adelle-boglis",
-            "tag": "Adelle Boglis",
-            "role": "Associate Producer",
-            "type": "person"
-          },
-          {
-            "key": "/library/people/5de910f8c62c49001e3b96ca",
-            "id": "5de910f8c62c49001e3b96ca",
-            "slug": "adrian-brown-4",
-            "tag": "Adrian Brown",
-            "thumb": "https://metadata-static.plex.tv/5/people/57964d898c4990efd472c20d319772d3.jpg",
-            "role": "Executive Producer",
-            "type": "person"
-          },
-          {
-            "key": "/library/people/5e6b19d04a9324003e3ce7a4",
-            "id": "5e6b19d04a9324003e3ce7a4",
-            "slug": "dan-colless-2",
-            "tag": "Dan Colless",
-            "role": "Post Producer",
-            "type": "person"
-          }
-        ]
-      },
-      {
-        "art": "https://metadata-static.plex.tv/2/gracenote/2159083f3032189c1ea7bf61c423bd7a.jpg",
-        "guid": "plex://season/6390967bf589a88ebaaa011d",
-        "key": "/library/metadata/6390967bf589a88ebaaa011d/children",
-        "primaryExtraKey": "/library/metadata/6390967bf589a88ebaaa011d/extras/63c833845f2bc6af9c211d44",
-        "ratingKey": "6390967bf589a88ebaaa011d",
-        "summary": "The Test returns for a second season with the journey of the Australian Men’s Cricket Team after the exits of Captain Tim Paine and the subsequent departure of Coach Justin Langer. Navigating their way through scandal, discontent and an uncertain world, the players pull back the curtain to the inner-workings of the team.",
-        "type": "season",
-        "thumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
-        "addedAt": 1673568000,
-        "publicPagesURL": "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team/season/2",
-        "userState": false,
-        "title": "Season 2",
-        "hasGenericTitle": true,
-        "parentSlug": "the-test-a-new-era-for-australias-team",
-        "parentTitle": "The Test",
-        "parentType": "show",
-        "parentArt": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
-        "parentThumb": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
-        "parentRatingKey": "5df46a38237002001dce338d",
-        "parentGuid": "plex://show/5df46a38237002001dce338d",
-        "parentKey": "/library/metadata/5df46a38237002001dce338d",
-        "leafCount": 4,
-        "index": 2,
-        "contentRating": "TV-14",
-        "originallyAvailableAt": "2023-01-13",
-        "year": 2023,
-        "source": "provider://tv.plex.provider.metadata",
-        "Image": [
-          {
-            "alt": "Season 2",
-            "type": "background",
-            "url": "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg"
-          },
-          {
-            "alt": "Season 2",
-            "type": "banner",
-            "url": "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg"
-          },
-          {
-            "alt": "Season 2",
-            "type": "coverArt",
-            "url": "https://metadata-static.plex.tv/a/gracenote/aaa03c4a33fedc650e9f882e62834bb6.jpg"
-          },
-          {
-            "alt": "Season 2",
-            "type": "coverPoster",
-            "url": "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg"
-          },
-          {
-            "alt": "Season 2",
-            "type": "coverSquare",
-            "url": "https://metadata-static.plex.tv/0/gracenote/003496a06f7738c98a32f947b6926914.jpg"
           }
         ],
-        "Guid": [
+        "Network": [
           {
-            "id": "tmdb://319190"
+            "tag": "Prime Video"
+          }
+        ],
+        "Rating": [
+          {
+            "image": "imdb://image.rating",
+            "type": "audience",
+            "value": 8.8
+          },
+          {
+            "image": "themoviedb://image.rating",
+            "type": "audience",
+            "value": 7.3
+          }
+        ],
+        "Studio": [
+          {
+            "tag": "CA Film"
+          },
+          {
+            "tag": "Whooshka Media"
+          },
+          {
+            "tag": "Amazon Studios"
           }
         ]
       }
