@@ -30,9 +30,16 @@ trait SonarrUtils extends SonarrConversions {
     val addOptions = SonarrAddOptions(config.sonarrSeasonMonitoring)
     val show = SonarrPost(item.title, item.getTvdbId.getOrElse(0L), config.sonarrQualityProfileId, config.sonarrRootFolder, addOptions)
 
-    postToArr[Unit](client)(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson).getOrElse(
-      logger.warn(s"Unable to send ${item.title} to Sonarr")
-    )
+    val result = postToArr[Unit](client)(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson)
+      .fold(
+        err => logger.debug(s"Received warning for sending ${item.title} to Sonarr: $err"),
+        result => result
+      )
+
+    result.map { r =>
+      logger.info(s"Sent ${item.title} to Sonarr")
+      r
+    }
   }
 
   private def getToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =

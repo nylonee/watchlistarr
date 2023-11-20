@@ -29,11 +29,16 @@ trait RadarrUtils extends RadarrConversions {
   protected def addToRadarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
     val movie = RadarrPost(item.title, item.getTmdbId.getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder)
 
-    postToArr[Unit](client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson)
+    val result = postToArr[Unit](client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson)
       .fold(
         err => logger.debug(s"Received warning for sending ${item.title} to Radarr: $err"),
         result => result
       )
+
+    result.map { r =>
+      logger.info(s"Sent ${item.title} to Radarr")
+      r
+    }
   }
 
   private def getToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =
