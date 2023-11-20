@@ -2,6 +2,7 @@ package radarr
 
 import cats.data.EitherT
 import cats.effect.IO
+import cats.implicits._
 import configuration.Configuration
 import http.HttpClient
 import io.circe.{Decoder, Json}
@@ -25,14 +26,14 @@ trait RadarrUtils extends RadarrConversions {
       }
     } yield (movies.map(toItem) ++ exclusions.map(toItem)).toSet
 
-  protected def addToRadarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
+  protected def addToRadarr(client: HttpClient)(config: Configuration)(item: Item) = {
     val movie = RadarrPost(item.title, item.getTmdbId.getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder)
 
     postToArr[Unit](client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson)
-      .value
-      .recover { err =>
-        logger.warn(s"Unable to send ${item.title} to Radarr: $err")
-      }.map(_ => ())
+      .fold(
+        err => logger.warn(s"Unable to send ${item.title} to Radarr: $err"),
+        result => result
+      )
   }
 
   private def getToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =
