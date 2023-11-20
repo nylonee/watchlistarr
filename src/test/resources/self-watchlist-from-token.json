@@ -1,0 +1,128 @@
+{
+  "MediaContainer" : {
+    "librarySectionID" : "watchlist",
+    "librarySectionTitle" : "Watchlist",
+    "offset" : 0,
+    "totalSize" : 11,
+    "identifier" : "tv.plex.provider.metadata",
+    "size" : 11,
+    "Metadata" : [
+      {
+        "art" : "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg",
+        "banner" : "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg",
+        "guid" : "plex://show/5df46a38237002001dce338d",
+        "key" : "/library/metadata/5df46a38237002001dce338d/children",
+        "rating" : 8.8,
+        "ratingKey" : "5df46a38237002001dce338d",
+        "studio" : "CA Film",
+        "tagline" : "A New Era for Australia's Team",
+        "type" : "show",
+        "thumb" : "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg",
+        "addedAt" : 1583884800,
+        "duration" : 2580000,
+        "publicPagesURL" : "https://watch.plex.tv/show/the-test-a-new-era-for-australias-team",
+        "slug" : "the-test-a-new-era-for-australias-team",
+        "userState" : false,
+        "title" : "The Test",
+        "leafCount" : 12,
+        "childCount" : 2,
+        "isContinuingSeries" : true,
+        "contentRating" : "TV-14",
+        "originallyAvailableAt" : "2020-03-11",
+        "year" : 2020,
+        "ratingImage" : "imdb://image.rating",
+        "imdbRatingCount" : 3455,
+        "Image" : [
+          {
+            "alt" : "The Test",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/irv4GNEi7d2yN0XL1ZpwJCH9Qpz.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "banner",
+            "url" : "https://artworks.thetvdb.com/banners/v4/series/372848/banners/62fd2b381d5f3.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/a/gracenote/aaa03c4a33fedc650e9f882e62834bb6.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/mIDaHnJPeMGKDSR76L73BURLOv7.jpg"
+          },
+          {
+            "alt" : "The Test",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/0/gracenote/003496a06f7738c98a32f947b6926914.jpg"
+          }
+        ]
+      },
+      {
+        "art" : "https://image.tmdb.org/t/p/original/xvzxqKWltnj6qSiWBXRq6ZCdcrw.jpg",
+        "banner" : "http://assets.fanart.tv/fanart/movies/1151534/moviebanner/nowhere-652724e79f726.jpg",
+        "guid" : "plex://movie/617d3ab142705b2183b1b20b",
+        "key" : "/library/metadata/617d3ab142705b2183b1b20b",
+        "primaryExtraKey" : "/library/metadata/617d3ab142705b2183b1b20b/extras/6504ffbc6859cd3ba9adb619",
+        "rating" : 6.2,
+        "ratingKey" : "617d3ab142705b2183b1b20b",
+        "studio" : "Rock & Ruz",
+        "tagline" : "Attempting to survive in the middle of nowhere is her only option.",
+        "type" : "movie",
+        "thumb" : "https://image.tmdb.org/t/p/original/zwKaPkkLizCg1onpHQq89LWugkS.jpg",
+        "addedAt" : 1695945600,
+        "duration" : 6540000,
+        "publicPagesURL" : "https://watch.plex.tv/movie/nowhere-17",
+        "slug" : "nowhere-17",
+        "userState" : false,
+        "title" : "Nowhere",
+        "contentRating" : "R",
+        "originallyAvailableAt" : "2023-09-29",
+        "year" : 2023,
+        "audienceRating" : 6.2,
+        "audienceRatingImage" : "rottentomatoes://image.rating.upright",
+        "ratingImage" : "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount" : 22485,
+        "Image" : [
+          {
+            "alt" : "Nowhere",
+            "type" : "background",
+            "url" : "https://image.tmdb.org/t/p/original/xvzxqKWltnj6qSiWBXRq6ZCdcrw.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "banner",
+            "url" : "http://assets.fanart.tv/fanart/movies/1151534/moviebanner/nowhere-652724e79f726.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "clearLogoWide",
+            "url" : "http://assets.fanart.tv/fanart/movies/1151534/hdmovielogo/nowhere-651b207542604.png"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "coverArt",
+            "url" : "https://metadata-static.plex.tv/8/gracenote/895c9c368de4e83c752791eaa362b96d.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "coverPoster",
+            "url" : "https://image.tmdb.org/t/p/original/zwKaPkkLizCg1onpHQq89LWugkS.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "coverSquare",
+            "url" : "https://metadata-static.plex.tv/d/gracenote/d26f1f2c7ff370a7c27345248c3e6888.jpg"
+          },
+          {
+            "alt" : "Nowhere",
+            "type" : "snapshot",
+            "url" : "https://metadata-static.plex.tv/2/gracenote/29bdff575ed2ac00d7e86c75a7d6c943.jpg"
+          }
+        ]
+      }
+    ]
+  }
+}

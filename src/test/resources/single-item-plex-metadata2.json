@@ -1,0 +1,319 @@
+{
+  "MediaContainer": {
+    "offset": 0,
+    "totalSize": 1,
+    "identifier": "tv.plex.provider.discover",
+    "size": 1,
+    "Metadata": [
+      {
+        "art": "https://image.tmdb.org/t/p/original/xvzxqKWltnj6qSiWBXRq6ZCdcrw.jpg",
+        "banner": "http://assets.fanart.tv/fanart/movies/1151534/moviebanner/nowhere-652724e79f726.jpg",
+        "guid": "plex://movie/617d3ab142705b2183b1b20b",
+        "key": "/library/metadata/617d3ab142705b2183b1b20b",
+        "primaryExtraKey": "/library/metadata/617d3ab142705b2183b1b20b/extras/6504ffbc6859cd3ba9adb619",
+        "rating": 6.4,
+        "ratingKey": "617d3ab142705b2183b1b20b",
+        "studio": "Rock & Ruz",
+        "summary": "A young pregnant woman named Mia escapes from a country at war by hiding in a maritime container aboard a cargo ship. After a violent storm, Mia gives birth to her child while lost at sea, where she must fight to survive.",
+        "tagline": "Attempting to survive in the middle of nowhere is her only option.",
+        "type": "movie",
+        "thumb": "https://image.tmdb.org/t/p/original/uldNFFKNXNvwss0MIZErMSFkBJZ.jpg",
+        "addedAt": 1695945600,
+        "duration": 6540000,
+        "publicPagesURL": "https://watch.plex.tv/movie/nowhere-17",
+        "slug": "nowhere-17",
+        "userState": false,
+        "title": "Nowhere",
+        "contentRating": "R",
+        "originallyAvailableAt": "2023-09-29",
+        "year": 2023,
+        "audienceRating": 6.2,
+        "audienceRatingImage": "rottentomatoes://image.rating.upright",
+        "ratingImage": "rottentomatoes://image.rating.ripe",
+        "imdbRatingCount": 25906,
+        "source": "provider://tv.plex.provider.metadata",
+        "Image": [
+          {
+            "alt": "Nowhere",
+            "type": "background",
+            "url": "https://image.tmdb.org/t/p/original/xvzxqKWltnj6qSiWBXRq6ZCdcrw.jpg"
+          },
+          {
+            "alt": "Nowhere",
+            "type": "banner",
+            "url": "http://assets.fanart.tv/fanart/movies/1151534/moviebanner/nowhere-652724e79f726.jpg"
+          },
+          {
+            "alt": "Nowhere",
+            "type": "clearLogoWide",
+            "url": "http://assets.fanart.tv/fanart/movies/1151534/hdmovielogo/nowhere-651b207542604.png"
+          },
+          {
+            "alt": "Nowhere",
+            "type": "coverArt",
+            "url": "https://metadata-static.plex.tv/8/gracenote/895c9c368de4e83c752791eaa362b96d.jpg"
+          },
+          {
+            "alt": "Nowhere",
+            "type": "coverPoster",
+            "url": "https://image.tmdb.org/t/p/original/uldNFFKNXNvwss0MIZErMSFkBJZ.jpg"
+          },
+          {
+            "alt": "Nowhere",
+            "type": "coverSquare",
+            "url": "https://metadata-static.plex.tv/d/gracenote/d26f1f2c7ff370a7c27345248c3e6888.jpg"
+          },
+          {
+            "alt": "Nowhere",
+            "type": "snapshot",
+            "url": "https://metadata-static.plex.tv/2/gracenote/29bdff575ed2ac00d7e86c75a7d6c943.jpg"
+          }
+        ],
+        "Genre": [
+          {
+            "filter": "genre=5d9c046c705e7a001e6c8d9a",
+            "id": "5d9c046c705e7a001e6c8d9a",
+            "ratingKey": "genre_5d9c046c705e7a001e6c8d9a",
+            "slug": "drama",
+            "tag": "Drama",
+            "directory": true,
+            "context": "tag.genre"
+          },
+          {
+            "filter": "genre=5d9c046c2192ba001f2ff6c5",
+            "id": "5d9c046c2192ba001f2ff6c5",
+            "ratingKey": "genre_5d9c046c2192ba001f2ff6c5",
+            "slug": "thriller",
+            "tag": "Thriller",
+            "directory": true,
+            "context": "tag.genre"
+          }
+        ],
+        "Guid": [
+          {
+            "id": "imdb://tt15789472"
+          },
+          {
+            "id": "tmdb://1151534"
+          },
+          {
+            "id": "tvdb://347900"
+          }
+        ],
+        "Country": [
+          {
+            "tag": "Spain"
+          }
+        ],
+        "Role": [
+          {
+            "key": "/library/people/5d7768dff617c90020159be5",
+            "id": "5d7768dff617c90020159be5",
+            "order": 1,
+            "slug": "anna-castillo",
+            "tag": "Anna Castillo",
+            "thumb": "https://metadata-static.plex.tv/1/people/133eeec52fadcded19e99686cca961f5.jpg",
+            "role": "Mia",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d77682b961905001eb9235c",
+            "id": "5d77682b961905001eb9235c",
+            "order": 2,
+            "slug": "tamar-novas",
+            "tag": "Tamar Novas",
+            "thumb": "https://metadata-static.plex.tv/people/5d77682b961905001eb9235c.jpg",
+            "role": "Nico",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776c5e9ab5440021515daa",
+            "id": "5d776c5e9ab5440021515daa",
+            "order": 3,
+            "slug": "irina-bravo",
+            "tag": "Irina Bravo",
+            "thumb": "https://metadata-static.plex.tv/7/people/781db81b07e77df6f8ae7842c262de96.jpg",
+            "role": "Angela",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d77697d51dd69001fe17b34",
+            "id": "5d77697d51dd69001fe17b34",
+            "order": 4,
+            "slug": "victoria-teijeiro",
+            "tag": "Victoria Teijeiro",
+            "thumb": "https://metadata-static.plex.tv/people/5d77697d51dd69001fe17b34.jpg",
+            "role": "Vicky",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d9c08dfe9d5a1001f4dd2b3",
+            "id": "5d9c08dfe9d5a1001f4dd2b3",
+            "order": 5,
+            "slug": "lucia-soria-2",
+            "tag": "Lucia Soria",
+            "thumb": "https://metadata-static.plex.tv/people/5d9c08dfe9d5a1001f4dd2b3.jpg",
+            "role": "Addlescente",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/613621bb1806dac81fc037d3",
+            "id": "613621bb1806dac81fc037d3",
+            "order": 6,
+            "slug": "mary-ruiz-2",
+            "tag": "Mary Ruiz",
+            "thumb": "https://metadata-static.plex.tv/1/people/11262f70e5ce9b8d87595dc19de47956.jpg",
+            "role": "Sandra",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d77688bebdf2200209c21df",
+            "id": "5d77688bebdf2200209c21df",
+            "order": 7,
+            "slug": "tony-corvillo",
+            "tag": "Tony Corvillo",
+            "thumb": "https://metadata-static.plex.tv/6/people/6e5a56d9a2d34c331b04afe2b44b378a.jpg",
+            "role": "Gil",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776ca8ad5437001f7c4ffe",
+            "id": "5d776ca8ad5437001f7c4ffe",
+            "order": 8,
+            "slug": "mariam-torres",
+            "tag": "Mariam Torres",
+            "thumb": "https://metadata-static.plex.tv/c/people/c817f2fffd3ef11a4ef1c79c074d69bd.jpg",
+            "role": "Lucia",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d776903594b2b001e69ad45",
+            "id": "5d776903594b2b001e69ad45",
+            "order": 9,
+            "slug": "edu-bulnes",
+            "tag": "Edu Bulnes",
+            "thumb": "https://metadata-static.plex.tv/0/people/0776e3aa1ab33055431afb2f9c04db57.jpg",
+            "role": "Andres",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d7768a1d11dd30020228d2d",
+            "id": "5d7768a1d11dd30020228d2d",
+            "order": 10,
+            "slug": "antonio-buil-pueyo",
+            "tag": "Antonio Buíl",
+            "thumb": "https://metadata-static.plex.tv/5/people/5457685fabea77673dd8d7aecb57ee9b.jpg",
+            "role": "Conductor Camion",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5d7768ba51dd69001fe1007d",
+            "id": "5d7768ba51dd69001fe1007d",
+            "order": 11,
+            "slug": "said-el-mouden",
+            "tag": "Said El Mouden",
+            "thumb": "https://metadata-static.plex.tv/people/5d7768ba51dd69001fe1007d.jpg",
+            "role": "Traficante Lider",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5f401346fea1a1003f9d91ff",
+            "id": "5f401346fea1a1003f9d91ff",
+            "order": 12,
+            "slug": "kaabil",
+            "tag": "Kaabil Sekali",
+            "thumb": "https://metadata-static.plex.tv/f/people/f36ce2af879eae40588c7405eefb82e0.jpg",
+            "role": "Traficante",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/651a7c83cba6bec8f7f2b2de",
+            "id": "651a7c83cba6bec8f7f2b2de",
+            "order": 13,
+            "slug": "saorla-wright-4",
+            "tag": "Saorla Wright",
+            "thumb": "https://metadata-static.plex.tv/9/people/96a6a0fc3f1b22302d5584887b5c4912.jpg",
+            "role": "Hija Pescador",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/6329aba005f2f1b85b40314f",
+            "id": "6329aba005f2f1b85b40314f",
+            "order": 14,
+            "slug": "emma-sanchez-3",
+            "tag": "Emma Sánchez",
+            "thumb": "https://metadata-static.plex.tv/9/people/9081f395754a6e61adc9552908ecd355.jpg",
+            "role": "Uma",
+            "type": "person"
+          }
+        ],
+        "Director": [
+          {
+            "key": "/library/people/5d776bbbf617c90020179905",
+            "id": "5d776bbbf617c90020179905",
+            "slug": "albert-pinto",
+            "tag": "Albert Pintó",
+            "thumb": "https://metadata-static.plex.tv/4/people/44f70360deaf0946ec7e0cb0f3f42c8e.jpg",
+            "role": "Director",
+            "type": "person"
+          }
+        ],
+        "Producer": [
+          {
+            "key": "/library/people/5f57ba35782ab30043546456",
+            "id": "5f57ba35782ab30043546456",
+            "slug": "miguel-ruz-2",
+            "tag": "Miguel Ruz",
+            "role": "Producer",
+            "type": "person"
+          }
+        ],
+        "Writer": [
+          {
+            "key": "/library/people/5d7768576f4521001eaa2749",
+            "id": "5d7768576f4521001eaa2749",
+            "slug": "miguel-ruz",
+            "tag": "Miguel Ruz",
+            "role": "Writer",
+            "type": "person"
+          },
+          {
+            "key": "/library/people/5dce6e724288ee001eb62fe6",
+            "id": "5dce6e724288ee001eb62fe6",
+            "slug": "seanne-winslow",
+            "tag": "Seanne Winslow",
+            "role": "Writer",
+            "type": "person"
+          }
+        ],
+        "Rating": [
+          {
+            "image": "imdb://image.rating",
+            "type": "audience",
+            "value": 6.3
+          },
+          {
+            "image": "rottentomatoes://image.rating.ripe",
+            "type": "critic",
+            "value": 6.4
+          },
+          {
+            "image": "rottentomatoes://image.rating.upright",
+            "type": "audience",
+            "value": 6.2
+          },
+          {
+            "image": "themoviedb://image.rating",
+            "type": "audience",
+            "value": 7.584
+          }
+        ],
+        "Studio": [
+          {
+            "tag": "Rock & Ruz"
+          }
+        ]
+      }
+    ]
+  }
+}

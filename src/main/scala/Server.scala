@@ -1,6 +1,6 @@
 
 import cats.effect._
-import cats.implicits.catsSyntaxTuple2Parallel
+import cats.implicits.catsSyntaxTuple3Parallel
 import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
 import http.HttpClient
 import org.slf4j.LoggerFactory
@@ -23,7 +23,11 @@ object Server extends IOApp {
 
     for {
       memoizedConfigIo <- ConfigurationUtils.create(configReader, httpClient).memoize
-      result <- (watchlistSync(memoizedConfigIo, httpClient), plexTokenSync(memoizedConfigIo, httpClient)).parTupled.as(ExitCode.Success)
+      result <- (
+        watchlistSync(memoizedConfigIo, httpClient),
+        pingTokenSync(memoizedConfigIo, httpClient),
+        plexTokenSync(memoizedConfigIo, httpClient)
+      ).parTupled.as(ExitCode.Success)
     } yield result
   }
 
@@ -35,11 +39,17 @@ object Server extends IOApp {
       _ <- watchlistSync(configIO, httpClient)
     } yield ()
 
+  private def pingTokenSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
+    for {
+      config <- configIO
+      _ <- PingTokenSync.run(config, httpClient)
+      _ <- IO.sleep(24.hours)
+      _ <- pingTokenSync(configIO, httpClient)
+    } yield ()
+
   private def plexTokenSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
     for {
       config <- configIO
       _ <- PlexTokenSync.run(config, httpClient)
-      _ <- IO.sleep(24.hours)
-      _ <- plexTokenSync(configIO, httpClient)
     } yield ()
 }
