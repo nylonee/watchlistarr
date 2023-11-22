@@ -1,0 +1,18 @@
+{
+  "data": {
+    "allFriendsV2": [
+      {
+        "user": {
+          "id": "ecdb6as0230e2115",
+          "username": "friend-1"
+        }
+      },
+      {
+        "user": {
+          "id": "a31281fd8s413643",
+          "username": "friend-2"
+        }
+      }
+    ]
+  }
+}

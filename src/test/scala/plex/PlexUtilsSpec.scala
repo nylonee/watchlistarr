@@ -3,13 +3,15 @@ package plex
 import cats.effect.IO
 import http.HttpClient
 import io.circe.parser._
-import model.Item
+import model.{GraphQLQuery, Item}
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
 import cats.effect.unsafe.implicits.global
 import configuration.Configuration
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import io.circe.generic.extras.auto._
+import io.circe.syntax.EncoderOps
 
 import scala.concurrent.duration.DurationInt
 import scala.io.Source
@@ -56,7 +58,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
       None
     ).returning(IO.pure(parse("{}"))).once()
 
-    val result = ping(mockClient)(config).unsafeRunSync()
+    val result: Unit = ping(mockClient)(config).unsafeRunSync()
 
     result shouldBe()
   }
@@ -89,6 +91,52 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     val result = eitherResult.getOrElse(Set.empty[Item])
     result.size shouldBe 2
     result.head shouldBe Item("The Test", List("imdb://tt11347692", "tmdb://95837", "tvdb://372848"), "show")
+  }
+
+  it should "successfully fetch friends from Plex" in {
+    val mockClient = mock[HttpClient]
+    val config = createConfiguration(Some("test-token"))
+    val query = GraphQLQuery(
+      """query GetAllFriends {
+        |        allFriendsV2 {
+        |          user {
+        |            id
+        |            username
+        |          }
+        |        }
+        |      }""".stripMargin)
+    (mockClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://community.plex.tv/api"),
+      Some("test-token"),
+      Some(query.asJson)
+    ).returning(IO.pure(parse(Source.fromResource("plex-get-all-friends.json").getLines().mkString("\n")))).once()
+
+    val eitherResult = getFriends(config, mockClient).value.unsafeRunSync()
+
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty[User])
+    result.size shouldBe 2
+    result.head shouldBe User("ecdb6as0230e2115", "friend-1")
+    result.last shouldBe User("a31281fd8s413643", "friend-2")
+  }
+
+  it should "successfully fetch a watchlist from a friend on Plex" in {
+    val mockClient = mock[HttpClient]
+    val config = createConfiguration(Some("test-token"))
+    (mockClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://community.plex.tv/api"),
+      Some("test-token"),
+      *
+    ).returning(IO.pure(parse(Source.fromResource("plex-get-watchlist-from-friend.json").getLines().mkString("\n")))).once()
+
+    val eitherResult = getWatchlistIdsForUser(config, mockClient)(User("ecdb6as0230e2115", "friend-1")).value.unsafeRunSync()
+
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty[TokenWatchlistItem])
+    result.size shouldBe 2
+    result.head shouldBe TokenWatchlistItem("The Twilight Saga: Breaking Dawn - Part 2", "5d77688b9ab54400214e789b", "movie", "/library/metadata/5d77688b9ab54400214e789b")
   }
 
   private def createConfiguration(plexToken: Option[String]): Configuration = Configuration(

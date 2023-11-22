@@ -17,10 +17,12 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
     val result = for {
       selfWatchlist <- getSelfWatchlist(config, client)
       _ = logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
+      othersWatchlist <- getOthersWatchlist(config, client)
+      _ = logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
       movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
       allIds = movies ++ series
-      _ <- missingIds(client)(config)(allIds, selfWatchlist)
+      _ <- missingIds(client)(config)(allIds, selfWatchlist ++ othersWatchlist)
     } yield ()
 
     result.leftMap {
