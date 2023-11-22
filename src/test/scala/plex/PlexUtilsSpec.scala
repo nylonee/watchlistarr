@@ -139,6 +139,30 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     result.head shouldBe TokenWatchlistItem("The Twilight Saga: Breaking Dawn - Part 2", "5d77688b9ab54400214e789b", "movie", "/library/metadata/5d77688b9ab54400214e789b")
   }
 
+  it should "successfully fetch multiple watchlist pages from a friend on Plex" in {
+    val mockClient = mock[HttpClient]
+    val config = createConfiguration(Some("test-token"))
+    (mockClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://community.plex.tv/api"),
+      Some("test-token"),
+      *
+    ).returning(IO.pure(parse(Source.fromResource("plex-get-watchlist-from-friend-page-1.json").getLines().mkString("\n")))).repeat(13)
+    (mockClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://community.plex.tv/api"),
+      Some("test-token"),
+      *
+    ).returning(IO.pure(parse(Source.fromResource("plex-get-watchlist-from-friend.json").getLines().mkString("\n")))).once()
+
+    val eitherResult = getWatchlistIdsForUser(config, mockClient)(User("ecdb6as0230e2115", "friend-1")).value.unsafeRunSync()
+
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty[TokenWatchlistItem])
+    result.size shouldBe 2
+    result.head shouldBe TokenWatchlistItem("The Twilight Saga: Breaking Dawn - Part 2", "5d77688b9ab54400214e789b", "movie", "/library/metadata/5d77688b9ab54400214e789b")
+  }
+
   private def createConfiguration(plexToken: Option[String]): Configuration = Configuration(
     refreshInterval = 10.seconds,
     sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
