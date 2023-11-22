@@ -32,8 +32,8 @@ class ItemSpec extends AnyFlatSpec with Matchers {
 
   it should "succeed if one of the guids match" in {
     val item1 = Item(punch, List(punch, punch), punch)
-    val item2 = item1.copy(guids = List(item1.guids.head))
-    val item3 = item1.copy(guids = List(item1.guids.last))
+    val item2 = item1.copy(guids = List(punch, item1.guids.head, punch))
+    val item3 = item1.copy(guids = List(punch, item1.guids.last, punch))
 
     item1.matches(item2) shouldBe true
     item2.matches(item1) shouldBe true
