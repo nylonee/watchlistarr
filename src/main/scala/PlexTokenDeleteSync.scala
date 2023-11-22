@@ -40,10 +40,10 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
           logger.debug(s"$c \"${item.title}\" already exists in Plex")
           Right(IO.unit)
         case (false, "show") =>
-          logger.info(s"Found show \"${item.title}\" which does not exist on Plex")
+          logger.info(s"Found show \"${item.title}\" which is not on Plex")
           Right(IO.unit)
         case (false, "movie") =>
-          logger.info(s"Found movie \"${item.title}\" which does not exist yet in Radarr")
+          logger.info(s"Found movie \"${item.title}\" which is not on Plex")
           Right(IO.unit)
         case (false, c) =>
           logger.warn(s"Found $c \"${item.title}\", but I don't recognize the category")
