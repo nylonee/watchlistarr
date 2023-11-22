@@ -1,0 +1,26 @@
+{
+  "data": {
+    "user": {
+      "watchlist": {
+        "nodes": [
+          {
+            "id": "5d77688b9ab54400214e789b",
+            "title": "The Twilight Saga: Breaking Dawn - Part 2",
+            "publicPagesURL": "https://watch.plex.tv/movie/the-twilight-saga-breaking-dawn-part-2",
+            "type": "MOVIE"
+          },
+          {
+            "id": "5d77688b594b2b001e68f2f0",
+            "title": "The Twilight Saga: Breaking Dawn - Part 1",
+            "publicPagesURL": "https://watch.plex.tv/movie/the-twilight-saga-breaking-dawn-part-1",
+            "type": "MOVIE"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": true,
+          "endCursor": "MTY1NjE4NDgyMzEzMA=="
+        }
+      }
+    }
+  }
+}

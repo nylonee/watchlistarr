@@ -64,7 +64,7 @@ trait PlexUtils {
   protected def getOthersWatchlist(config: Configuration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] =
     for {
       friends <- getFriends(config, client)
-      watchlistItems <- friends.map(getWatchlistIdsForUser(config, client)).toList.sequence.map(_.flatten)
+      watchlistItems <- friends.map(getWatchlistIdsForUser(config, client)(_)).toList.sequence.map(_.flatten)
       items <- watchlistItems.map(i => toItems(config, client, i)).sequence.map(_.toSet)
     } yield items
 
@@ -95,46 +95,52 @@ trait PlexUtils {
       })
     }.getOrElse(EitherT.left(IO.pure(new Throwable("Plex tokens are not configured"))))
 
-  protected def getWatchlistIdsForUser(config: Configuration, client: HttpClient)(user: User): EitherT[IO, Throwable, Set[TokenWatchlistItem]] =
+  protected def getWatchlistIdsForUser(config: Configuration, client: HttpClient)(user: User, page: Option[String] = None): EitherT[IO, Throwable, Set[TokenWatchlistItem]] =
     config.plexToken.map { token =>
       val url = Uri.unsafeFromString("https://community.plex.tv/api")
 
       val query = GraphQLQuery(
         """query GetWatchlistHub ($uuid: ID = "", $first: PaginationInt !, $after: String) {
-                user(id: $uuid) {
-                  watchlist(first: $first, after: $after) {
-                    nodes {
-                    ...itemFields
-                    }
-                    pageInfo {
-                      hasNextPage
-                      endCursor
-                    }
-                  }
-                }
-              }
-                fragment itemFields on MetadataItem {
-                id
-                title
-                type
-              }""".stripMargin,
-        Some(
-          s"""{
-             |  "first": 100,
-             |  "uuid": "${user.id}"
-             |}""".stripMargin.asJson))
+                        user(id: $uuid) {
+                          watchlist(first: $first, after: $after) {
+                            nodes {
+                            ...itemFields
+                            }
+                            pageInfo {
+                              hasNextPage
+                              endCursor
+                            }
+                          }
+                        }
+                      }
+                        fragment itemFields on MetadataItem {
+                        id
+                        title
+                        type
+                      }""".stripMargin,
+        if (page.isEmpty) {
+          Some(
+            s"""{
+               |  "first": 100,
+               |  "uuid": "${user.id}"
+               |}""".stripMargin.asJson)
+        } else {
+          Some(
+            s"""{
+               |  "first": 100,
+               |  "after": "${page.getOrElse("")}",
+               |  "uuid": "${user.id}"
+               |}""".stripMargin.asJson)
+        })
 
-      EitherT(client.httpRequest(Method.POST, url, Some(token), Some(query.asJson)).map {
-        case Left(err) =>
-          logger.warn(s"Unable to fetch friends watchlist from Plex: $err")
-          Left(err)
-        case Right(json) =>
-          json.as[TokenWatchlistFriend] match {
-            // TODO: Fetch the other pages if hasNextPage = true
-            case Right(v) => Right(v.data.user.watchlist.nodes.map(_.toTokenWatchlistItem).toSet)
-            case Left(v) => Left(new Throwable(v))
-          }
-      })
+      for {
+        responseJson <- EitherT(client.httpRequest(Method.POST, url, Some(token), Some(query.asJson)))
+        watchlist <- EitherT.fromEither[IO](responseJson.as[TokenWatchlistFriend]).leftMap(new Throwable(_))
+        extraContent <- if (watchlist.data.user.watchlist.pageInfo.hasNextPage)
+          getWatchlistIdsForUser(config, client)(user, Some(watchlist.data.user.watchlist.pageInfo.endCursor))
+        else
+          EitherT.pure[IO, Throwable](Set.empty[TokenWatchlistItem])
+      } yield watchlist.data.user.watchlist.nodes.map(_.toTokenWatchlistItem).toSet ++ extraContent
     }.getOrElse(EitherT.left(IO.pure(new Throwable("Plex tokens are not configured"))))
 
   // We don't have all the information available in TokenWatchlist
