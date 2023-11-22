@@ -11,6 +11,8 @@ case class Item(title: String, guids: List[String], category: String) {
     case Item(_, theirGuids, c) if c == this.category =>
       theirGuids.foldLeft(false) {
         case (acc, guid) => acc || guids.contains(guid)
+      } || guids.foldLeft(false) {
+        case (acc, guid) => acc || theirGuids.contains(guid)
       }
     case _ => false
   }
