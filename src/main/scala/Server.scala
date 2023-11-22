@@ -1,6 +1,6 @@
 
 import cats.effect._
-import cats.implicits.catsSyntaxTuple3Parallel
+import cats.implicits.catsSyntaxTuple4Parallel
 import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
 import http.HttpClient
 import org.slf4j.LoggerFactory
@@ -26,7 +26,8 @@ object Server extends IOApp {
       result <- (
         watchlistSync(memoizedConfigIo, httpClient),
         pingTokenSync(memoizedConfigIo, httpClient),
-        plexTokenSync(memoizedConfigIo, httpClient)
+        plexTokenSync(memoizedConfigIo, httpClient),
+        plexTokenDeleteSync(memoizedConfigIo, httpClient)
       ).parTupled.as(ExitCode.Success)
     } yield result
   }
@@ -51,5 +52,13 @@ object Server extends IOApp {
     for {
       config <- configIO
       _ <- PlexTokenSync.run(config, httpClient)
+    } yield ()
+
+  private def plexTokenDeleteSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
+    for {
+      config <- configIO
+      _ <- PlexTokenDeleteSync.run(config, httpClient)
+      _ <- IO.sleep(7.days)
+      _ <- plexTokenDeleteSync(configIO, httpClient)
     } yield ()
 }
