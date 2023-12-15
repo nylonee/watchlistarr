@@ -136,8 +136,8 @@ trait PlexUtils {
       for {
         responseJson <- EitherT(client.httpRequest(Method.POST, url, Some(token), Some(query.asJson)))
         watchlist <- EitherT.fromEither[IO](responseJson.as[TokenWatchlistFriend]).leftMap(new Throwable(_))
-        extraContent <- if (watchlist.data.user.watchlist.pageInfo.hasNextPage)
-          getWatchlistIdsForUser(config, client)(user, Some(watchlist.data.user.watchlist.pageInfo.endCursor))
+        extraContent <- if (watchlist.data.user.watchlist.pageInfo.hasNextPage && watchlist.data.user.watchlist.pageInfo.endCursor.nonEmpty)
+          getWatchlistIdsForUser(config, client)(user, watchlist.data.user.watchlist.pageInfo.endCursor)
         else
           EitherT.pure[IO, Throwable](Set.empty[TokenWatchlistItem])
       } yield watchlist.data.user.watchlist.nodes.map(_.toTokenWatchlistItem).toSet ++ extraContent
