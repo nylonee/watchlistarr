@@ -8,7 +8,7 @@ private[plex] case class WatchlistUserData(watchlist: WatchlistNodes)
 
 private[plex] case class WatchlistNodes(nodes: List[WatchlistNode], pageInfo: PageInfo)
 
-private[plex] case class PageInfo(hasNextPage: Boolean, endCursor: String)
+private[plex] case class PageInfo(hasNextPage: Boolean, endCursor: Option[String])
 
 private[plex] case class WatchlistNode(id: String, title: String, `type`: String) {
   def toTokenWatchlistItem: TokenWatchlistItem =

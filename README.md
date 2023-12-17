@@ -69,10 +69,10 @@ Docker tag options:
 Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
 
 ```bash
-java -jar watchlistarr.java\
-  -Dsonarr.apikey=YOUR_API_KEY\
+java -Dsonarr.apikey=YOUR_API_KEY\
   -Dradarr.apikey=YOUR_API_KEY\
-  -Dplex.watchlist1=YOUR_PLEX_WATCHLIST_URL
+  -Dplex.watchlist1=YOUR_PLEX_WATCHLIST_URL\
+  -jar watchlistarr.java
 ```
 
 For a full list of options to pass in,
