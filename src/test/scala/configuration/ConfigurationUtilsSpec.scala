@@ -23,7 +23,6 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     noException should be thrownBy config
     config.radarrApiKey shouldBe "radarr-api-key"
     config.sonarrApiKey shouldBe "sonarr-api-key"
-    config.plexWatchlistUrls shouldBe inAnyOrder(List(Uri.unsafeFromString("https://rss.plex.tv/1")))
   }
 
   it should "fail if missing sonarr API key" in {
@@ -40,37 +39,6 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     val mockHttpClient = createMockHttpClient()
 
     an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
-  }
-
-  it should "fail if missing plex watchlist 1 and 2" in {
-
-    val mockConfigReader = createMockConfigReader(plexWatchlist1 = None)
-    val mockHttpClient = createMockHttpClient()
-
-    an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
-  }
-
-  it should "pass if missing plex watchlist 1 but there's a plex watchlist 2" in {
-
-    val mockConfigReader = createMockConfigReader(plexWatchlist1 = None, plexWatchlist2 = Some(s"https://rss.plex.tv/2"))
-    val mockHttpClient = createMockHttpClient()
-
-    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
-    noException should be thrownBy config
-    config.plexWatchlistUrls shouldBe inAnyOrder(List(Uri.unsafeFromString("https://rss.plex.tv/2")))
-  }
-
-  it should "pass if both plex watchlist 1 and 2 are provided" in {
-
-    val mockConfigReader = createMockConfigReader(plexWatchlist1 = Some(s"https://rss.plex.tv/1"), plexWatchlist2 = Some(s"https://rss.plex.tv/2"))
-    val mockHttpClient = createMockHttpClient()
-
-    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
-    noException should be thrownBy config
-    config.plexWatchlistUrls shouldBe inAnyOrder(List(
-      Uri.unsafeFromString("https://rss.plex.tv/1"),
-      Uri.unsafeFromString("https://rss.plex.tv/2")
-    ))
   }
 
   it should "fetch the first accessible root folder of sonarr if none is provided" in {
@@ -150,14 +118,16 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
-  it should "allow an optional plex token to be passed in" in {
+  it should "correctly split multiple RSS watchlists feeds" in {
 
-    val mockConfigReader = createMockConfigReader(plexToken = Some("test-token"))
+    val mockConfigReader = createMockConfigReader(plexWatchlists = Some("https://rss.plex.tv/1|https://rss.plex.tv/2"))
     val mockHttpClient = createMockHttpClient()
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.plexToken shouldBe Some("test-token")
+    config.plexWatchlistUrls shouldBe Set(
+      Uri.unsafeFromString("https://rss.plex.tv/b5adbd07-fc91-4636-b77a-89f34a703473")
+    )
   }
 
   private def createMockConfigReader(
@@ -165,9 +135,10 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
                                       sonarrRootFolder: Option[String] = None,
                                       radarrRootFolder: Option[String] = None,
                                       radarrApiKey: Option[String] = Some("radarr-api-key"),
-                                      plexWatchlist1: Option[String] = Some(s"https://rss.plex.tv/1"),
+                                      plexWatchlist1: Option[String] = None,
                                       plexWatchlist2: Option[String] = None,
-                                      plexToken: Option[String] = None
+                                      plexToken: Option[String] = Some("test-token"),
+                                      plexWatchlists: Option[String] = None
                                     ): ConfigurationReader = {
     val unset = None
 
@@ -218,6 +189,18 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
       Some("radarr-api-key"),
       None
     ).returning(IO.pure(parse(Source.fromResource("rootFolder.json").getLines().mkString("\n")))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/rss?X-Plex-Token=test-token"),
+      None,
+      Some("""{"feedtype": "watchlist"}""".asJson)
+    ).returning(IO.pure(parse(Source.fromResource("rss-feed-generated.json").getLines().mkString("\n")))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/rss?X-Plex-Token=test-token"),
+      None,
+      Some("""{"feedtype": "friendsWatchlist"}""".asJson)
+    ).returning(IO.pure(parse(Source.fromResource("rss-feed-generated.json").getLines().mkString("\n")))).anyNumberOfTimes()
     mockHttpClient
   }
 }
