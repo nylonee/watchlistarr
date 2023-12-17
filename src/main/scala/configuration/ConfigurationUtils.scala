@@ -5,7 +5,6 @@ import cats.implicits.toTraverseOps
 import http.HttpClient
 import io.circe.generic.auto._
 import io.circe.Json
-import io.circe.syntax.EncoderOps
 import org.http4s.{Method, Uri}
 import org.slf4j.LoggerFactory
 import plex.RssFeedGenerated
@@ -197,8 +196,9 @@ object ConfigurationUtils {
     val url = Uri
       .unsafeFromString("https://discover.provider.plex.tv/rss")
       .withQueryParam("X-Plex-Token", token)
+      .withQueryParam("X-Plex-Client-Identifier", "watchlistarr")
 
-    val body = s"""{"feedtype": "$rssType"}""".asJson
+    val body = Json.obj(("feedtype", Json.fromString(rssType)))
 
     client.httpRequest(Method.POST, url, None, Some(body)).map {
       case Left(err) =>
@@ -206,7 +206,7 @@ object ConfigurationUtils {
         None
       case Right(json) =>
         logger.debug("Got a result from Plex when generating RSS feed, attempting to decode")
-        json.as[RssFeedGenerated].map(_.RSSInfo.head.url) match {
+        json.as[RssFeedGenerated].map(_.RSSInfo.watchlistUrl) match {
           case Left(err) =>
             logger.warn(s"Unable to decode RSS generation response: $err, returning None instead")
             None

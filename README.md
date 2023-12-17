@@ -34,6 +34,7 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 * Radarr v3 or higher
 * Friends must change their privacy settings so that the main user can see their watchlists
 * Docker or Java
+* Plex Token (see [here](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))
 
 ## Getting Started
 
