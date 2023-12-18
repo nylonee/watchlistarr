@@ -200,7 +200,8 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     radarrRootFolder = "/root/",
     radarrBypassIgnored = radarrBypassIgnored,
     plexWatchlistUrls = Set(plexWatchlistUrl),
-    plexTokens = Set("test-token")
+    plexTokens = Set("test-token"),
+    skipFriendSync = false
   )
 
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {

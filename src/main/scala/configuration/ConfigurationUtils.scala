@@ -26,7 +26,8 @@ object ConfigurationUtils {
       (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
       plexTokens = getPlexTokens(configReader)
-      plexWatchlistUrls <- getPlexWatchlistUrls(client)(configReader, plexTokens)
+      skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
+      plexWatchlistUrls <- getPlexWatchlistUrls(client)(configReader, plexTokens, skipFriendSync)
     } yield Configuration(
       refreshInterval,
       sonarrBaseUrl,
@@ -41,7 +42,8 @@ object ConfigurationUtils {
       radarrRootFolder,
       radarrBypassIgnored,
       plexWatchlistUrls,
-      plexTokens
+      plexTokens,
+      skipFriendSync
     )
 
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
@@ -132,7 +134,7 @@ object ConfigurationUtils {
     (if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path)
       .replace("//", "/")
 
-  private def getPlexWatchlistUrls(client: HttpClient)(configReader: ConfigurationReader, tokens: Set[String]): IO[Set[Uri]] = {
+  private def getPlexWatchlistUrls(client: HttpClient)(configReader: ConfigurationReader, tokens: Set[String], skipFriendSync: Boolean): IO[Set[Uri]] = {
     val watchlistsFromConfigDeprecated = Set(
       configReader.getConfigOption(Keys.plexWatchlist1),
       configReader.getConfigOption(Keys.plexWatchlist2)
@@ -144,7 +146,11 @@ object ConfigurationUtils {
       for {
         selfWatchlist <- getRssFromPlexToken(client)(token, "watchlist")
         _ = logger.info(s"Generated watchlist RSS feed for self: $selfWatchlist")
-        otherWatchlist <- getRssFromPlexToken(client)(token, "friendsWatchlist")
+        otherWatchlist <- if (skipFriendSync)
+          IO.pure(None)
+        else {
+          getRssFromPlexToken(client)(token, "friendsWatchlist")
+        }
         _ = logger.info(s"Generated watchlist RSS feed for friends: $otherWatchlist")
       } yield Set(selfWatchlist, otherWatchlist).collect {
         case Some(url) => url
@@ -210,12 +216,12 @@ object ConfigurationUtils {
         None
       case Right(json) =>
         logger.debug("Got a result from Plex when generating RSS feed, attempting to decode")
-        json.as[RssFeedGenerated].map(_.RSSInfo.watchlistUrl) match {
+        json.as[RssFeedGenerated].map(_.RSSInfo.headOption.map(_.url)) match {
           case Left(err) =>
             logger.warn(s"Unable to decode RSS generation response: $err, returning None instead")
             None
           case Right(url) =>
-            Some(url)
+            url
         }
     }
   }

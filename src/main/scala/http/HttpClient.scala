@@ -24,6 +24,8 @@ class HttpClient {
     ))
     val requestWithPayload = payload.fold(requestWithApiKey)(p => requestWithApiKey.withEntity(p))
 
+
+    println(s"Headers: ${requestWithPayload.headers}")
     client.use(_.expect[Json](requestWithPayload).attempt)
   }
 }

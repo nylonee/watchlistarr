@@ -177,6 +177,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     radarrRootFolder = "/root/",
     radarrBypassIgnored = false,
     plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
-    plexTokens = plexTokens
+    plexTokens = plexTokens,
+    skipFriendSync = false
   )
 }

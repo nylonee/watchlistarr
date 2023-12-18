@@ -139,18 +139,6 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
-  it should "correctly split multiple RSS watchlists feeds" in {
-
-    val mockConfigReader = createMockConfigReader(plexWatchlists = Some("https://rss.plex.tv/1|https://rss.plex.tv/2"))
-    val mockHttpClient = createMockHttpClient()
-
-    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
-    noException should be thrownBy config
-    config.plexWatchlistUrls shouldBe Set(
-      Uri.unsafeFromString("https://rss.plex.tv/b5adbd07-fc91-4636-b77a-89f34a703473")
-    )
-  }
-
   private def createMockConfigReader(
                                       sonarrApiKey: Option[String] = Some("sonarr-api-key"),
                                       sonarrRootFolder: Option[String] = None,
@@ -158,8 +146,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
                                       radarrApiKey: Option[String] = Some("radarr-api-key"),
                                       plexWatchlist1: Option[String] = None,
                                       plexWatchlist2: Option[String] = None,
-                                      plexToken: Option[String] = Some("test-token"),
-                                      plexWatchlists: Option[String] = None
+                                      plexToken: Option[String] = Some("test-token")
                                     ): ConfigurationReader = {
     val unset = None
 
@@ -179,6 +166,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     (mockConfigReader.getConfigOption _).expects(Keys.plexWatchlist2).returning(plexWatchlist2).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrSeasonMonitoring).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.plexToken).returning(plexToken).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.skipFriendSync).returning(unset).anyNumberOfTimes()
     mockConfigReader
   }
 

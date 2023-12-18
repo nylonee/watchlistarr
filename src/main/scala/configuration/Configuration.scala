@@ -18,5 +18,6 @@ case class Configuration(
                           radarrRootFolder: String,
                           radarrBypassIgnored: Boolean,
                           plexWatchlistUrls: Set[Uri],
-                          plexTokens: Set[String]
+                          plexTokens: Set[String],
+                          skipFriendSync: Boolean
                         )

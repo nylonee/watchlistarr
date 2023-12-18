@@ -46,7 +46,8 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     radarrRootFolder = "/root/",
     radarrBypassIgnored = false,
     plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
-    plexTokens = plexTokens
+    plexTokens = plexTokens,
+    skipFriendSync = false
   )
 
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {

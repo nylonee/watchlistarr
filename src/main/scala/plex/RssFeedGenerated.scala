@@ -1,5 +1,5 @@
 package plex
 
-case class RssFeedGenerated(RSSInfo: RssInfo)
+case class RssFeedGenerated(RSSInfo: List[RssInfo])
 
-case class RssInfo(watchlistUrl: String)
+case class RssInfo(url: String)
