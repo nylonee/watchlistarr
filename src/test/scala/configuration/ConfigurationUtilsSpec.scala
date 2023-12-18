@@ -202,13 +202,13 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
       Method.POST,
       Uri.unsafeFromString("https://discover.provider.plex.tv/rss?X-Plex-Token=test-token&X-Plex-Client-Identifier=watchlistarr"),
       None,
-      Some(parse("""{"feedtype": "watchlist"}""").getOrElse(Json.Null))
+      Some(parse("""{"feedType": "watchlist"}""").getOrElse(Json.Null))
     ).returning(IO.pure(parse(Source.fromResource("rss-feed-generated.json").getLines().mkString("\n")))).anyNumberOfTimes()
     (mockHttpClient.httpRequest _).expects(
       Method.POST,
       Uri.unsafeFromString("https://discover.provider.plex.tv/rss?X-Plex-Token=test-token&X-Plex-Client-Identifier=watchlistarr"),
       None,
-      Some(parse("""{"feedtype": "friendsWatchlist"}""").getOrElse(Json.Null))
+      Some(parse("""{"feedType": "friendsWatchlist"}""").getOrElse(Json.Null))
     ).returning(IO.pure(parse(Source.fromResource("rss-feed-generated.json").getLines().mkString("\n")))).anyNumberOfTimes()
     mockHttpClient
   }
