@@ -24,7 +24,7 @@ Watchlistarr is working towards being able to support a full delete sync with yo
 a user
 removes an item off their watchlist, Watchlistarr can detect that and delete content from Sonarr/Radarr.**
 
-This feature will be released soon, in the meantime, you can enjoy a little "sneak peak"
+This feature will be released soon, in the meantime, you can enjoy a little "sneak peek"
 upon startup of the app, where the logs will list the movies/tv shows that are out of sync.
 
 ### Requirements
