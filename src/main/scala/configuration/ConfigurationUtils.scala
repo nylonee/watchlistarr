@@ -143,7 +143,9 @@ object ConfigurationUtils {
     val watchlistsFromTokenIo = tokens.map { token =>
       for {
         selfWatchlist <- getRssFromPlexToken(client)(token, "watchlist")
+        _ = logger.info(s"Generated watchlist RSS feed for self: $selfWatchlist")
         otherWatchlist <- getRssFromPlexToken(client)(token, "friendsWatchlist")
+        _ = logger.info(s"Generated watchlist RSS feed for friends: $otherWatchlist")
       } yield Set(selfWatchlist, otherWatchlist).collect {
         case Some(url) => url
       }
@@ -158,14 +160,14 @@ object ConfigurationUtils {
     }
   }
 
-  private def getPlexTokens(configReader: ConfigurationReader): Set[String] = {
+  private def getPlexTokens(configReader: ConfigurationReader): Set[String] =
     configReader.getConfigOption(Keys.plexToken) match {
       case Some(rawToken) =>
         rawToken.split(',').toSet
       case None =>
-        throwError("Missing plex token")
+        logger.warn("Missing plex token")
+        Set.empty
     }
-  }
 
   private def toPlexUri(url: String): Uri = {
     val supportedHosts = List(

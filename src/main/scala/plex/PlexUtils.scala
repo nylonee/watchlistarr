@@ -151,7 +151,7 @@ trait PlexUtils {
     val key = cleanKey(i.key)
     val url = Uri
       .unsafeFromString(s"https://discover.provider.plex.tv$key")
-      .withQueryParam("X-Plex-Token", config.plexTokens.head)
+      .withQueryParam("X-Plex-Token", config.plexTokens.headOption.getOrElse("unknown"))
 
     val guids: EitherT[IO, Throwable, List[String]] = for {
       response <- EitherT(client.httpRequest(Method.GET, url))
