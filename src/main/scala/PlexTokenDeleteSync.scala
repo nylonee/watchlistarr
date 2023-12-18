@@ -13,10 +13,10 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def run(config: Configuration, client: HttpClient): IO[Unit] =  {
+  def run(config: Configuration, client: HttpClient): IO[Unit] = {
     val result = for {
       selfWatchlist <- getSelfWatchlist(config, client)
-      othersWatchlist <- getOthersWatchlist(config, client)
+      othersWatchlist <- if (config.skipFriendSync) EitherT.pure[IO, Throwable](Set.empty[Item]) else getOthersWatchlist(config, client)
       moviesWithoutExclusions <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, bypass = true)
       seriesWithoutExclusions <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, bypass = true)
       allIdsWithoutExclusions = moviesWithoutExclusions ++ seriesWithoutExclusions

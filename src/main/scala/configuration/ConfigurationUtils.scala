@@ -208,7 +208,7 @@ object ConfigurationUtils {
       .withQueryParam("X-Plex-Token", token)
       .withQueryParam("X-Plex-Client-Identifier", "watchlistarr")
 
-    val body = Json.obj(("feedtype", Json.fromString(rssType)))
+    val body = Json.obj(("feedType", Json.fromString(rssType)))
 
     client.httpRequest(Method.POST, url, None, Some(body)).map {
       case Left(err) =>

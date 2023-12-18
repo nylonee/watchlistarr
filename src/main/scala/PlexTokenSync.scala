@@ -13,11 +13,14 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def run(config: Configuration, client: HttpClient): IO[Unit] =  {
+  def run(config: Configuration, client: HttpClient): IO[Unit] = {
     val result = for {
       selfWatchlist <- getSelfWatchlist(config, client)
       _ = logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
-      othersWatchlist <- getOthersWatchlist(config, client)
+      othersWatchlist <- if (config.skipFriendSync)
+        EitherT.pure[IO, Throwable](Set.empty[Item])
+      else
+        getOthersWatchlist(config, client)
       _ = logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
       movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
