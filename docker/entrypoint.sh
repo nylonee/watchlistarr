@@ -62,4 +62,8 @@ if [ -n "$PLEX_TOKEN" ]; then
   CMD="$CMD -Dplex.token=$PLEX_TOKEN"
 fi
 
+if [ -n "$SKIP_FRIEND_SYNC" ]; then
+  CMD="$CMD -Dplex.skipfriendsync=$SKIP_FRIEND_SYNC"
+fi
+
 exec $CMD
