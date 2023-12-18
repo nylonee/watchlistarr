@@ -128,7 +128,9 @@ object ConfigurationUtils {
         )
     }
 
-  private def normalizePath(path: String): String = if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path
+  private def normalizePath(path: String): String =
+    (if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path)
+      .replace("//", "/")
 
   private def getPlexWatchlistUrls(client: HttpClient)(configReader: ConfigurationReader, tokens: Set[String]): IO[Set[Uri]] = {
     val watchlistsFromConfigDeprecated = Set(

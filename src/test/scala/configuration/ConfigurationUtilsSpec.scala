@@ -72,6 +72,16 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     config.sonarrRootFolder shouldBe "/data3"
   }
 
+  it should "find the root folder with an escaped slash provided in sonarr config" in {
+
+    val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("//data3"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
+    noException should be thrownBy config
+    config.sonarrRootFolder shouldBe "/data3"
+  }
+
   it should "throw an error if the sonarr root folder provided can't be found" in {
 
     val mockConfigReader = createMockConfigReader(sonarrRootFolder = Some("/unknown"))
@@ -104,6 +114,16 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
   it should "find the root folder with a trailing slash provided in radarr config" in {
 
     val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("/data3/"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
+    noException should be thrownBy config
+    config.radarrRootFolder shouldBe "/data3"
+  }
+
+  it should "find the root folder with an escaped slash provided in radarr config" in {
+
+    val mockConfigReader = createMockConfigReader(radarrRootFolder = Some("//data3"))
     val mockHttpClient = createMockHttpClient()
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
