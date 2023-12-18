@@ -1,11 +1,13 @@
 package configuration
 
 import cats.effect.IO
+import cats.implicits.toTraverseOps
 import http.HttpClient
 import io.circe.generic.auto._
 import io.circe.Json
 import org.http4s.{Method, Uri}
 import org.slf4j.LoggerFactory
+import plex.RssFeedGenerated
 
 import scala.concurrent.duration._
 
@@ -23,8 +25,9 @@ object ConfigurationUtils {
       radarrConfig <- getRadarrConfig(configReader, client)
       (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
-      plexWatchlistUrls = getPlexWatchlistUrls(configReader)
-      plexToken = configReader.getConfigOption(Keys.plexToken)
+      plexTokens = getPlexTokens(configReader)
+      skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
+      plexWatchlistUrls <- getPlexWatchlistUrls(client)(configReader, plexTokens, skipFriendSync)
     } yield Configuration(
       refreshInterval,
       sonarrBaseUrl,
@@ -39,7 +42,8 @@ object ConfigurationUtils {
       radarrRootFolder,
       radarrBypassIgnored,
       plexWatchlistUrls,
-      plexToken
+      plexTokens,
+      skipFriendSync
     )
 
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
@@ -126,18 +130,49 @@ object ConfigurationUtils {
         )
     }
 
-  private def normalizePath(path: String): String = if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path
+  private def normalizePath(path: String): String =
+    (if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path)
+      .replace("//", "/")
 
-  private def getPlexWatchlistUrls(configReader: ConfigurationReader): List[Uri] =
-    Set(
+  private def getPlexWatchlistUrls(client: HttpClient)(configReader: ConfigurationReader, tokens: Set[String], skipFriendSync: Boolean): IO[Set[Uri]] = {
+    val watchlistsFromConfigDeprecated = Set(
       configReader.getConfigOption(Keys.plexWatchlist1),
       configReader.getConfigOption(Keys.plexWatchlist2)
-    ).toList.collect {
+    ).collect {
       case Some(url) => url
-    } match {
-      case Nil =>
-        throwError("Missing plex watchlist URL")
-      case other => other.map(toPlexUri)
+    }
+
+    val watchlistsFromTokenIo = tokens.map { token =>
+      for {
+        selfWatchlist <- getRssFromPlexToken(client)(token, "watchlist")
+        _ = logger.info(s"Generated watchlist RSS feed for self: $selfWatchlist")
+        otherWatchlist <- if (skipFriendSync)
+          IO.pure(None)
+        else {
+          getRssFromPlexToken(client)(token, "friendsWatchlist")
+        }
+        _ = logger.info(s"Generated watchlist RSS feed for friends: $otherWatchlist")
+      } yield Set(selfWatchlist, otherWatchlist).collect {
+        case Some(url) => url
+      }
+    }.toList.sequence.map(_.flatten)
+
+    watchlistsFromTokenIo.map { watchlistsFromToken =>
+      (watchlistsFromConfigDeprecated ++ watchlistsFromToken).toList match {
+        case Nil =>
+          throwError("Missing plex watchlist URL")
+        case other => other.map(toPlexUri).toSet
+      }
+    }
+  }
+
+  private def getPlexTokens(configReader: ConfigurationReader): Set[String] =
+    configReader.getConfigOption(Keys.plexToken) match {
+      case Some(rawToken) =>
+        rawToken.split(',').toSet
+      case None =>
+        logger.warn("Missing plex token")
+        Set.empty
     }
 
   private def toPlexUri(url: String): Uri = {
@@ -166,5 +201,29 @@ object ConfigurationUtils {
 
   private def getToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): IO[Either[Throwable, Json]] =
     client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey))
+
+  private def getRssFromPlexToken(client: HttpClient)(token: String, rssType: String): IO[Option[String]] = {
+    val url = Uri
+      .unsafeFromString("https://discover.provider.plex.tv/rss")
+      .withQueryParam("X-Plex-Token", token)
+      .withQueryParam("X-Plex-Client-Identifier", "watchlistarr")
+
+    val body = Json.obj(("feedType", Json.fromString(rssType)))
+
+    client.httpRequest(Method.POST, url, None, Some(body)).map {
+      case Left(err) =>
+        logger.warn(s"Unable to generate an RSS feed: $err")
+        None
+      case Right(json) =>
+        logger.debug("Got a result from Plex when generating RSS feed, attempting to decode")
+        json.as[RssFeedGenerated].map(_.RSSInfo.headOption.map(_.url)) match {
+          case Left(err) =>
+            logger.warn(s"Unable to decode RSS generation response: $err, returning None instead")
+            None
+          case Right(url) =>
+            url
+        }
+    }
+  }
 
 }

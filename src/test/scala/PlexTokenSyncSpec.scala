@@ -20,7 +20,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
   "PlexTokenSync.run" should "do a single sync with all required fields provided" in {
 
     val mockHttpClient = mock[HttpClient]
-    val config = createConfiguration(plexToken = Some("plex-token"))
+    val config = createConfiguration(plexTokens = Set("plex-token"))
     defaultPlexMock(mockHttpClient)
     defaultRadarrMock(mockHttpClient)
     defaultSonarrMock(mockHttpClient)
@@ -31,7 +31,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
   }
 
   private def createConfiguration(
-                                   plexToken: Option[String]
+                                   plexTokens: Set[String]
                                  ): Configuration = Configuration(
     refreshInterval = 10.seconds,
     sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
@@ -45,8 +45,9 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     radarrQualityProfileId = 1,
     radarrRootFolder = "/root/",
     radarrBypassIgnored = false,
-    plexWatchlistUrls = List(Uri.unsafeFromString("https://localhost:9090")),
-    plexToken = plexToken
+    plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
+    plexTokens = plexTokens,
+    skipFriendSync = false
   )
 
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {

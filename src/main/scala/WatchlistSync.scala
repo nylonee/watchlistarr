@@ -19,7 +19,7 @@ object WatchlistSync
     logger.debug("Starting watchlist sync")
 
     val result = for {
-      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).sequence.map(Right(_)))
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
       watchlistData = watchlistDatas.flatten.toSet
       movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
