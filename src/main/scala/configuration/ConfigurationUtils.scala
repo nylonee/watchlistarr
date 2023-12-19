@@ -75,7 +75,6 @@ object ConfigurationUtils {
       languageProfileId <- getToArr(client)(url, apiKey, "languageprofile").map {
         case Right(res) =>
           val allLanguageProfiles = res.as[List[LanguageProfile]].getOrElse(List.empty)
-          println(s"All language profiles: $allLanguageProfiles")
           allLanguageProfiles.headOption.map(_.id).getOrElse {
             logger.warn("Unable to find a language profile, using 1 as default")
             1
