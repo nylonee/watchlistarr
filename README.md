@@ -68,6 +68,7 @@ Running this using native java requires the fat jar, download the latest from th
 java -Dsonarr.apikey=YOUR_API_KEY\
   -Dradarr.apikey=YOUR_API_KEY\
   -Dplex.token=YOUR_PLEX_TOKEN\
+  -Xmx100m\
   -jar watchlistarr.java
 ```
 

@@ -2,6 +2,8 @@
 
 CMD="/app/bin/watchlistarr"
 
+JAVA_OPTS="-Xmx100m"
+
 if [ -n "$SONARR_API_KEY" ]; then
   CMD="$CMD -Dsonarr.apikey=$SONARR_API_KEY"
 fi
@@ -66,4 +68,4 @@ if [ -n "$SKIP_FRIEND_SYNC" ]; then
   CMD="$CMD -Dplex.skipfriendsync=$SKIP_FRIEND_SYNC"
 fi
 
-exec $CMD
+exec $CMD $JAVA_OPTS
