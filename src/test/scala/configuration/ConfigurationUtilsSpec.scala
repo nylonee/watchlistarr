@@ -24,6 +24,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     noException should be thrownBy config
     config.radarrApiKey shouldBe "radarr-api-key"
     config.sonarrApiKey shouldBe "sonarr-api-key"
+    config.sonarrLanguageProfileId shouldBe 3
   }
 
   it should "fail if missing sonarr API key" in {
@@ -180,6 +181,12 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
       Some("sonarr-api-key"),
       None
     ).returning(IO.pure(Right(defaultQualityProfileResponse.asJson))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/languageprofile")),
+      Some("sonarr-api-key"),
+      None
+    ).returning(IO.pure(parse(Source.fromResource("sonarr-language-profile.json").getLines().mkString("\n")))).anyNumberOfTimes()
     (mockHttpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("http://localhost:7878").withPath(Uri.Path.unsafeFromString("/api/v3/qualityprofile")),

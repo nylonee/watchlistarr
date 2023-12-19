@@ -28,7 +28,14 @@ trait SonarrUtils extends SonarrConversions {
   protected def addToSonarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
 
     val addOptions = SonarrAddOptions(config.sonarrSeasonMonitoring)
-    val show = SonarrPost(item.title, item.getTvdbId.getOrElse(0L), config.sonarrQualityProfileId, config.sonarrRootFolder, addOptions)
+    val show = SonarrPost(
+      item.title,
+      item.getTvdbId.getOrElse(0L),
+      config.sonarrQualityProfileId,
+      config.sonarrRootFolder,
+      addOptions,
+      config.sonarrLanguageProfileId,
+    )
 
     val result = postToArr[Unit](client)(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson)
       .fold(
