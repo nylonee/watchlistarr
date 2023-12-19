@@ -30,7 +30,7 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 ### Requirements
 
 * Plex Pass Subscription
-* Sonarr v4 or higher
+* Sonarr v3 or higher
 * Radarr v3 or higher
 * Friends must change their privacy settings so that the main user can see their watchlists
 * Docker or Java
@@ -65,9 +65,9 @@ Docker tag options:
 Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
 
 ```bash
-java -Dsonarr.apikey=YOUR_API_KEY\
-  -Dradarr.apikey=YOUR_API_KEY\
-  -Dplex.token=YOUR_PLEX_TOKEN\
+java "-Dsonarr.apikey=YOUR_API_KEY"\
+  "-Dradarr.apikey=YOUR_API_KEY"\
+  "-Dplex.token=YOUR_PLEX_TOKEN"\
   -jar watchlistarr.java
 ```
 

@@ -12,6 +12,7 @@ case class Configuration(
                           sonarrRootFolder: String,
                           sonarrBypassIgnored: Boolean,
                           sonarrSeasonMonitoring: String,
+                          sonarrLanguageProfileId: Int,
                           radarrBaseUrl: Uri,
                           radarrApiKey: String,
                           radarrQualityProfileId: Int,

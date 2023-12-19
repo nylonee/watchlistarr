@@ -44,6 +44,7 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |    "searchForCutoffUnmetEpisodes" : true,
         |    "searchForMissingEpisodes" : true
         |  },
+        |  "languageProfileId" : 1,
         |  "monitored" : true
         |}""".stripMargin
     defaultPlexMock(mockHttpClient)
@@ -194,6 +195,7 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     sonarrRootFolder = "/root/",
     sonarrBypassIgnored = sonarrBypassIgnored,
     sonarrSeasonMonitoring = "all",
+    sonarrLanguageProfileId = 1,
     radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
     radarrApiKey = "radarr-api-key",
     radarrQualityProfileId = 1,

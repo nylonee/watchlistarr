@@ -1,0 +1,458 @@
+[
+  {
+    "name": "English",
+    "upgradeAllowed": false,
+    "cutoff": {
+      "id": 1,
+      "name": "English"
+    },
+    "languages": [
+      {
+        "language": {
+          "id": 13,
+          "name": "Vietnamese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 0,
+          "name": "Unknown"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 30,
+          "name": "Ukrainian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 17,
+          "name": "Turkish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 14,
+          "name": "Swedish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 3,
+          "name": "Spanish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 11,
+          "name": "Russian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 18,
+          "name": "Portuguese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 12,
+          "name": "Polish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 15,
+          "name": "Norwegian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 29,
+          "name": "Malayalam"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 24,
+          "name": "Lithuanian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 21,
+          "name": "Korean"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 8,
+          "name": "Japanese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 5,
+          "name": "Italian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 9,
+          "name": "Icelandic"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 22,
+          "name": "Hungarian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 27,
+          "name": "Hindi"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 23,
+          "name": "Hebrew"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 20,
+          "name": "Greek"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 4,
+          "name": "German"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 2,
+          "name": "French"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 19,
+          "name": "Flemish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 16,
+          "name": "Finnish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 1,
+          "name": "English"
+        },
+        "allowed": true
+      },
+      {
+        "language": {
+          "id": 7,
+          "name": "Dutch"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 6,
+          "name": "Danish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 25,
+          "name": "Czech"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 10,
+          "name": "Chinese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 28,
+          "name": "Bulgarian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 26,
+          "name": "Arabic"
+        },
+        "allowed": false
+      }
+    ],
+    "id": 3
+  },
+  {
+    "name": "Arabic",
+    "upgradeAllowed": false,
+    "cutoff": {
+      "id": 26,
+      "name": "Arabic"
+    },
+    "languages": [
+      {
+        "language": {
+          "id": 0,
+          "name": "Unknown"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 13,
+          "name": "Vietnamese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 30,
+          "name": "Ukrainian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 17,
+          "name": "Turkish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 14,
+          "name": "Swedish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 3,
+          "name": "Spanish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 11,
+          "name": "Russian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 18,
+          "name": "Portuguese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 12,
+          "name": "Polish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 15,
+          "name": "Norwegian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 29,
+          "name": "Malayalam"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 24,
+          "name": "Lithuanian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 21,
+          "name": "Korean"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 8,
+          "name": "Japanese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 5,
+          "name": "Italian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 9,
+          "name": "Icelandic"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 22,
+          "name": "Hungarian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 27,
+          "name": "Hindi"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 23,
+          "name": "Hebrew"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 20,
+          "name": "Greek"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 4,
+          "name": "German"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 2,
+          "name": "French"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 19,
+          "name": "Flemish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 16,
+          "name": "Finnish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 1,
+          "name": "English"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 7,
+          "name": "Dutch"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 6,
+          "name": "Danish"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 25,
+          "name": "Czech"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 10,
+          "name": "Chinese"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 28,
+          "name": "Bulgarian"
+        },
+        "allowed": false
+      },
+      {
+        "language": {
+          "id": 26,
+          "name": "Arabic"
+        },
+        "allowed": true
+      }
+    ],
+    "id": 2
+  }
+]

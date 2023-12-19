@@ -19,7 +19,7 @@ object ConfigurationUtils {
     for {
       sonarrConfig <- getSonarrConfig(configReader, client)
       refreshInterval = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
-      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder) = sonarrConfig
+      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder, sonarrLanguageProfileId) = sonarrConfig
       sonarrBypassIgnored = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
       sonarrSeasonMonitoring = configReader.getConfigOption(Keys.sonarrSeasonMonitoring).getOrElse("all")
       radarrConfig <- getRadarrConfig(configReader, client)
@@ -36,6 +36,7 @@ object ConfigurationUtils {
       sonarrRootFolder,
       sonarrBypassIgnored,
       sonarrSeasonMonitoring,
+      sonarrLanguageProfileId,
       radarrBaseUrl,
       radarrApiKey,
       radarrQualityProfileId,
@@ -46,7 +47,7 @@ object ConfigurationUtils {
       skipFriendSync
     )
 
-  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
+  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int)] = {
     val url = configReader.getConfigOption(Keys.sonarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
       val default = "http://localhost:8989"
       logger.warn(s"Unable to fetch sonarr baseUrl, using default $default")
@@ -54,23 +55,35 @@ object ConfigurationUtils {
     }
     val apiKey = configReader.getConfigOption(Keys.sonarrApiKey).getOrElse(throwError("Unable to find sonarr API key"))
 
-    getToArr(client)(url, apiKey, "rootFolder").map {
-      case Right(res) =>
-        logger.info("Successfully connected to Sonarr")
-        val allRootFolders = res.as[List[RootFolder]].getOrElse(List.empty)
-        selectRootFolder(allRootFolders, configReader.getConfigOption(Keys.sonarrRootFolder))
-      case Left(err) =>
-        throwError(s"Unable to connect to Sonarr at $url, with error $err")
-    }.flatMap(rootFolder =>
-      getToArr(client)(url, apiKey, "qualityprofile").map {
+    for {
+      rootFolder <- getToArr(client)(url, apiKey, "rootFolder").map {
         case Right(res) =>
-          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
-          val chosenQualityProfile = configReader.getConfigOption(Keys.sonarrQualityProfile)
-          (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile), rootFolder)
+          logger.info("Successfully connected to Sonarr")
+          val allRootFolders = res.as[List[RootFolder]].getOrElse(List.empty)
+          selectRootFolder(allRootFolders, configReader.getConfigOption(Keys.sonarrRootFolder))
         case Left(err) =>
           throwError(s"Unable to connect to Sonarr at $url, with error $err")
       }
-    )
+      qualityProfileId <- getToArr(client)(url, apiKey, "qualityprofile").map {
+        case Right(res) =>
+          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+          val chosenQualityProfile = configReader.getConfigOption(Keys.sonarrQualityProfile)
+          getQualityProfileId(allQualityProfiles, chosenQualityProfile)
+        case Left(err) =>
+          throwError(s"Unable to connect to Sonarr at $url, with error $err")
+      }
+      languageProfileId <- getToArr(client)(url, apiKey, "languageprofile").map {
+        case Right(res) =>
+          val allLanguageProfiles = res.as[List[LanguageProfile]].getOrElse(List.empty)
+          println(s"All language profiles: $allLanguageProfiles")
+          allLanguageProfiles.headOption.map(_.id).getOrElse {
+            logger.warn("Unable to find a language profile, using 1 as default")
+            1
+          }
+        case Left(err) =>
+          throwError(s"Unable to connect to Sonarr at $url, with error $err")
+      }
+    } yield (url, apiKey, qualityProfileId, rootFolder, languageProfileId)
   }
 
   private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
