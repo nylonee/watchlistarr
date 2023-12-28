@@ -2,7 +2,7 @@
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import configuration.Configuration
+import configuration.{Configuration, DeleteConfiguration, PlexConfiguration, RadarrConfiguration, SonarrConfiguration}
 import http.HttpClient
 import io.circe.parser._
 import io.circe.generic.auto._
@@ -34,21 +34,32 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
                                    plexTokens: Set[String]
                                  ): Configuration = Configuration(
     refreshInterval = 10.seconds,
-    sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
-    sonarrApiKey = "sonarr-api-key",
-    sonarrQualityProfileId = 0,
-    sonarrRootFolder = "/root/",
-    sonarrBypassIgnored = false,
-    sonarrSeasonMonitoring = "all",
-    sonarrLanguageProfileId = 1,
-    radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
-    radarrApiKey = "radarr-api-key",
-    radarrQualityProfileId = 1,
-    radarrRootFolder = "/root/",
-    radarrBypassIgnored = false,
-    plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
-    plexTokens = plexTokens,
-    skipFriendSync = false
+    SonarrConfiguration(
+      sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
+      sonarrApiKey = "sonarr-api-key",
+      sonarrQualityProfileId = 0,
+      sonarrRootFolder = "/root/",
+      sonarrBypassIgnored = false,
+      sonarrSeasonMonitoring = "all",
+      sonarrLanguageProfileId = 1
+    ),
+    RadarrConfiguration(
+      radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
+      radarrApiKey = "radarr-api-key",
+      radarrQualityProfileId = 1,
+      radarrRootFolder = "/root/",
+      radarrBypassIgnored = false
+    ),
+    PlexConfiguration(
+      plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
+      plexTokens = plexTokens,
+      skipFriendSync = false
+    ),
+    DeleteConfiguration(
+      movieDeleting = false,
+      endedShowDeleting = false,
+      continuingShowDeleting = false
+    )
   )
 
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {
