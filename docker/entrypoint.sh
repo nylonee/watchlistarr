@@ -68,4 +68,16 @@ if [ -n "$SKIP_FRIEND_SYNC" ]; then
   CMD="$CMD -Dplex.skipfriendsync=$SKIP_FRIEND_SYNC"
 fi
 
+if [ -n "$ALLOW_MOVIE_DELETING" ]; then
+  CMD="$CMD -Ddelete.movie=$ALLOW_MOVIE_DELETING"
+fi
+
+if [ -n "$ALLOW_ENDED_SHOW_DELETING" ]; then
+  CMD="$CMD -Ddelete.endedShow=$ALLOW_ENDED_SHOW_DELETING"
+fi
+
+if [ -n "$ALLOW_CONTINUING_SHOW_DELETING" ]; then
+  CMD="$CMD -Ddelete.continuingShow=$ALLOW_CONTINUING_SHOW_DELETING"
+fi
+
 exec $CMD $JAVA_OPTS

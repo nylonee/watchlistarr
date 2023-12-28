@@ -19,10 +19,10 @@ object WatchlistSync
     logger.debug("Starting watchlist sync")
 
     val result = for {
-      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
       watchlistData = watchlistDatas.flatten.toSet
-      movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
-      series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
+      movies <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, config.radarrConfiguration.radarrBypassIgnored)
+      series <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, config.sonarrConfiguration.sonarrBypassIgnored)
       allIds = movies ++ series
       _ <- missingIds(client)(config)(allIds, watchlistData)
     } yield ()
@@ -46,10 +46,10 @@ object WatchlistSync
           Right(IO.unit)
         case (false, "show") =>
           logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
-          Right(addToSonarr(client)(config)(watchlistedItem))
+          Right(addToSonarr(client)(config.sonarrConfiguration)(watchlistedItem))
         case (false, "movie") =>
           logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
-          Right(addToRadarr(client)(config)(watchlistedItem))
+          Right(addToRadarr(client)(config.radarrConfiguration)(watchlistedItem))
         case (false, c) =>
           logger.warn(s"Found $c \"${watchlistedItem.title}\", but I don't recognize the category")
           Left(new Throwable(s"Unknown category $c"))

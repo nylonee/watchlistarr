@@ -2,7 +2,7 @@ package sonarr
 
 import cats.data.EitherT
 import cats.effect.IO
-import configuration.Configuration
+import configuration.SonarrConfiguration
 import http.HttpClient
 import io.circe.{Decoder, Json}
 import io.circe.generic.auto._
@@ -25,7 +25,7 @@ trait SonarrUtils extends SonarrConversions {
       }
     } yield (shows.map(toItem) ++ exclusions.map(toItem)).toSet
 
-  protected def addToSonarr(client: HttpClient)(config: Configuration)(item: Item): IO[Unit] = {
+  protected def addToSonarr(client: HttpClient)(config: SonarrConfiguration)(item: Item): IO[Unit] = {
 
     val addOptions = SonarrAddOptions(config.sonarrSeasonMonitoring)
     val show = SonarrPost(
