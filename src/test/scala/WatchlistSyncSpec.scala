@@ -2,7 +2,7 @@
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import configuration.Configuration
+import configuration.{Configuration, DeleteConfiguration, PlexConfiguration, RadarrConfiguration, SonarrConfiguration}
 import http.HttpClient
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
@@ -189,21 +189,33 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
                                    radarrBypassIgnored: Boolean = false
                                  ): Configuration = Configuration(
     refreshInterval = 10.seconds,
-    sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
-    sonarrApiKey = "sonarr-api-key",
-    sonarrQualityProfileId = 0,
-    sonarrRootFolder = "/root/",
-    sonarrBypassIgnored = sonarrBypassIgnored,
-    sonarrSeasonMonitoring = "all",
-    sonarrLanguageProfileId = 1,
-    radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
-    radarrApiKey = "radarr-api-key",
-    radarrQualityProfileId = 1,
-    radarrRootFolder = "/root/",
-    radarrBypassIgnored = radarrBypassIgnored,
-    plexWatchlistUrls = Set(plexWatchlistUrl),
-    plexTokens = Set("test-token"),
-    skipFriendSync = false
+    SonarrConfiguration(
+      sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
+      sonarrApiKey = "sonarr-api-key",
+      sonarrQualityProfileId = 0,
+      sonarrRootFolder = "/root/",
+      sonarrBypassIgnored = sonarrBypassIgnored,
+      sonarrSeasonMonitoring = "all",
+      sonarrLanguageProfileId = 1
+    ),
+    RadarrConfiguration(
+      radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
+      radarrApiKey = "radarr-api-key",
+      radarrQualityProfileId = 1,
+      radarrRootFolder = "/root/",
+      radarrBypassIgnored = radarrBypassIgnored
+    ),
+    PlexConfiguration(
+      plexWatchlistUrls = Set(plexWatchlistUrl),
+      plexTokens = Set("test-token"),
+      skipFriendSync = false
+    ),
+    DeleteConfiguration(
+      movieDeleting = false,
+      endedShowDeleting = false,
+      continuingShowDeleting = false,
+      deleteInterval = 7.days
+    )
   )
 
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {

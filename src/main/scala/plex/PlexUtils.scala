@@ -3,7 +3,7 @@ package plex
 import cats.data.EitherT
 import cats.effect.IO
 import cats.implicits.toTraverseOps
-import configuration.Configuration
+import configuration.PlexConfiguration
 import http.HttpClient
 import model.{GraphQLQuery, Item}
 import org.http4s.{Method, Uri}
@@ -33,7 +33,7 @@ trait PlexUtils {
         }
     }
 
-  protected def ping(client: HttpClient)(config: Configuration): IO[Unit] = {
+  protected def ping(client: HttpClient)(config: PlexConfiguration): IO[Unit] = {
     config.plexTokens.map { token =>
       val url = Uri
         .unsafeFromString("https://plex.tv/api/v2/ping")
@@ -49,7 +49,7 @@ trait PlexUtils {
     }
   }.toList.sequence.map(_ => ())
 
-  protected def getSelfWatchlist(config: Configuration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] = config.plexTokens.map { token =>
+  protected def getSelfWatchlist(config: PlexConfiguration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] = config.plexTokens.map { token =>
     val url = Uri
       .unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all")
       .withQueryParam("X-Plex-Token", token)
@@ -61,14 +61,14 @@ trait PlexUtils {
     } yield result
   }.toList.sequence.map(_.toSet.flatten)
 
-  protected def getOthersWatchlist(config: Configuration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] =
+  protected def getOthersWatchlist(config: PlexConfiguration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] =
     for {
       friends <- getFriends(config, client)
       watchlistItems <- friends.map { case (friend, token) => getWatchlistIdsForUser(config, client, token)(friend) }.toList.sequence.map(_.flatten)
       items <- watchlistItems.map(i => toItems(config, client, i)).sequence.map(_.toSet)
     } yield items
 
-  protected def getFriends(config: Configuration, client: HttpClient): EitherT[IO, Throwable, Set[(User, String)]] = config.plexTokens.map { token =>
+  protected def getFriends(config: PlexConfiguration, client: HttpClient): EitherT[IO, Throwable, Set[(User, String)]] = config.plexTokens.map { token =>
     val url = Uri
       .unsafeFromString("https://community.plex.tv/api")
 
@@ -94,7 +94,7 @@ trait PlexUtils {
     })
   }.toList.sequence.map(_.toSet.flatten)
 
-  protected def getWatchlistIdsForUser(config: Configuration, client: HttpClient, token: String)(user: User, page: Option[String] = None): EitherT[IO, Throwable, Set[TokenWatchlistItem]] = {
+  protected def getWatchlistIdsForUser(config: PlexConfiguration, client: HttpClient, token: String)(user: User, page: Option[String] = None): EitherT[IO, Throwable, Set[TokenWatchlistItem]] = {
     val url = Uri.unsafeFromString("https://community.plex.tv/api")
 
     val query = GraphQLQuery(
@@ -143,10 +143,10 @@ trait PlexUtils {
 
   // We don't have all the information available in TokenWatchlist
   // so we need to make additional calls to Plex to get more information
-  private def toItems(config: Configuration, client: HttpClient)(plex: TokenWatchlist): EitherT[IO, Throwable, Set[Item]] =
+  private def toItems(config: PlexConfiguration, client: HttpClient)(plex: TokenWatchlist): EitherT[IO, Throwable, Set[Item]] =
     plex.MediaContainer.Metadata.map(i => toItems(config, client, i)).sequence.map(_.toSet)
 
-  private def toItems(config: Configuration, client: HttpClient, i: TokenWatchlistItem): EitherT[IO, Throwable, Item] = {
+  private def toItems(config: PlexConfiguration, client: HttpClient, i: TokenWatchlistItem): EitherT[IO, Throwable, Item] = {
 
     val key = cleanKey(i.key)
     val url = Uri

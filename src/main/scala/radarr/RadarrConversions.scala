@@ -5,9 +5,9 @@ import model.Item
 private[radarr] trait RadarrConversions {
   def toItem(movie: RadarrMovie): Item = Item(
     movie.title,
-    List(movie.imdbId, movie.tmdbId.map("tmdb://" + _)).collect { case Some(x) => x },
+    List(movie.imdbId, movie.tmdbId.map("tmdb://" + _), Some(s"radarr://${movie.id}")).collect { case Some(x) => x },
     "movie"
   )
 
-  def toItem(movie: RadarrMovieExclusion): Item = toItem(RadarrMovie(movie.movieTitle, movie.imdbId, movie.tmdbId))
+  def toItem(movie: RadarrMovieExclusion): Item = toItem(RadarrMovie(movie.movieTitle, movie.imdbId, movie.tmdbId, movie.id))
 }

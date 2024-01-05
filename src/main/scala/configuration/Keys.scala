@@ -20,4 +20,9 @@ private[configuration] object Keys {
   val plexWatchlist2 = "plex.watchlist2"
   val plexToken = "plex.token"
   val skipFriendSync = "plex.skipfriendsync"
+
+  val deleteIntervalDays = "delete.interval.days"
+  val deleteMovies = "delete.movie"
+  val deleteEndedShow = "delete.endedShow"
+  val deleteContinuingShow = "delete.continuingShow"
 }

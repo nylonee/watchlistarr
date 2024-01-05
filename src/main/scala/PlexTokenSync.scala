@@ -15,15 +15,15 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   def run(config: Configuration, client: HttpClient): IO[Unit] = {
     val result = for {
-      selfWatchlist <- getSelfWatchlist(config, client)
+      selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client)
       _ = logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
-      othersWatchlist <- if (config.skipFriendSync)
+      othersWatchlist <- if (config.plexConfiguration.skipFriendSync)
         EitherT.pure[IO, Throwable](Set.empty[Item])
       else
-        getOthersWatchlist(config, client)
+        getOthersWatchlist(config.plexConfiguration, client)
       _ = logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
-      movies <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, config.radarrBypassIgnored)
-      series <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, config.sonarrBypassIgnored)
+      movies <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, config.radarrConfiguration.radarrBypassIgnored)
+      series <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, config.sonarrConfiguration.sonarrBypassIgnored)
       allIds = movies ++ series
       _ <- missingIds(client)(config)(allIds, selfWatchlist ++ othersWatchlist)
     } yield ()
@@ -46,10 +46,10 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
           Right(IO.unit)
         case (false, "show") =>
           logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
-          Right(addToSonarr(client)(config)(watchlistedItem))
+          Right(addToSonarr(client)(config.sonarrConfiguration)(watchlistedItem))
         case (false, "movie") =>
           logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
-          Right(addToRadarr(client)(config)(watchlistedItem))
+          Right(addToRadarr(client)(config.radarrConfiguration)(watchlistedItem))
         case (false, c) =>
           logger.warn(s"Found $c \"${watchlistedItem.title}\", but I don't recognize the category")
           Left(new Throwable(s"Unknown category $c"))

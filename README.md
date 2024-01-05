@@ -24,7 +24,9 @@ Watchlistarr is working towards being able to support a full delete sync with yo
 a user
 removes an item off their watchlist, Watchlistarr can detect that and delete content from Sonarr/Radarr.**
 
-This feature will be released soon, in the meantime, you can enjoy a little "sneak peek"
+This feature is available for movies (disabled by default), and is still under development for shows.
+
+Whether you've enabled this or not, you can enjoy a little "sneak peek"
 upon startup of the app, where the logs will list the movies/tv shows that are out of sync.
 
 ### Requirements
@@ -32,7 +34,8 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 * Plex Pass Subscription
 * Sonarr v3 or higher
 * Radarr v3 or higher
-* Friends' Watchlists [Account Visibility](https://app.plex.tv/desktop/#!/settings/account) must be changed to 'Friends Only' or 'Friends of Friends'
+* Friends' Watchlists [Account Visibility](https://app.plex.tv/desktop/#!/settings/account) must be changed to 'Friends
+  Only' or 'Friends of Friends'
 * Docker or Java
 * Plex Token (see [here](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))
 
@@ -94,6 +97,8 @@ in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entr
 | RADARR_ROOT_FOLDER       |                       | Root folder for Radarr. If not set, will grab the first one it finds on Radarr                                                                                                                      |
 | RADARR_BYPASS_IGNORED    | false                 | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                                 |
 | SKIP_FRIEND_SYNC         | false                 | Boolean flag to toggle between only syncing your own content, vs syncing your own and all your friends content                                                                                      |
+| ALLOW_MOVIE_DELETING     | false                 | Boolean flag to enable/disable the full Watchlistarr sync for movies. If enabled, movies that are not watchlisted will be deleted from Radarr                                                       |
+| DELETE_INTERVAL_DAYS     | 7                     | Number of days to wait before deleting content from the arrs (Deleting must be enabled)                                                                                                             |
 
 ## Developers Corner
 

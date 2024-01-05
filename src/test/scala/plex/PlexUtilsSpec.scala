@@ -7,7 +7,7 @@ import model.{GraphQLQuery, Item}
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
 import cats.effect.unsafe.implicits.global
-import configuration.Configuration
+import configuration.{Configuration, PlexConfiguration}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.generic.extras.auto._
@@ -163,20 +163,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     result.head shouldBe TokenWatchlistItem("The Twilight Saga: Breaking Dawn - Part 2", "5d77688b9ab54400214e789b", "movie", "/library/metadata/5d77688b9ab54400214e789b")
   }
 
-  private def createConfiguration(plexTokens: Set[String]): Configuration = Configuration(
-    refreshInterval = 10.seconds,
-    sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
-    sonarrApiKey = "sonarr-api-key",
-    sonarrQualityProfileId = 0,
-    sonarrRootFolder = "/root/",
-    sonarrBypassIgnored = false,
-    sonarrSeasonMonitoring = "all",
-    sonarrLanguageProfileId = 1,
-    radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
-    radarrApiKey = "radarr-api-key",
-    radarrQualityProfileId = 1,
-    radarrRootFolder = "/root/",
-    radarrBypassIgnored = false,
+  private def createConfiguration(plexTokens: Set[String]): PlexConfiguration = PlexConfiguration(
     plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
     plexTokens = plexTokens,
     skipFriendSync = false

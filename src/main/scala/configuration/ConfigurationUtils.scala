@@ -28,23 +28,39 @@ object ConfigurationUtils {
       plexTokens = getPlexTokens(configReader)
       skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
       plexWatchlistUrls <- getPlexWatchlistUrls(client)(configReader, plexTokens, skipFriendSync)
+      deleteMovies = configReader.getConfigOption(Keys.deleteMovies).flatMap(_.toBooleanOption).getOrElse(false)
+      deleteEndedShows = configReader.getConfigOption(Keys.deleteEndedShow).flatMap(_.toBooleanOption).getOrElse(false)
+      deleteContinuingShows = configReader.getConfigOption(Keys.deleteContinuingShow).flatMap(_.toBooleanOption).getOrElse(false)
+      deleteInterval = configReader.getConfigOption(Keys.deleteIntervalDays).flatMap(_.toIntOption).getOrElse(7).days
     } yield Configuration(
       refreshInterval,
-      sonarrBaseUrl,
-      sonarrApiKey,
-      sonarrQualityProfileId,
-      sonarrRootFolder,
-      sonarrBypassIgnored,
-      sonarrSeasonMonitoring,
-      sonarrLanguageProfileId,
-      radarrBaseUrl,
-      radarrApiKey,
-      radarrQualityProfileId,
-      radarrRootFolder,
-      radarrBypassIgnored,
-      plexWatchlistUrls,
-      plexTokens,
-      skipFriendSync
+      SonarrConfiguration(
+        sonarrBaseUrl,
+        sonarrApiKey,
+        sonarrQualityProfileId,
+        sonarrRootFolder,
+        sonarrBypassIgnored,
+        sonarrSeasonMonitoring,
+        sonarrLanguageProfileId
+      ),
+      RadarrConfiguration(
+        radarrBaseUrl,
+        radarrApiKey,
+        radarrQualityProfileId,
+        radarrRootFolder,
+        radarrBypassIgnored
+      ),
+      PlexConfiguration(
+        plexWatchlistUrls,
+        plexTokens,
+        skipFriendSync
+      ),
+      DeleteConfiguration(
+        deleteMovies,
+        deleteEndedShows,
+        deleteContinuingShows,
+        deleteInterval
+      )
     )
 
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int)] = {

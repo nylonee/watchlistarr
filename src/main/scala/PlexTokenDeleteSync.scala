@@ -15,10 +15,10 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   def run(config: Configuration, client: HttpClient): IO[Unit] = {
     val result = for {
-      selfWatchlist <- getSelfWatchlist(config, client)
-      othersWatchlist <- if (config.skipFriendSync) EitherT.pure[IO, Throwable](Set.empty[Item]) else getOthersWatchlist(config, client)
-      moviesWithoutExclusions <- fetchMovies(client)(config.radarrApiKey, config.radarrBaseUrl, bypass = true)
-      seriesWithoutExclusions <- fetchSeries(client)(config.sonarrApiKey, config.sonarrBaseUrl, bypass = true)
+      selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client)
+      othersWatchlist <- if (config.plexConfiguration.skipFriendSync) EitherT.pure[IO, Throwable](Set.empty[Item]) else getOthersWatchlist(config.plexConfiguration, client)
+      moviesWithoutExclusions <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, bypass = true)
+      seriesWithoutExclusions <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, bypass = true)
       allIdsWithoutExclusions = moviesWithoutExclusions ++ seriesWithoutExclusions
       _ <- missingIdsOnPlex(client)(config)(allIdsWithoutExclusions, selfWatchlist ++ othersWatchlist)
     } yield ()
@@ -34,22 +34,28 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
     for {
       item <- existingItems
       maybeExistingItem = watchlist.exists(_.matches(item))
-      category = item.category
-      task = EitherT.fromEither[IO]((maybeExistingItem, category) match {
+      task = (maybeExistingItem, item.category) match {
         case (true, c) =>
           logger.debug(s"$c \"${item.title}\" already exists in Plex")
-          Right(IO.unit)
+          EitherT[IO, Throwable, Unit](IO.pure(Right(())))
         case (false, "show") =>
           logger.info(s"Found show \"${item.title}\" which is not watchlisted on Plex")
-          Right(IO.unit)
+          EitherT[IO, Throwable, Unit](IO.pure(Right(())))
         case (false, "movie") =>
-          logger.info(s"Found movie \"${item.title}\" which is not watchlisted on Plex")
-          Right(IO.unit)
+          deleteMovie(client, config)(item)
         case (false, c) =>
           logger.warn(s"Found $c \"${item.title}\", but I don't recognize the category")
-          Left(new Throwable(s"Unknown category $c"))
-      })
-    } yield task.flatMap(EitherT.liftF[IO, Throwable, Unit])
+          EitherT[IO, Throwable, Unit](IO.pure(Left(new Throwable(s"Unknown category $c"))))
+      }
+    } yield task
   }.toList.sequence.map(_.toSet)
+
+  private def deleteMovie(client: HttpClient, config: Configuration)(movie: Item): EitherT[IO, Throwable, Unit] =
+    if (config.deleteConfiguration.movieDeleting) {
+        deleteFromRadarr(client, config.radarrConfiguration)(movie)
+    } else {
+      logger.info(s"Found movie \"${movie.title}\" which is not watchlisted on Plex")
+      EitherT.pure[IO, Throwable](())
+    }
 
 }

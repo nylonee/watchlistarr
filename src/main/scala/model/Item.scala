@@ -7,6 +7,9 @@ case class Item(title: String, guids: List[String], category: String) {
   def getTmdbId: Option[Long] =
     guids.find(_.startsWith("tmdb://")).flatMap(_.stripPrefix("tmdb://").toLongOption)
 
+  def getRadarrId: Option[Long] =
+    guids.find(_.startsWith("radarr://")).flatMap(_.stripPrefix("radarr://").toLongOption)
+
   def matches(that: Any): Boolean = that match {
     case Item(_, theirGuids, c) if c == this.category =>
       theirGuids.foldLeft(false) {

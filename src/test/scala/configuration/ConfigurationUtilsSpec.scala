@@ -22,9 +22,9 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.radarrApiKey shouldBe "radarr-api-key"
-    config.sonarrApiKey shouldBe "sonarr-api-key"
-    config.sonarrLanguageProfileId shouldBe 3
+    config.radarrConfiguration.radarrApiKey shouldBe "radarr-api-key"
+    config.sonarrConfiguration.sonarrApiKey shouldBe "sonarr-api-key"
+    config.sonarrConfiguration.sonarrLanguageProfileId shouldBe 3
   }
 
   it should "fail if missing sonarr API key" in {
@@ -50,7 +50,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.sonarrRootFolder shouldBe "/data2"
+    config.sonarrConfiguration.sonarrRootFolder shouldBe "/data2"
   }
 
   it should "find the root folder provided in sonarr config" in {
@@ -60,7 +60,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.sonarrRootFolder shouldBe "/data3"
+    config.sonarrConfiguration.sonarrRootFolder shouldBe "/data3"
   }
 
   it should "find the root folder with a trailing slash provided in sonarr config" in {
@@ -70,7 +70,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.sonarrRootFolder shouldBe "/data3"
+    config.sonarrConfiguration.sonarrRootFolder shouldBe "/data3"
   }
 
   it should "find the root folder with an escaped slash provided in sonarr config" in {
@@ -80,7 +80,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.sonarrRootFolder shouldBe "/data3"
+    config.sonarrConfiguration.sonarrRootFolder shouldBe "/data3"
   }
 
   it should "throw an error if the sonarr root folder provided can't be found" in {
@@ -98,7 +98,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.radarrRootFolder shouldBe "/data2"
+    config.radarrConfiguration.radarrRootFolder shouldBe "/data2"
   }
 
 
@@ -109,7 +109,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.radarrRootFolder shouldBe "/data3"
+    config.radarrConfiguration.radarrRootFolder shouldBe "/data3"
   }
 
   it should "find the root folder with a trailing slash provided in radarr config" in {
@@ -119,7 +119,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.radarrRootFolder shouldBe "/data3"
+    config.radarrConfiguration.radarrRootFolder shouldBe "/data3"
   }
 
   it should "find the root folder with an escaped slash provided in radarr config" in {
@@ -129,7 +129,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
     val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
     noException should be thrownBy config
-    config.radarrRootFolder shouldBe "/data3"
+    config.radarrConfiguration.radarrRootFolder shouldBe "/data3"
   }
 
   it should "throw an error if the radarr root folder provided can't be found" in {
@@ -168,6 +168,10 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrSeasonMonitoring).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.plexToken).returning(plexToken).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.skipFriendSync).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.deleteMovies).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.deleteContinuingShow).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.deleteEndedShow).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.deleteIntervalDays).returning(unset).anyNumberOfTimes()
     mockConfigReader
   }
 
