@@ -140,6 +140,17 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     an[IllegalArgumentException] should be thrownBy ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
   }
 
+  it should "work even if quality profiles are multiple words" in {
+
+    val mockConfigReader = createMockConfigReader(qualityProfile = Some("HD - 720p/1080p"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
+    noException should be thrownBy config
+    config.sonarrConfiguration.sonarrQualityProfileId shouldBe 7
+    config.radarrConfiguration.radarrQualityProfileId shouldBe 7
+  }
+
   private def createMockConfigReader(
                                       sonarrApiKey: Option[String] = Some("sonarr-api-key"),
                                       sonarrRootFolder: Option[String] = None,
@@ -147,7 +158,8 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
                                       radarrApiKey: Option[String] = Some("radarr-api-key"),
                                       plexWatchlist1: Option[String] = None,
                                       plexWatchlist2: Option[String] = None,
-                                      plexToken: Option[String] = Some("test-token")
+                                      plexToken: Option[String] = Some("test-token"),
+                                      qualityProfile: Option[String] = None
                                     ): ConfigurationReader = {
     val unset = None
 
@@ -155,12 +167,12 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     (mockConfigReader.getConfigOption _).expects(Keys.intervalSeconds).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrBaseUrl).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrApiKey).returning(sonarrApiKey).anyNumberOfTimes()
-    (mockConfigReader.getConfigOption _).expects(Keys.sonarrQualityProfile).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.sonarrQualityProfile).returning(qualityProfile).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrRootFolder).returning(sonarrRootFolder).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.sonarrBypassIgnored).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrBaseUrl).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrApiKey).returning(radarrApiKey).anyNumberOfTimes()
-    (mockConfigReader.getConfigOption _).expects(Keys.radarrQualityProfile).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.radarrQualityProfile).returning(qualityProfile).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrRootFolder).returning(radarrRootFolder).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.radarrBypassIgnored).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.plexWatchlist1).returning(plexWatchlist1).anyNumberOfTimes()
@@ -178,13 +190,12 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
   private def createMockHttpClient(): HttpClient = {
     val mockHttpClient = mock[HttpClient]
 
-    val defaultQualityProfileResponse = List(QualityProfile("1080p", 5))
     (mockHttpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/qualityprofile")),
       Some("sonarr-api-key"),
       None
-    ).returning(IO.pure(Right(defaultQualityProfileResponse.asJson))).anyNumberOfTimes()
+    ).returning(IO.pure(parse(Source.fromResource("quality-profile.json").getLines().mkString("\n")))).anyNumberOfTimes()
     (mockHttpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/languageprofile")),
@@ -196,7 +207,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
       Uri.unsafeFromString("http://localhost:7878").withPath(Uri.Path.unsafeFromString("/api/v3/qualityprofile")),
       Some("radarr-api-key"),
       None
-    ).returning(IO.pure(Right(defaultQualityProfileResponse.asJson))).anyNumberOfTimes()
+    ).returning(IO.pure(parse(Source.fromResource("quality-profile.json").getLines().mkString("\n")))).anyNumberOfTimes()
     (mockHttpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/rootFolder")),
