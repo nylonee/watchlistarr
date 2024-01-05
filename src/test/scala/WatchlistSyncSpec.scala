@@ -184,6 +184,47 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     sync shouldBe ()
   }
 
+
+  it should "skip adding a show to Sonarr and Radarr if the id is missing" in {
+
+    val mockHttpClient = mock[HttpClient]
+    val config = createConfiguration()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      plexWatchlistUrl,
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("watchlist-missing-ids.json").getLines().mkString("\n")))).once()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+      Some("radarr-api-key"),
+      None
+    ).returning(IO.pure(parse("[]"))).once()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://localhost:7878/api/v3/exclusions"),
+      Some("radarr-api-key"),
+      None
+    ).returning(IO.pure(parse("[]"))).once()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://localhost:8989/api/v3/series"),
+      Some("sonarr-api-key"),
+      None
+    ).returning(IO.pure(parse("[]"))).once()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://localhost:8989/api/v3/importlistexclusion"),
+      Some("sonarr-api-key"),
+      None
+    ).returning(IO.pure(parse("[]"))).once()
+
+    val sync: Unit = WatchlistSync.run(config, mockHttpClient).unsafeRunSync()
+
+    sync shouldBe()
+  }
+
   private def createConfiguration(
                                    sonarrBypassIgnored: Boolean = false,
                                    radarrBypassIgnored: Boolean = false
