@@ -98,6 +98,7 @@ in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entr
 | RADARR_BYPASS_IGNORED    | false                 | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                                 |
 | SKIP_FRIEND_SYNC         | false                 | Boolean flag to toggle between only syncing your own content, vs syncing your own and all your friends content                                                                                      |
 | ALLOW_MOVIE_DELETING     | false                 | Boolean flag to enable/disable the full Watchlistarr sync for movies. If enabled, movies that are not watchlisted will be deleted from Radarr                                                       |
+| DELETE_INTERVAL_DAYS     | 7                     | Number of days to wait before deleting content from the arrs (Deleting must be enabled)                                                                                                             |
 
 ## Developers Corner
 

@@ -58,7 +58,7 @@ object Server extends IOApp {
     for {
       config <- configIO
       _ <- PlexTokenDeleteSync.run(config, httpClient)
-      _ <- IO.sleep(7.days)
+      _ <- IO.sleep(config.deleteConfiguration.deleteInterval)
       _ <- plexTokenDeleteSync(configIO, httpClient)
     } yield ()
 }

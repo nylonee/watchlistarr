@@ -39,5 +39,6 @@ case class PlexConfiguration(
 case class DeleteConfiguration(
                                 movieDeleting: Boolean,
                                 endedShowDeleting: Boolean,
-                                continuingShowDeleting: Boolean
+                                continuingShowDeleting: Boolean,
+                                deleteInterval: FiniteDuration
                               )

@@ -31,6 +31,7 @@ object ConfigurationUtils {
       deleteMovies = configReader.getConfigOption(Keys.deleteMovies).flatMap(_.toBooleanOption).getOrElse(false)
       deleteEndedShows = configReader.getConfigOption(Keys.deleteEndedShow).flatMap(_.toBooleanOption).getOrElse(false)
       deleteContinuingShows = configReader.getConfigOption(Keys.deleteContinuingShow).flatMap(_.toBooleanOption).getOrElse(false)
+      deleteInterval = configReader.getConfigOption(Keys.deleteIntervalDays).flatMap(_.toIntOption).getOrElse(7).days
     } yield Configuration(
       refreshInterval,
       SonarrConfiguration(
@@ -57,7 +58,8 @@ object ConfigurationUtils {
       DeleteConfiguration(
         deleteMovies,
         deleteEndedShows,
-        deleteContinuingShows
+        deleteContinuingShows,
+        deleteInterval
       )
     )
 

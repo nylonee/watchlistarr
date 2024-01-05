@@ -80,4 +80,8 @@ if [ -n "$ALLOW_CONTINUING_SHOW_DELETING" ]; then
   CMD="$CMD -Ddelete.continuingShow=$ALLOW_CONTINUING_SHOW_DELETING"
 fi
 
+if [ -n "$DELETE_INTERVAL_DAYS" ]; then
+  CMD="$CMD -Ddelete.interval.days=$DELETE_INTERVAL_DAYS"
+fi
+
 exec $CMD $JAVA_OPTS

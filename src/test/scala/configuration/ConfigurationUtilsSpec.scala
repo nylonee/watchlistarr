@@ -171,6 +171,7 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     (mockConfigReader.getConfigOption _).expects(Keys.deleteMovies).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.deleteContinuingShow).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.deleteEndedShow).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.deleteIntervalDays).returning(unset).anyNumberOfTimes()
     mockConfigReader
   }
 
