@@ -213,7 +213,8 @@ class WatchlistSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     DeleteConfiguration(
       movieDeleting = false,
       endedShowDeleting = false,
-      continuingShowDeleting = false
+      continuingShowDeleting = false,
+      deleteInterval = 7.days
     )
   )
 
