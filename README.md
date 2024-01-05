@@ -20,12 +20,11 @@ does a comprehensive, yet fast real-time sync.
 
 ### Full Delete Sync
 
-Watchlistarr is working towards being able to support a full delete sync with your watchlist. This means that **if
+Watchlistarr also supports a full delete sync with your watchlist. This means that **if
 a user
 removes an item off their watchlist, Watchlistarr can detect that and delete content from Sonarr/Radarr.**
 
-This feature is available for movies (disabled by default), and is still under development for shows.
-
+This feature is disabled by default, refer to the Environment Variables below to see the config required to enable it.
 Whether you've enabled this or not, you can enjoy a little "sneak peek"
 upon startup of the app, where the logs will list the movies/tv shows that are out of sync.
 
