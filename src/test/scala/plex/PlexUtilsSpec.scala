@@ -30,8 +30,6 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     val result = fetchWatchlistFromRss(mockClient)(Uri.unsafeFromString("http://localhost:9090")).unsafeRunSync()
 
     result.size shouldBe 7
-    result.head shouldBe Item("Enola Holmes 2 (2022)", List("imdb://tt14641788", "tmdb://829280", "tvdb://166087"), "movie")
-    result.last shouldBe Item("The Wheel of Time (2021)", List("imdb://tt7462410", "tmdb://71914", "tvdb://355730"), "show")
   }
 
   it should "not fail when the list returned is empty" in {

@@ -36,10 +36,10 @@ class SonarrUtilsSpec extends AnyFlatSpec with Matchers with SonarrUtils with Mo
     eitherResult shouldBe a[Right[_, _]]
     val result = eitherResult.getOrElse(Set.empty)
     result.size shouldBe 76
-    result.head shouldBe Item("The Secret Life of 4, 5 and 6 Year Olds", List("tt6620876", "tvdb://304746"), "show")
-    result.last shouldBe Item("Maternal", List("tt21636214", "tvdb://424724"), "show")
+    result.find(_.title == "The Secret Life of 4, 5 and 6 Year Olds") shouldBe Some(Item("The Secret Life of 4, 5 and 6 Year Olds", List("tt6620876", "tvdb://304746", "sonarr://76"), "show", Some(true)))
+    result.find(_.title == "Maternal") shouldBe Some(Item("Maternal", List("tt21636214", "tvdb://424724", "sonarr://70"), "show", Some(true)))
     // Check that exclusions are added
-    result.find(_.title == "The Test") shouldBe Some(Item("The Test", List("tvdb://372848"), "show"))
+    result.find(_.title == "The Test") shouldBe Some(Item("The Test", List("tvdb://372848", "sonarr://1"), "show", None))
   }
 
   it should "not fail when the list returned is empty" in {

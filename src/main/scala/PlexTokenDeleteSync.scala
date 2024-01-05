@@ -39,8 +39,7 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
           logger.debug(s"$c \"${item.title}\" already exists in Plex")
           EitherT[IO, Throwable, Unit](IO.pure(Right(())))
         case (false, "show") =>
-          logger.info(s"Found show \"${item.title}\" which is not watchlisted on Plex")
-          EitherT[IO, Throwable, Unit](IO.pure(Right(())))
+          deleteSeries(client, config)(item)
         case (false, "movie") =>
           deleteMovie(client, config)(item)
         case (false, c) =>
@@ -57,5 +56,16 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
       logger.info(s"Found movie \"${movie.title}\" which is not watchlisted on Plex")
       EitherT.pure[IO, Throwable](())
     }
+
+  private def deleteSeries(client: HttpClient, config: Configuration)(show: Item): EitherT[IO, Throwable, Unit] = {
+    if (show.ended.contains(true) && config.deleteConfiguration.endedShowDeleting) {
+      deleteFromSonarr(client, config.sonarrConfiguration)(show)
+    } else if (show.ended.contains(false) && config.deleteConfiguration.continuingShowDeleting) {
+      deleteFromSonarr(client, config.sonarrConfiguration)(show)
+    } else {
+      logger.info(s"Found show \"${show.title}\" which is not watchlisted on Plex")
+      EitherT[IO, Throwable, Unit](IO.pure(Right(())))
+    }
+  }
 
 }

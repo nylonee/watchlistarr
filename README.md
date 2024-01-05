@@ -20,12 +20,11 @@ does a comprehensive, yet fast real-time sync.
 
 ### Full Delete Sync
 
-Watchlistarr is working towards being able to support a full delete sync with your watchlist. This means that **if
+Watchlistarr also supports a full delete sync with your watchlist. This means that **if
 a user
 removes an item off their watchlist, Watchlistarr can detect that and delete content from Sonarr/Radarr.**
 
-This feature is available for movies (disabled by default), and is still under development for shows.
-
+This feature is disabled by default, refer to the Environment Variables below to see the config required to enable it.
 Whether you've enabled this or not, you can enjoy a little "sneak peek"
 upon startup of the app, where the logs will list the movies/tv shows that are out of sync.
 
@@ -81,24 +80,26 @@ in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entr
 
 ### Environment Variables
 
-| Key                      | Default               | Description                                                                                                                                                                                         |
-|--------------------------|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SONARR_API_KEY*          |                       | API key for Sonarr, found in your Sonarr UI -> General settings                                                                                                                                     |
-| RADARR_API_KEY*          |                       | API key for Radarr, found in your Radarr UI -> General settings                                                                                                                                     |
-| PLEX_TOKEN*              |                       | Token for Plex, retrieved via [this tutorial](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/). Note that multiple tokens can be provided, comma separated |
-| REFRESH_INTERVAL_SECONDS | 60                    | Number of seconds to wait in between checking the watchlist                                                                                                                                         |
-| SONARR_BASE_URL          | http://localhost:8989 | Base URL for Sonarr, including the 'http' and port and any configured urlbase                                                                                                                       |
-| SONARR_QUALITY_PROFILE   |                       | Quality profile for Sonarr, found in your Sonarr UI -> Profiles settings. If not set, will grab the first one it finds on Sonarr                                                                    |
-| SONARR_ROOT_FOLDER       |                       | Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr                                                                                                                      |
-| SONARR_BYPASS_IGNORED    | false                 | Boolean flag to bypass tv shows that are on the Sonarr Exclusion List                                                                                                                               |
-| SONARR_SEASON_MONITORING | all                   | Default monitoring for new seasons added to Sonarr. Full list of options are found in the [Sonarr API Docs](https://sonarr.tv/docs/api/#/Series/post_api_v3_series) under **MonitorTypes**          |
-| RADARR_BASE_URL          | http://127.0.0.1:7878 | Base URL for Radarr, including the 'http' and port and any configured urlbase                                                                                                                       |
-| RADARR_QUALITY_PROFILE   |                       | Quality profile for Radarr, found in your Radarr UI -> Profiles settings. If not set, will grab the first one it finds on Radarr                                                                    |
-| RADARR_ROOT_FOLDER       |                       | Root folder for Radarr. If not set, will grab the first one it finds on Radarr                                                                                                                      |
-| RADARR_BYPASS_IGNORED    | false                 | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                                 |
-| SKIP_FRIEND_SYNC         | false                 | Boolean flag to toggle between only syncing your own content, vs syncing your own and all your friends content                                                                                      |
-| ALLOW_MOVIE_DELETING     | false                 | Boolean flag to enable/disable the full Watchlistarr sync for movies. If enabled, movies that are not watchlisted will be deleted from Radarr                                                       |
-| DELETE_INTERVAL_DAYS     | 7                     | Number of days to wait before deleting content from the arrs (Deleting must be enabled)                                                                                                             |
+| Key                            | Default               | Description                                                                                                                                                                                         |
+|--------------------------------|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SONARR_API_KEY*                |                       | API key for Sonarr, found in your Sonarr UI -> General settings                                                                                                                                     |
+| RADARR_API_KEY*                |                       | API key for Radarr, found in your Radarr UI -> General settings                                                                                                                                     |
+| PLEX_TOKEN*                    |                       | Token for Plex, retrieved via [this tutorial](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/). Note that multiple tokens can be provided, comma separated |
+| REFRESH_INTERVAL_SECONDS       | 60                    | Number of seconds to wait in between checking the watchlist                                                                                                                                         |
+| SONARR_BASE_URL                | http://localhost:8989 | Base URL for Sonarr, including the 'http' and port and any configured urlbase                                                                                                                       |
+| SONARR_QUALITY_PROFILE         |                       | Quality profile for Sonarr, found in your Sonarr UI -> Profiles settings. If not set, will grab the first one it finds on Sonarr                                                                    |
+| SONARR_ROOT_FOLDER             |                       | Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr                                                                                                                      |
+| SONARR_BYPASS_IGNORED          | false                 | Boolean flag to bypass tv shows that are on the Sonarr Exclusion List                                                                                                                               |
+| SONARR_SEASON_MONITORING       | all                   | Default monitoring for new seasons added to Sonarr. Full list of options are found in the [Sonarr API Docs](https://sonarr.tv/docs/api/#/Series/post_api_v3_series) under **MonitorTypes**          |
+| RADARR_BASE_URL                | http://127.0.0.1:7878 | Base URL for Radarr, including the 'http' and port and any configured urlbase                                                                                                                       |
+| RADARR_QUALITY_PROFILE         |                       | Quality profile for Radarr, found in your Radarr UI -> Profiles settings. If not set, will grab the first one it finds on Radarr                                                                    |
+| RADARR_ROOT_FOLDER             |                       | Root folder for Radarr. If not set, will grab the first one it finds on Radarr                                                                                                                      |
+| RADARR_BYPASS_IGNORED          | false                 | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                                 |
+| SKIP_FRIEND_SYNC               | false                 | Boolean flag to toggle between only syncing your own content, vs syncing your own and all your friends content                                                                                      |
+| ALLOW_MOVIE_DELETING           | false                 | Boolean flag to enable/disable the full Watchlistarr sync for movies. If enabled, movies that are not watchlisted will be deleted from Radarr                                                       |
+| ALLOW_ENDED_SHOW_DELETING      | false                 | Boolean flag to enable/disable the full Watchlistarr sync for ended shows. If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr                  |
+| ALLOW_CONTINUING_SHOW_DELETING | false                 | Boolean flag to enable/disable the full Watchlistarr sync for continuing shows. If enabled, shows that still have planned seasons and are not watchlisted will be deleted from Sonarr               |
+| DELETE_INTERVAL_DAYS           | 7                     | Number of days to wait before deleting content from the arrs (Deleting must be enabled)                                                                                                             |
 
 ## Developers Corner
 

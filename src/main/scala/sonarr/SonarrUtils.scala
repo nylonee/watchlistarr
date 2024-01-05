@@ -8,7 +8,7 @@ import io.circe.{Decoder, Json}
 import io.circe.generic.auto._
 import io.circe.syntax.EncoderOps
 import model.Item
-import org.http4s.{Method, Uri}
+import org.http4s.{MalformedMessageBodyFailure, Method, Uri}
 import org.slf4j.LoggerFactory
 
 trait SonarrUtils extends SonarrConversions {
@@ -47,6 +47,29 @@ trait SonarrUtils extends SonarrConversions {
       logger.info(s"Sent ${item.title} to Sonarr")
       r
     }
+  }
+
+  protected def deleteFromSonarr(client: HttpClient, config: SonarrConfiguration)(item: Item): EitherT[IO, Throwable, Unit] = {
+    val showId = item.getSonarrId.getOrElse {
+      logger.warn(s"Unable to extract Sonarr ID from show to delete: $item")
+      0L
+    }
+
+    deleteToArr(client)(config.sonarrBaseUrl, config.sonarrApiKey, showId)
+      .map { r =>
+        logger.info(s"Deleted ${item.title} from Sonarr")
+        r
+      }
+  }
+
+  private def deleteToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, id: Long): EitherT[IO, Throwable, Unit] = {
+    val urlWithQueryParams = (baseUrl / "api" / "v3" / "series" / id)
+      .withQueryParam("deleteFiles", true)
+      .withQueryParam("addImportListExclusion", false)
+
+    EitherT(client.httpRequest(Method.DELETE, urlWithQueryParams, Some(apiKey)))
+      .recover { case _: MalformedMessageBodyFailure => Json.Null }
+      .map(_ => ())
   }
 
   private def getToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =
