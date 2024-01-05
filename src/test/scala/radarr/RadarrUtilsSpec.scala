@@ -36,8 +36,8 @@ class RadarrUtilsSpec extends AnyFlatSpec with Matchers with RadarrUtils with Mo
     eitherResult shouldBe a[Right[_, _]]
     val result = eitherResult.getOrElse(Set.empty)
     result.size shouldBe 157
-    result.head shouldBe Item("Moonlight", List("tt4975722", "tmdb://376867", "radarr://32"), "movie")
-    result.last shouldBe Item("Oculus", List("tt2388715", "tmdb://157547", "radarr://21"), "movie")
+    result.find(_.title == "Moonlight") shouldBe Some(Item("Moonlight", List("tt4975722", "tmdb://376867", "radarr://32"), "movie"))
+    result.find(_.title == "Oculus") shouldBe Some(Item("Oculus", List("tt2388715", "tmdb://157547", "radarr://21"), "movie"))
     // Check that exclusions are added
     result.find(_.title == "Monty Python and the Holy Grail") shouldBe Some(Item("Monty Python and the Holy Grail", List("tmdb://762", "radarr://2"), "movie"))
   }
