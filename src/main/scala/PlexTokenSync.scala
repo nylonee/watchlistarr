@@ -44,12 +44,24 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
         case (true, c) =>
           logger.debug(s"$c \"${watchlistedItem.title}\" already exists in Sonarr/Radarr")
           Right(IO.unit)
+
         case (false, "show") =>
-          logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
-          Right(addToSonarr(client)(config.sonarrConfiguration)(watchlistedItem))
+          if (watchlistedItem.getTvdbId.isDefined) {
+            logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
+            Right(addToSonarr(client)(config.sonarrConfiguration)(watchlistedItem))
+          } else {
+            logger.warn(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr, but we do not have the tvdb ID so will skip adding")
+            Right(IO.unit)
+          }
         case (false, "movie") =>
-          logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
-          Right(addToRadarr(client)(config.radarrConfiguration)(watchlistedItem))
+          if (watchlistedItem.getTmdbId.isDefined) {
+            logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
+            Right(addToRadarr(client)(config.radarrConfiguration)(watchlistedItem))
+          } else {
+            logger.warn(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr, but we do not have the tmdb ID so will skip adding")
+            Right(IO.unit)
+          }
+
         case (false, c) =>
           logger.warn(s"Found $c \"${watchlistedItem.title}\", but I don't recognize the category")
           Left(new Throwable(s"Unknown category $c"))
