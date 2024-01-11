@@ -4,6 +4,8 @@
 
 Sync plex watchlists in realtime with Sonarr and Radarr.
 
+![watchlistarr-gif](https://github.com/nylonee/watchlistarr/assets/4732553/3ff083f2-5c5d-411b-8280-ea76958542bf)
+
 ## How it works
 
 There are several ways of fetching watchlist information from Plex
