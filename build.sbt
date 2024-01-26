@@ -15,11 +15,13 @@ val circeVersion = "0.14.6"
 val fs2Version = "3.7.0"
 val http4sVersion = "0.23.23"
 val logbackVersion = "1.4.11"
+val scaffeineVersion = "5.2.1"
 val scalamockVersion = "5.2.0"
 val scalatestVersion = "3.2.17"
 val shapelessVersion = "2.3.10"
 val slf4jVersion = "2.0.9"
 val vaultVersion = "3.5.0"
+
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-library" % scalaVersion.value % "provided",
@@ -38,6 +40,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % catsEffectVersion,
   "org.typelevel" %% "cats-effect-kernel" % catsEffectKernelVersion,
   "org.typelevel" %% "vault" % vaultVersion,
+  "com.github.blemale" %% "scaffeine" % scaffeineVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeGenericExtrasVersion,
   "io.circe" %% "circe-parser" % circeVersion % Test,

@@ -7,13 +7,13 @@ import model.{GraphQLQuery, Item}
 import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
 import cats.effect.unsafe.implicits.global
-import configuration.{Configuration, PlexConfiguration}
+import configuration.PlexConfiguration
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.generic.extras.auto._
 import io.circe.syntax.EncoderOps
+import utils.StubbedCache
 
-import scala.concurrent.duration.DurationInt
 import scala.io.Source
 
 class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFactory {
@@ -83,7 +83,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
       None
     ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n")))).once()
 
-    val eitherResult = getSelfWatchlist(config, mockClient).value.unsafeRunSync()
+    val eitherResult = getSelfWatchlist(config, mockClient, StubbedCache).value.unsafeRunSync()
 
     eitherResult shouldBe a[Right[_, _]]
     val result = eitherResult.getOrElse(Set.empty[Item])

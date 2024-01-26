@@ -2,7 +2,7 @@ import cats.data.EitherT
 import cats.effect.IO
 import configuration.Configuration
 import http.HttpClient
-import model.Item
+import model.{Item, WatchlistarrCache}
 import org.slf4j.LoggerFactory
 import plex.PlexUtils
 import radarr.RadarrUtils
@@ -13,9 +13,9 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def run(config: Configuration, client: HttpClient): IO[Unit] = {
+  def run(config: Configuration, client: HttpClient, cache: WatchlistarrCache): IO[Unit] = {
     val result = for {
-      selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client)
+      selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client, cache)
       _ = logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
       othersWatchlist <- if (config.plexConfiguration.skipFriendSync)
         EitherT.pure[IO, Throwable](Set.empty[Item])

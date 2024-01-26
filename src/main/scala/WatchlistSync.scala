@@ -29,7 +29,7 @@ object WatchlistSync
 
     result.value.map {
       case Left(err) =>
-        logger.warn(s"An error occured while attempting to sync: $err")
+        logger.warn(s"An error occurred while attempting to sync: $err")
       case Right(_) =>
         logger.debug("Watchlist sync complete")
     }

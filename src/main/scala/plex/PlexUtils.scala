@@ -5,7 +5,7 @@ import cats.effect.IO
 import cats.implicits.toTraverseOps
 import configuration.PlexConfiguration
 import http.HttpClient
-import model.{GraphQLQuery, Item}
+import model.{GraphQLQuery, Item, WatchlistarrCache}
 import org.http4s.{Method, Uri}
 import org.slf4j.LoggerFactory
 import io.circe.generic.extras
@@ -49,7 +49,7 @@ trait PlexUtils {
     }
   }.toList.sequence.map(_ => ())
 
-  protected def getSelfWatchlist(config: PlexConfiguration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] = config.plexTokens.map { token =>
+  protected def getSelfWatchlist(config: PlexConfiguration, client: HttpClient, cache: WatchlistarrCache): EitherT[IO, Throwable, Set[Item]] = config.plexTokens.map { token =>
     val url = Uri
       .unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all")
       .withQueryParam("X-Plex-Token", token)

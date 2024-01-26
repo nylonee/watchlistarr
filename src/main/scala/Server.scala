@@ -1,8 +1,10 @@
 
 import cats.effect._
 import cats.implicits.catsSyntaxTuple4Parallel
+import com.github.blemale.scaffeine.{Cache, Scaffeine}
 import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
 import http.HttpClient
+import model.{Cache, CaffeineCache, Item, ThirdPartyType, WatchlistarrCache}
 import org.slf4j.LoggerFactory
 
 import java.nio.channels.ClosedChannelException
@@ -20,16 +22,28 @@ object Server extends IOApp {
   def run(args: List[String]): IO[ExitCode] = {
     val configReader = SystemPropertyReader
     val httpClient = new HttpClient
+    val cache = makeCache()
 
     for {
       memoizedConfigIo <- ConfigurationUtils.create(configReader, httpClient).memoize
       result <- (
         watchlistSync(memoizedConfigIo, httpClient),
         pingTokenSync(memoizedConfigIo, httpClient),
-        plexTokenSync(memoizedConfigIo, httpClient),
+        plexTokenSync(memoizedConfigIo, httpClient, cache),
         plexTokenDeleteSync(memoizedConfigIo, httpClient)
       ).parTupled.as(ExitCode.Success)
     } yield result
+  }
+
+  private def makeCache(): WatchlistarrCache = {
+    val internalCache =
+      Scaffeine()
+        .recordStats()
+        .expireAfterWrite(1.hour)
+        .maximumSize(500)
+        .build[ThirdPartyType, Seq[Item]]()
+
+    CaffeineCache(internalCache)
   }
 
   private def watchlistSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
@@ -48,10 +62,10 @@ object Server extends IOApp {
       _ <- pingTokenSync(configIO, httpClient)
     } yield ()
 
-  private def plexTokenSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
+  private def plexTokenSync(configIO: IO[Configuration], httpClient: HttpClient, cache: WatchlistarrCache): IO[Unit] =
     for {
       config <- configIO
-      _ <- PlexTokenSync.run(config, httpClient)
+      _ <- PlexTokenSync.run(config, httpClient, cache)
     } yield ()
 
   private def plexTokenDeleteSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
