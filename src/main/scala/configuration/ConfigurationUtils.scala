@@ -15,8 +15,8 @@ object ConfigurationUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def create(configReader: ConfigurationReader, client: HttpClient): IO[Configuration] =
-    for {
+  def create(configReader: ConfigurationReader, client: HttpClient): IO[Configuration] = {
+    val config = for {
       sonarrConfig <- getSonarrConfig(configReader, client)
       refreshInterval = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
       (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder, sonarrLanguageProfileId) = sonarrConfig
@@ -62,6 +62,10 @@ object ConfigurationUtils {
         deleteInterval
       )
     )
+
+    logger.info(s"Configuration read by Watchlistarr: $config")
+    config
+  }
 
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int)] = {
     val url = configReader.getConfigOption(Keys.sonarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
