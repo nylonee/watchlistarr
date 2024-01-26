@@ -63,7 +63,7 @@ object ConfigurationUtils {
       )
     )
 
-    logger.info(s"Configuration read by Watchlistarr: $config")
+    config.map(c => logger.info(s"Configuration read by Watchlistarr: $c"))
     config
   }
 
