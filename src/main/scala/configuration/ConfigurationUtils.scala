@@ -63,8 +63,10 @@ object ConfigurationUtils {
       )
     )
 
-    config.map(c => logger.info(s"Configuration read by Watchlistarr: $c"))
-    config
+    config.map { c =>
+      logger.info(s"Configuration read by Watchlistarr: $c")
+      c
+    }
   }
 
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int)] = {
