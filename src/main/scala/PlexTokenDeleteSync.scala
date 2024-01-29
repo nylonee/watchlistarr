@@ -1,3 +1,4 @@
+import WatchlistSync.fetchWatchlistFromRss
 import cats.data.EitherT
 import cats.effect.IO
 import cats.implicits._
@@ -17,10 +18,12 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
     val result = for {
       selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client)
       othersWatchlist <- if (config.plexConfiguration.skipFriendSync) EitherT.pure[IO, Throwable](Set.empty[Item]) else getOthersWatchlist(config.plexConfiguration, client)
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
+      watchlistData = watchlistDatas.flatten.toSet
       moviesWithoutExclusions <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, bypass = true)
       seriesWithoutExclusions <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, bypass = true)
       allIdsWithoutExclusions = moviesWithoutExclusions ++ seriesWithoutExclusions
-      _ <- missingIdsOnPlex(client)(config)(allIdsWithoutExclusions, selfWatchlist ++ othersWatchlist)
+      _ <- missingIdsOnPlex(client)(config)(allIdsWithoutExclusions, selfWatchlist ++ othersWatchlist ++ watchlistData)
     } yield ()
 
     result.leftMap {

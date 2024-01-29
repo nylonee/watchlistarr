@@ -53,6 +53,8 @@ trait PlexUtils {
     val url = Uri
       .unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all")
       .withQueryParam("X-Plex-Token", token)
+      .withQueryParam("X-Plex-Container-Start", 0) // todo: pagination
+      .withQueryParam("X-Plex-Container-Size", 300)
 
     for {
       response <- EitherT(client.httpRequest(Method.GET, url))
