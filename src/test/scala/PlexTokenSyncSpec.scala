@@ -66,7 +66,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {
     (httpClient.httpRequest _).expects(
       Method.GET,
-      Uri.unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all?X-Plex-Token=plex-token"),
+      Uri.unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all?X-Plex-Token=plex-token&X-Plex-Container-Start=0&X-Plex-Container-Size=300"),
       None,
       None
     ).returning(IO.pure(parse(Source.fromResource("self-watchlist-from-token.json").getLines().mkString("\n")))).once()
