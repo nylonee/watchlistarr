@@ -1,12 +1,8 @@
-name: Test and Release
+name: Test Java 8
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  release:
-    types: [ published ]
 
 permissions:
   contents: write
@@ -27,14 +23,3 @@ jobs:
           cache: 'sbt'
       - name: sbt validation
         run: sbt "dependencyUpdatesFailBuild; unusedCompileDependenciesTest; undeclaredCompileDependenciesTest; test"
-      - name: Build fat JAR
-        if: startsWith(github.ref, 'refs/tags/')
-        run: sbt assembly
-      - name: Rename fat JAR
-        if: startsWith(github.ref, 'refs/tags/')
-        run: cp ./target/scala-2.13/watchlistarr-assembly-0.1.0-SNAPSHOT.jar ./target/scala-2.13/watchlistarr-java8.jar
-      - name: Upload JAR to GitHub Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ./target/scala-2.13/watchlistarr-java8.jar
