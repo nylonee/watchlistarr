@@ -91,6 +91,36 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     result.head shouldBe Item("The Test", List("imdb://tt11347692", "tmdb://95837", "tvdb://372848"), "show")
   }
 
+  it should "fetch the healthy part of a watchlist using the plex token" in {
+    val mockClient = mock[HttpClient]
+    val config = createConfiguration(Set("test-token"))
+    (mockClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all?X-Plex-Token=test-token&X-Plex-Container-Start=0&X-Plex-Container-Size=300"),
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("self-watchlist-from-token.json").getLines().mkString("\n")))).once()
+    (mockClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d?X-Plex-Token=test-token"),
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n")))).once()
+    (mockClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/617d3ab142705b2183b1b20b?X-Plex-Token=test-token"),
+      None,
+      None
+    ).returning(IO.pure(Left(new Exception("404")))).once()
+
+    val eitherResult = getSelfWatchlist(config, mockClient).value.unsafeRunSync()
+
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty[Item])
+    result.size shouldBe 1
+    result.head shouldBe Item("The Test", List("imdb://tt11347692", "tmdb://95837", "tvdb://372848"), "show")
+  }
+
   it should "successfully fetch friends from Plex" in {
     val mockClient = mock[HttpClient]
     val config = createConfiguration(Set("test-token"))

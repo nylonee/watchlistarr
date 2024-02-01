@@ -4,6 +4,7 @@ import cats.effect.IO
 import cats.implicits.toTraverseOps
 import http.HttpClient
 import io.circe.generic.auto._
+import io.circe.syntax._
 import io.circe.Json
 import org.http4s.{Method, Uri}
 import org.slf4j.LoggerFactory
@@ -64,7 +65,7 @@ object ConfigurationUtils {
     )
 
     config.map { c =>
-      logger.info(s"Configuration read by Watchlistarr: $c")
+      logger.info(ConfigurationRedactor.redactToString(c))
       c
     }
   }
