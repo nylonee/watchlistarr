@@ -65,7 +65,7 @@ object ConfigurationUtils {
     )
 
     config.map { c =>
-      logger.info(s"Configuration read by Watchlistarr: ${c.asJson.spaces2}")
+      logger.info(ConfigurationRedactor.redactToString(c))
       c
     }
   }
