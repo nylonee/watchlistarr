@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory
 import io.circe.generic.extras
 import io.circe.generic.extras.auto._
 import io.circe.syntax.EncoderOps
+import org.http4s.client.UnexpectedStatus
 
 trait PlexUtils {
 
@@ -145,7 +146,12 @@ trait PlexUtils {
   // We don't have all the information available in TokenWatchlist
   // so we need to make additional calls to Plex to get more information
   private def toItems(config: PlexConfiguration, client: HttpClient)(plex: TokenWatchlist): IO[Set[Item]] =
-    plex.MediaContainer.Metadata.map(i => toItems(config, client, i)).foldLeft(IO.pure(Set.empty[Item])) { case (acc, eitherT) =>
+    plex.MediaContainer.Metadata.map(i => toItems(config, client, i).leftMap {
+      err =>
+        logger.warn(s"Found item ${i.title} on the watchlist, but we cannot find this in Plex's database.")
+        err
+    }
+    ).foldLeft(IO.pure(Set.empty[Item])) { case (acc, eitherT) =>
       for {
         eitherItem <- eitherT.value
         itemsToAdd = eitherItem.map(Set(_)).getOrElse(Set.empty)
