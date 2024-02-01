@@ -23,7 +23,7 @@ val vaultVersion = "3.5.0"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-library" % scalaVersion.value % "provided",
-  "ch.qos.logback" % "logback-classic" % logbackVersion % Runtime,
+  "ch.qos.logback" % "logback-classic" % logbackVersion,
   "org.slf4j" % "slf4j-api" % slf4jVersion,
   "org.http4s" %% "http4s-ember-client" % http4sVersion,
   "org.http4s" %% "http4s-circe" % http4sVersion,

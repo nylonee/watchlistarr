@@ -23,3 +23,5 @@ jobs:
           cache: 'sbt'
       - name: sbt validation
         run: sbt "dependencyUpdatesFailBuild; unusedCompileDependenciesTest; undeclaredCompileDependenciesTest; test"
+      - name: Build fat JAR
+        run: sbt assembly
