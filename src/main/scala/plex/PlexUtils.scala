@@ -58,8 +58,7 @@ trait PlexUtils {
 
     for {
       response <- EitherT(client.httpRequest(Method.GET, url))
-      eitherTResult <- EitherT(IO.pure(response.as[TokenWatchlist].map(toItems(config, client)))).leftMap(err => new Throwable(err))
-      result <- eitherTResult
+      result <- EitherT(response.as[TokenWatchlist].map(toItems(config, client)).sequence).leftMap(err => new Throwable(err))
     } yield result
   }.toList.sequence.map(_.toSet.flatten)
 
@@ -145,8 +144,14 @@ trait PlexUtils {
 
   // We don't have all the information available in TokenWatchlist
   // so we need to make additional calls to Plex to get more information
-  private def toItems(config: PlexConfiguration, client: HttpClient)(plex: TokenWatchlist): EitherT[IO, Throwable, Set[Item]] =
-    plex.MediaContainer.Metadata.map(i => toItems(config, client, i)).sequence.map(_.toSet)
+  private def toItems(config: PlexConfiguration, client: HttpClient)(plex: TokenWatchlist): IO[Set[Item]] =
+    plex.MediaContainer.Metadata.map(i => toItems(config, client, i)).foldLeft(IO.pure(Set.empty[Item])) { case (acc, eitherT) =>
+      for {
+        eitherItem <- eitherT.value
+        itemsToAdd = eitherItem.map(Set(_)).getOrElse(Set.empty)
+        accumulatedItems <- acc
+      } yield accumulatedItems ++ itemsToAdd
+    }
 
   private def toItems(config: PlexConfiguration, client: HttpClient, i: TokenWatchlistItem): EitherT[IO, Throwable, Item] = {
 
