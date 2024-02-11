@@ -37,7 +37,7 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 * Radarr v3 or higher
 * Friends' Watchlists [Account Visibility](https://app.plex.tv/desktop/#!/settings/account) must be changed to 'Friends
   Only' or 'Friends of Friends'
-* Docker or Java
+* Docker or Java v11 or higher (Recommended version [JDK 21](https://www.oracle.com/java/technologies/downloads/#jdk21-windows))
 * Plex Token (see [here](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))
 
 ## Getting Started
@@ -66,6 +66,7 @@ Docker tag options:
 
 ### Java
 
+#### Running the Java command
 Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
 
 ```bash
@@ -73,9 +74,19 @@ java "-Dsonarr.apikey=YOUR_API_KEY"\
   "-Dradarr.apikey=YOUR_API_KEY"\
   "-Dplex.token=YOUR_PLEX_TOKEN"\
   -Xmx100m\
-  -jar watchlistarr.java
+  -jar watchlistarr.jar
 ```
 
+#### Starting Watchlistarr on Windows startup
+Once you confirm that this command works, you may want to set up a script to auto-run this on startup of Windows. This can be done using a .bat file with the following contents:
+```
+@ECHO OFF
+java -Dsonarr.apikey=YOUR_API_KEY -Dradarr.apikey=YOUR_API_KEY -Dplex.token=YOUR_PLEX_TOKEN -Xmx100m -jar watchlistarr.jar
+```
+
+Save this file in the same directory as the .jar file, then create a shortcut to this .bat file and place it in the Windows startup folder. In the properties of the shortcut, set it to start minimized (Thanks Redditor u/DanCBooper for tip)
+
+#### Java variables
 For a full list of options to pass in when running the application on native java,
 refer to the environment variables chart below, and cross-reference the key to the internal key
 in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entrypoint.sh)
