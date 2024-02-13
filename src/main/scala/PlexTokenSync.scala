@@ -20,7 +20,7 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
       else
         EitherT.pure[IO, Throwable](Set.empty[Item])
       _ = if (firstRun) logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
-      othersWatchlist <- if (!firstRun && config.plexConfiguration.skipFriendSync)
+      othersWatchlist <- if (!firstRun || config.plexConfiguration.skipFriendSync)
         EitherT.pure[IO, Throwable](Set.empty[Item])
       else
         getOthersWatchlist(config.plexConfiguration, client)
