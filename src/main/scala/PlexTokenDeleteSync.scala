@@ -1,4 +1,3 @@
-import WatchlistSync.fetchWatchlistFromRss
 import cats.data.EitherT
 import cats.effect.IO
 import cats.implicits._

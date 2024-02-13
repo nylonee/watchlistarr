@@ -25,7 +25,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     defaultRadarrMock(mockHttpClient)
     defaultSonarrMock(mockHttpClient)
 
-    val sync: Unit = PlexTokenSync.run(config, mockHttpClient).unsafeRunSync()
+    val sync: Unit = PlexTokenSync.run(config, mockHttpClient, firstRun = true).unsafeRunSync()
 
     sync shouldBe ()
   }
@@ -51,7 +51,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       radarrBypassIgnored = false
     ),
     PlexConfiguration(
-      plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
+      plexWatchlistUrls = Set(),
       plexTokens = plexTokens,
       skipFriendSync = false
     ),

@@ -13,19 +13,24 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def run(config: Configuration, client: HttpClient): IO[Unit] = {
+  def run(config: Configuration, client: HttpClient, firstRun: Boolean): IO[Unit] = {
     val result = for {
-      selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client)
+      selfWatchlist <- if (firstRun)
+        getSelfWatchlist(config.plexConfiguration, client)
+      else
+        EitherT.pure[IO, Throwable](Set.empty[Item])
       _ = logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
-      othersWatchlist <- if (config.plexConfiguration.skipFriendSync)
+      othersWatchlist <- if (!firstRun && config.plexConfiguration.skipFriendSync)
         EitherT.pure[IO, Throwable](Set.empty[Item])
       else
         getOthersWatchlist(config.plexConfiguration, client)
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
+      watchlistData = watchlistDatas.flatten.toSet
       _ = logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
       movies <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, config.radarrConfiguration.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, config.sonarrConfiguration.sonarrBypassIgnored)
       allIds = movies ++ series
-      _ <- missingIds(client)(config)(allIds, selfWatchlist ++ othersWatchlist)
+      _ <- missingIds(client)(config)(allIds, selfWatchlist ++ othersWatchlist ++ watchlistData)
     } yield ()
 
     result.leftMap {
