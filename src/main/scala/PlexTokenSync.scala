@@ -55,7 +55,7 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
             logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
             Right(addToSonarr(client)(config.sonarrConfiguration)(watchlistedItem))
           } else {
-            logger.warn(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr, but we do not have the tvdb ID so will skip adding")
+            logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr, but we do not have the tvdb ID so will skip adding")
             Right(IO.unit)
           }
         case (false, "movie") =>
@@ -63,7 +63,7 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
             logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
             Right(addToRadarr(client)(config.radarrConfiguration)(watchlistedItem))
           } else {
-            logger.warn(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr, but we do not have the tmdb ID so will skip adding")
+            logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr, but we do not have the tmdb ID so will skip adding")
             Right(IO.unit)
           }
 
