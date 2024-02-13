@@ -1,6 +1,6 @@
 
 import cats.effect._
-import cats.implicits.catsSyntaxTuple4Parallel
+import cats.implicits.catsSyntaxTuple3Parallel
 import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
 import http.HttpClient
 import org.slf4j.LoggerFactory
@@ -24,21 +24,12 @@ object Server extends IOApp {
     for {
       memoizedConfigIo <- ConfigurationUtils.create(configReader, httpClient).memoize
       result <- (
-        watchlistSync(memoizedConfigIo, httpClient),
         pingTokenSync(memoizedConfigIo, httpClient),
         plexTokenSync(memoizedConfigIo, httpClient),
         plexTokenDeleteSync(memoizedConfigIo, httpClient)
       ).parTupled.as(ExitCode.Success)
     } yield result
   }
-
-  private def watchlistSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
-    for {
-      config <- configIO
-      _ <- WatchlistSync.run(config, httpClient)
-      _ <- IO.sleep(config.refreshInterval)
-      _ <- watchlistSync(configIO, httpClient)
-    } yield ()
 
   private def pingTokenSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
     for {
@@ -48,10 +39,12 @@ object Server extends IOApp {
       _ <- pingTokenSync(configIO, httpClient)
     } yield ()
 
-  private def plexTokenSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
+  private def plexTokenSync(configIO: IO[Configuration], httpClient: HttpClient, firstRun: Boolean = true): IO[Unit] =
     for {
       config <- configIO
-      _ <- PlexTokenSync.run(config, httpClient)
+      _ <- PlexTokenSync.run(config, httpClient, firstRun)
+      _ <- IO.sleep(config.refreshInterval)
+      _ <- plexTokenSync(configIO, httpClient, firstRun = false)
     } yield ()
 
   private def plexTokenDeleteSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
