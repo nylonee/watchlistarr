@@ -19,14 +19,14 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
         getSelfWatchlist(config.plexConfiguration, client)
       else
         EitherT.pure[IO, Throwable](Set.empty[Item])
-      _ = logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
+      _ = if (firstRun) logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
       othersWatchlist <- if (!firstRun && config.plexConfiguration.skipFriendSync)
         EitherT.pure[IO, Throwable](Set.empty[Item])
       else
         getOthersWatchlist(config.plexConfiguration, client)
       watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
       watchlistData = watchlistDatas.flatten.toSet
-      _ = logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
+      _ = if (firstRun) logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
       movies <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, config.radarrConfiguration.radarrBypassIgnored)
       series <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, config.sonarrConfiguration.sonarrBypassIgnored)
       allIds = movies ++ series
