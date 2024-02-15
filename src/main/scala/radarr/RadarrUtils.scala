@@ -27,7 +27,7 @@ trait RadarrUtils extends RadarrConversions {
     } yield (movies.map(toItem) ++ exclusions.map(toItem)).toSet
 
   protected def addToRadarr(client: HttpClient)(config: RadarrConfiguration)(item: Item): IO[Unit] = {
-    val movie = RadarrPost(item.title, item.getTmdbId.getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder)
+    val movie = RadarrPost(item.title, item.getTmdbId.getOrElse(0L), config.radarrQualityProfileId, config.radarrRootFolder, tags = config.radarrTagIds.toList)
 
     val result = postToArr[Unit](client)(config.radarrBaseUrl, config.radarrApiKey, "movie")(movie.asJson)
       .fold(

@@ -41,14 +41,16 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       sonarrRootFolder = "/root/",
       sonarrBypassIgnored = false,
       sonarrSeasonMonitoring = "all",
-      sonarrLanguageProfileId = 1
+      sonarrLanguageProfileId = 1,
+      sonarrTagIds = Set(1)
     ),
     RadarrConfiguration(
       radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
       radarrApiKey = "radarr-api-key",
       radarrQualityProfileId = 1,
       radarrRootFolder = "/root/",
-      radarrBypassIgnored = false
+      radarrBypassIgnored = false,
+      radarrTagIds = Set(2)
     ),
     PlexConfiguration(
       plexWatchlistUrls = Set(),

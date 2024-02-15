@@ -9,12 +9,14 @@ private[configuration] object Keys {
   val sonarrRootFolder = "sonarr.rootFolder"
   val sonarrBypassIgnored = "sonarr.bypassIgnored"
   val sonarrSeasonMonitoring = "sonarr.seasonMonitoring"
+  val sonarrTags = "sonarr.tags"
 
   val radarrBaseUrl = "radarr.baseUrl"
   val radarrApiKey = "radarr.apikey"
   val radarrQualityProfile = "radarr.qualityProfile"
   val radarrRootFolder = "radarr.rootFolder"
   val radarrBypassIgnored = "radarr.bypassIgnored"
+  val radarrTags = "radarr.tags"
 
   val plexWatchlist1 = "plex.watchlist1"
   val plexWatchlist2 = "plex.watchlist2"

@@ -2,6 +2,7 @@ package configuration
 
 import cats.effect.IO
 import cats.implicits.toTraverseOps
+import cats.implicits._
 import http.HttpClient
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -20,11 +21,11 @@ object ConfigurationUtils {
     val config = for {
       sonarrConfig <- getSonarrConfig(configReader, client)
       refreshInterval = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
-      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder, sonarrLanguageProfileId) = sonarrConfig
+      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder, sonarrLanguageProfileId, sonarrTagIds) = sonarrConfig
       sonarrBypassIgnored = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
       sonarrSeasonMonitoring = configReader.getConfigOption(Keys.sonarrSeasonMonitoring).getOrElse("all")
       radarrConfig <- getRadarrConfig(configReader, client)
-      (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder) = radarrConfig
+      (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder, radarrTagIds) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
       plexTokens = getPlexTokens(configReader)
       skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
@@ -42,14 +43,16 @@ object ConfigurationUtils {
         sonarrRootFolder,
         sonarrBypassIgnored,
         sonarrSeasonMonitoring,
-        sonarrLanguageProfileId
+        sonarrLanguageProfileId,
+        sonarrTagIds
       ),
       RadarrConfiguration(
         radarrBaseUrl,
         radarrApiKey,
         radarrQualityProfileId,
         radarrRootFolder,
-        radarrBypassIgnored
+        radarrBypassIgnored,
+        radarrTagIds
       ),
       PlexConfiguration(
         plexWatchlistUrls,
@@ -70,7 +73,7 @@ object ConfigurationUtils {
     }
   }
 
-  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int)] = {
+  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int, Set[Int])] = {
     val url = configReader.getConfigOption(Keys.sonarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
       val default = "http://localhost:8989"
       logger.warn(s"Unable to fetch sonarr baseUrl, using default $default")
@@ -79,7 +82,7 @@ object ConfigurationUtils {
     val apiKey = configReader.getConfigOption(Keys.sonarrApiKey).getOrElse(throwError("Unable to find sonarr API key"))
 
     for {
-      rootFolder <- getToArr(client)(url, apiKey, "rootFolder").map {
+      rootFolder <- toArr(client)(url, apiKey, "rootFolder").map {
         case Right(res) =>
           logger.info("Successfully connected to Sonarr")
           val allRootFolders = res.as[List[RootFolder]].getOrElse(List.empty)
@@ -87,7 +90,7 @@ object ConfigurationUtils {
         case Left(err) =>
           throwError(s"Unable to connect to Sonarr at $url, with error $err")
       }
-      qualityProfileId <- getToArr(client)(url, apiKey, "qualityprofile").map {
+      qualityProfileId <- toArr(client)(url, apiKey, "qualityprofile").map {
         case Right(res) =>
           val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
           val chosenQualityProfile = configReader.getConfigOption(Keys.sonarrQualityProfile)
@@ -95,7 +98,7 @@ object ConfigurationUtils {
         case Left(err) =>
           throwError(s"Unable to connect to Sonarr at $url, with error $err")
       }
-      languageProfileId <- getToArr(client)(url, apiKey, "languageprofile").map {
+      languageProfileId <- toArr(client)(url, apiKey, "languageprofile").map {
         case Right(res) =>
           val allLanguageProfiles = res.as[List[LanguageProfile]].getOrElse(List.empty)
           allLanguageProfiles.headOption.map(_.id).getOrElse {
@@ -105,10 +108,11 @@ object ConfigurationUtils {
         case Left(err) =>
           throwError(s"Unable to connect to Sonarr at $url, with error $err")
       }
-    } yield (url, apiKey, qualityProfileId, rootFolder, languageProfileId)
+      tagIds <- configReader.getConfigOption(Keys.sonarrTags).map(getTagIdsFromConfig(client, url, apiKey)).getOrElse(IO.pure(Set.empty[Int]))
+    } yield (url, apiKey, qualityProfileId, rootFolder, languageProfileId, tagIds)
   }
 
-  private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String)] = {
+  private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Set[Int])] = {
     val url = configReader.getConfigOption(Keys.radarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
       val default = "http://localhost:7878"
       logger.warn(s"Unable to fetch radarr baseUrl, using default $default")
@@ -116,23 +120,43 @@ object ConfigurationUtils {
     }
     val apiKey = configReader.getConfigOption(Keys.radarrApiKey).getOrElse(throwError("Unable to find radarr API key"))
 
-    getToArr(client)(url, apiKey, "rootFolder").map {
-      case Right(res) =>
-        logger.info("Successfully connected to Radarr")
-        val allRootFolders = res.as[List[RootFolder]].getOrElse(List.empty)
-        selectRootFolder(allRootFolders, configReader.getConfigOption(Keys.radarrRootFolder))
-      case Left(err) =>
-        throwError(s"Unable to connect to Radarr at $url, with error $err")
-    }.flatMap(rootFolder =>
-      getToArr(client)(url, apiKey, "qualityprofile").map {
+    for {
+      rootFolder <- toArr(client)(url, apiKey, "rootFolder").map {
         case Right(res) =>
-          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
-          val chosenQualityProfile = configReader.getConfigOption(Keys.radarrQualityProfile)
-          (url, apiKey, getQualityProfileId(allQualityProfiles, chosenQualityProfile), rootFolder)
+          logger.info("Successfully connected to Radarr")
+          val allRootFolders = res.as[List[RootFolder]].getOrElse(List.empty)
+          selectRootFolder(allRootFolders, configReader.getConfigOption(Keys.radarrRootFolder))
         case Left(err) =>
           throwError(s"Unable to connect to Radarr at $url, with error $err")
       }
-    )
+      qualityProfileId <- toArr(client)(url, apiKey, "qualityprofile").map {
+        case Right(res) =>
+          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+          val chosenQualityProfile = configReader.getConfigOption(Keys.radarrQualityProfile)
+          getQualityProfileId(allQualityProfiles, chosenQualityProfile)
+        case Left(err) =>
+          throwError(s"Unable to connect to Radarr at $url, with error $err")
+      }
+      tagIds <- configReader.getConfigOption(Keys.radarrTags).map(getTagIdsFromConfig(client, url, apiKey)).getOrElse(IO.pure(Set.empty[Int]))
+    } yield (url, apiKey, qualityProfileId, rootFolder, tagIds)
+  }
+
+  private def getTagIdsFromConfig(client: HttpClient, url: Uri, apiKey: String)(tags: String): IO[Set[Int]] = {
+    val tagsSplit = tags.split(',').map(_.trim).toSet
+
+    tagsSplit.map { tagName =>
+      val json = Json.obj(("label", Json.fromString(tagName.toLowerCase)))
+      logger.info(s"Fetching information for tag: $tagName")
+      toArr(client)(url, apiKey, "tag", Some(json)).map {
+        case Left(err) =>
+          logger.warn(s"Attempted to set a tag in an Arr app but got the error: $err")
+          None
+        case Right(result) =>
+          result.hcursor.get[Int]("id").toOption
+      }
+    }.toList.sequence.map(_.collect {
+      case Some(r) => r
+    }).map(_.toSet)
   }
 
   private def getQualityProfileId(allProfiles: List[QualityProfile], maybeEnvVariable: Option[String]): Int =
@@ -234,8 +258,13 @@ object ConfigurationUtils {
     throw new IllegalArgumentException(message)
   }
 
-  private def getToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): IO[Either[Throwable, Json]] =
-    client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey))
+  private def toArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String, payload: Option[Json] = None): IO[Either[Throwable, Json]] =
+    payload match {
+      case None =>
+        client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey), payload)
+      case Some(_) =>
+        client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), payload)
+    }
 
   private def getRssFromPlexToken(client: HttpClient)(token: String, rssType: String): IO[Option[String]] = {
     val url = Uri

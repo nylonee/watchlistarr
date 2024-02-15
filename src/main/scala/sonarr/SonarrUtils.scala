@@ -35,6 +35,7 @@ trait SonarrUtils extends SonarrConversions {
       config.sonarrRootFolder,
       addOptions,
       config.sonarrLanguageProfileId,
+      tags = config.sonarrTagIds.toList
     )
 
     val result = postToArr[Unit](client)(config.sonarrBaseUrl, config.sonarrApiKey, "series")(show.asJson)

@@ -83,4 +83,12 @@ if [ -n "$DELETE_INTERVAL_DAYS" ]; then
   CMD+=("-Ddelete.interval.days=$DELETE_INTERVAL_DAYS")
 fi
 
+if [ -n "$SONARR_TAGS" ]; then
+  CMD+=("-Dsonarr.tags=$SONARR_TAGS")
+fi
+
+if [ -n "$RADARR_TAGS" ]; then
+  CMD+=("-Dradarr.tags=$RADARR_TAGS")
+fi
+
 exec "${CMD[@]}" "${JAVA_OPTS[@]}"

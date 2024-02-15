@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory
 import io.circe.generic.extras
 import io.circe.generic.extras.auto._
 import io.circe.syntax.EncoderOps
-import org.http4s.client.UnexpectedStatus
 
 trait PlexUtils {
 
