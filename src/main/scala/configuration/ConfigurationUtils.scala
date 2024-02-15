@@ -33,8 +33,9 @@ object ConfigurationUtils {
       deleteEndedShows = configReader.getConfigOption(Keys.deleteEndedShow).flatMap(_.toBooleanOption).getOrElse(false)
       deleteContinuingShows = configReader.getConfigOption(Keys.deleteContinuingShow).flatMap(_.toBooleanOption).getOrElse(false)
       deleteInterval = configReader.getConfigOption(Keys.deleteIntervalDays).flatMap(_.toIntOption).getOrElse(7).days
+      hasPlexPass = plexWatchlistUrls.nonEmpty
     } yield Configuration(
-      refreshInterval,
+      if (hasPlexPass) refreshInterval else 19.minutes,
       SonarrConfiguration(
         sonarrBaseUrl,
         sonarrApiKey,
@@ -54,7 +55,8 @@ object ConfigurationUtils {
       PlexConfiguration(
         plexWatchlistUrls,
         plexTokens,
-        skipFriendSync
+        skipFriendSync,
+        hasPlexPass
       ),
       DeleteConfiguration(
         deleteMovies,

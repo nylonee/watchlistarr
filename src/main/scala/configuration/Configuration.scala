@@ -33,7 +33,8 @@ case class RadarrConfiguration(
 case class PlexConfiguration(
                               plexWatchlistUrls: Set[Uri],
                               plexTokens: Set[String],
-                              skipFriendSync: Boolean
+                              skipFriendSync: Boolean,
+                              hasPlexPass: Boolean
                             )
 
 case class DeleteConfiguration(
