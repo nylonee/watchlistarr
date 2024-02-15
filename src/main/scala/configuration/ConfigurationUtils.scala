@@ -261,7 +261,7 @@ object ConfigurationUtils {
   private def toArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String, payload: Option[Json] = None): IO[Either[Throwable, Json]] =
     payload match {
       case None =>
-        client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey), payload)
+        client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey))
       case Some(_) =>
         client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), payload)
     }

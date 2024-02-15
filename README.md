@@ -37,7 +37,8 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 * Radarr v3 or higher
 * Friends' Watchlists [Account Visibility](https://app.plex.tv/desktop/#!/settings/account) must be changed to 'Friends
   Only' or 'Friends of Friends'
-* Docker or Java v11 or higher (Recommended version [JDK 21](https://www.oracle.com/java/technologies/downloads/#jdk21-windows))
+* Docker or Java v11 or higher (Recommended
+  version [JDK 21](https://www.oracle.com/java/technologies/downloads/#jdk21-windows))
 * Plex Token (see [here](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))
 
 ## Getting Started
@@ -67,6 +68,7 @@ Docker tag options:
 ### Java
 
 #### Running the Java command
+
 Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
 
 ```bash
@@ -78,15 +80,21 @@ java "-Dsonarr.apikey=YOUR_API_KEY"\
 ```
 
 #### Starting Watchlistarr on Windows startup
-Once you confirm that this command works, you may want to set up a script to auto-run this on startup of Windows. This can be done using a .bat file with the following contents:
+
+Once you confirm that this command works, you may want to set up a script to auto-run this on startup of Windows. This
+can be done using a .bat file with the following contents:
+
 ```
 @ECHO OFF
 java -Dsonarr.apikey=YOUR_API_KEY -Dradarr.apikey=YOUR_API_KEY -Dplex.token=YOUR_PLEX_TOKEN -Xmx100m -jar watchlistarr.jar
 ```
 
-Save this file in the same directory as the .jar file, then create a shortcut to this .bat file and place it in the Windows startup folder. In the properties of the shortcut, set it to start minimized (Thanks Redditor u/DanCBooper for tip)
+Save this file in the same directory as the .jar file, then create a shortcut to this .bat file and place it in the
+Windows startup folder. In the properties of the shortcut, set it to start minimized (Thanks Redditor u/DanCBooper for
+tip)
 
 #### Java variables
+
 For a full list of options to pass in when running the application on native java,
 refer to the environment variables chart below, and cross-reference the key to the internal key
 in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entrypoint.sh)
@@ -104,10 +112,12 @@ in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entr
 | SONARR_ROOT_FOLDER             |                       | Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr                                                                                                                      |
 | SONARR_BYPASS_IGNORED          | false                 | Boolean flag to bypass tv shows that are on the Sonarr Exclusion List                                                                                                                               |
 | SONARR_SEASON_MONITORING       | all                   | Default monitoring for new seasons added to Sonarr. Full list of options are found in the [Sonarr API Docs](https://sonarr.tv/docs/api/#/Series/post_api_v3_series) under **MonitorTypes**          |
+| SONARR_TAGS                    |                       | Tags to assign to tv shows that are added via Watchlistarr, comma separated                                                                                                                         |
 | RADARR_BASE_URL                | http://127.0.0.1:7878 | Base URL for Radarr, including the 'http' and port and any configured urlbase                                                                                                                       |
 | RADARR_QUALITY_PROFILE         |                       | Quality profile for Radarr, found in your Radarr UI -> Profiles settings. If not set, will grab the first one it finds on Radarr                                                                    |
 | RADARR_ROOT_FOLDER             |                       | Root folder for Radarr. If not set, will grab the first one it finds on Radarr                                                                                                                      |
 | RADARR_BYPASS_IGNORED          | false                 | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                                 |
+| RADARR_TAGS                    |                       | Tags to assign to movies that are added via Watchlistarr, comma separated                                                                                                                           |
 | SKIP_FRIEND_SYNC               | false                 | Boolean flag to toggle between only syncing your own content, vs syncing your own and all your friends content                                                                                      |
 | ALLOW_MOVIE_DELETING           | false                 | Boolean flag to enable/disable the full Watchlistarr sync for movies. If enabled, movies that are not watchlisted will be deleted from Radarr                                                       |
 | ALLOW_ENDED_SHOW_DELETING      | false                 | Boolean flag to enable/disable the full Watchlistarr sync for ended shows. If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr                  |
