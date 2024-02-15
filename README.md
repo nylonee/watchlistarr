@@ -123,11 +123,15 @@ in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entr
 | ALLOW_ENDED_SHOW_DELETING      | false                 | Boolean flag to enable/disable the full Watchlistarr sync for ended shows. If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr                  |
 | ALLOW_CONTINUING_SHOW_DELETING | false                 | Boolean flag to enable/disable the full Watchlistarr sync for continuing shows. If enabled, shows that still have planned seasons and are not watchlisted will be deleted from Sonarr               |
 | DELETE_INTERVAL_DAYS           | 7                     | Number of days to wait before deleting content from the arrs (Deleting must be enabled)                                                                                                             |
+| LOG_LEVEL                      | INFO                  | Level of logging, set to DEBUG for more verbose logs, or WARN for less logs                                                                                                                         |
 
 ## Plex Pass Alternative
-The Plex Pass subscription is required to generate the RSS Feed URLs. Without a Plex Pass, the normal API calls are too heavy-hitting on Plex's servers.
 
-If the app detects that you are not a Plex Pass user (i.e. the app tries to generate an RSS URL, and it fails), it will fall back into a periodic sync.
+The Plex Pass subscription is required to generate the RSS Feed URLs. Without a Plex Pass, the normal API calls are too
+heavy-hitting on Plex's servers.
+
+If the app detects that you are not a Plex Pass user (i.e. the app tries to generate an RSS URL, and it fails), it will
+fall back into a periodic sync.
 
 The periodic sync will run every 19 minutes, ignoring the configuration for REFRESH_INTERVAL_SECONDS
 
