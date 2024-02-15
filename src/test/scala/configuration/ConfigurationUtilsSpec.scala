@@ -8,9 +8,7 @@ import org.http4s.{Method, Uri}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import io.circe.generic.auto._
 import io.circe.parser._
-import io.circe.syntax.EncoderOps
 
 import scala.io.Source
 
