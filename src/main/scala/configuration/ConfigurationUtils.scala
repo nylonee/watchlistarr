@@ -195,8 +195,11 @@ object ConfigurationUtils {
     watchlistsFromTokenIo.map { watchlistsFromToken =>
       (watchlistsFromConfigDeprecated ++ watchlistsFromToken).toList match {
         case Nil =>
-          throwError("Missing plex watchlist URL")
-        case other => other.map(toPlexUri).toSet
+          logger.warn("Missing RSS URL. Are you an active Plex Pass user?")
+          logger.warn("Real-time RSS sync disabled")
+          Set.empty
+        case other =>
+          other.map(toPlexUri).toSet
       }
     }
   }
@@ -247,7 +250,7 @@ object ConfigurationUtils {
 
     client.httpRequest(Method.POST, url, None, Some(body)).map {
       case Left(err) =>
-        logger.warn(s"Unable to generate an RSS feed: $err")
+        logger.warn(s"Unable to generate an RSS feed. Do you have an active Plex Pass subscription? Error: $err")
         None
       case Right(json) =>
         logger.debug("Got a result from Plex when generating RSS feed, attempting to decode")
