@@ -13,6 +13,7 @@ object ConfigurationRedactor {
       |    sonarrRootFolder: ${config.sonarrConfiguration.sonarrRootFolder}
       |    sonarrBypassIgnored: ${config.sonarrConfiguration.sonarrBypassIgnored}
       |    sonarrLanguageProfileId: ${config.sonarrConfiguration.sonarrLanguageProfileId}
+      |    sonarrTagIds: ${config.sonarrConfiguration.sonarrTagIds.mkString(",")}
       |
       |  RadarrConfiguration:
       |    radarrBaseUrl: ${config.radarrConfiguration.radarrBaseUrl}
@@ -20,6 +21,7 @@ object ConfigurationRedactor {
       |    radarrQualityProfileId: ${config.radarrConfiguration.radarrQualityProfileId}
       |    radarrRootFolder: ${config.radarrConfiguration.radarrRootFolder}
       |    radarrBypassIgnored: ${config.radarrConfiguration.radarrBypassIgnored}
+      |    radarrTagIds: ${config.radarrConfiguration.radarrTagIds.mkString(",")}
       |
       |  PlexConfiguration:
       |    plexWatchlistUrls: ${config.plexConfiguration.plexWatchlistUrls.mkString(", ")}

@@ -7,5 +7,6 @@ private[sonarr] case class SonarrPost(
                                        rootFolderPath: String,
                                        addOptions: SonarrAddOptions,
                                        languageProfileId: Int,
-                                       monitored: Boolean = true
+                                       monitored: Boolean = true,
+                                       tags: List[Int] = List.empty[Int]
                                      )

@@ -151,6 +151,17 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     config.radarrConfiguration.radarrQualityProfileId shouldBe 7
   }
 
+  it should "fetch a tag from Sonarr/Radarr" in {
+
+    val mockConfigReader = createMockConfigReader(tags = Some("test-tag"))
+    val mockHttpClient = createMockHttpClient()
+
+    val config = ConfigurationUtils.create(mockConfigReader, mockHttpClient).unsafeRunSync()
+    noException should be thrownBy config
+    config.sonarrConfiguration.sonarrTagIds shouldBe Set(3)
+    config.radarrConfiguration.radarrTagIds shouldBe Set(3)
+  }
+
   private def createMockConfigReader(
                                       sonarrApiKey: Option[String] = Some("sonarr-api-key"),
                                       sonarrRootFolder: Option[String] = None,
@@ -159,7 +170,8 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
                                       plexWatchlist1: Option[String] = None,
                                       plexWatchlist2: Option[String] = None,
                                       plexToken: Option[String] = Some("test-token"),
-                                      qualityProfile: Option[String] = None
+                                      qualityProfile: Option[String] = None,
+                                      tags: Option[String] = None
                                     ): ConfigurationReader = {
     val unset = None
 
@@ -184,6 +196,8 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
     (mockConfigReader.getConfigOption _).expects(Keys.deleteContinuingShow).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.deleteEndedShow).returning(unset).anyNumberOfTimes()
     (mockConfigReader.getConfigOption _).expects(Keys.deleteIntervalDays).returning(unset).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.sonarrTags).returning(tags).anyNumberOfTimes()
+    (mockConfigReader.getConfigOption _).expects(Keys.radarrTags).returning(tags).anyNumberOfTimes()
     mockConfigReader
   }
 
@@ -232,6 +246,18 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
       None,
       Some(parse("""{"feedType": "friendsWatchlist"}""").getOrElse(Json.Null))
     ).returning(IO.pure(parse(Source.fromResource("rss-feed-generated.json").getLines().mkString("\n")))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/tag")),
+      Some("sonarr-api-key"),
+      *
+    ).returning(IO.pure(parse(Source.fromResource("tag-response.json").getLines().mkString("\n")))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.POST,
+      Uri.unsafeFromString("http://localhost:7878").withPath(Uri.Path.unsafeFromString("/api/v3/tag")),
+      Some("radarr-api-key"),
+      *
+    ).returning(IO.pure(parse(Source.fromResource("tag-response.json").getLines().mkString("\n")))).anyNumberOfTimes()
     mockHttpClient
   }
 }

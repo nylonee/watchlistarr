@@ -41,14 +41,16 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       sonarrRootFolder = "/root/",
       sonarrBypassIgnored = false,
       sonarrSeasonMonitoring = "all",
-      sonarrLanguageProfileId = 1
+      sonarrLanguageProfileId = 1,
+      sonarrTagIds = Set(1)
     ),
     RadarrConfiguration(
       radarrBaseUrl = Uri.unsafeFromString("https://localhost:7878"),
       radarrApiKey = "radarr-api-key",
       radarrQualityProfileId = 1,
       radarrRootFolder = "/root/",
-      radarrBypassIgnored = false
+      radarrBypassIgnored = false,
+      radarrTagIds = Set(2)
     ),
     PlexConfiguration(
       plexWatchlistUrls = Set(),
@@ -132,7 +134,10 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
                        |  "rootFolderPath" : "/root/",
                        |  "addOptions" : {
                        |    "searchForMovie" : true
-                       |  }
+                       |  },
+                       |  "tags" : [
+                       |    2
+                       |  ]
                        |}""".stripMargin
     val movieToAdd2 =
       """{
@@ -142,7 +147,10 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |  "rootFolderPath" : "/root/",
         |  "addOptions" : {
         |    "searchForMovie" : true
-        |  }
+        |  },
+        |  "tags" : [
+        |    2
+        |  ]
         |}""".stripMargin
     val movieToAdd3 =
       """{
@@ -152,7 +160,10 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |  "rootFolderPath" : "/root/",
         |  "addOptions" : {
         |    "searchForMovie" : true
-        |  }
+        |  },
+        |  "tags" : [
+        |    2
+        |  ]
         |}""".stripMargin
     (httpClient.httpRequest _).expects(
       Method.GET,

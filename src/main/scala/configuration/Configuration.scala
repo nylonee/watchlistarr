@@ -19,7 +19,8 @@ case class SonarrConfiguration(
                                 sonarrRootFolder: String,
                                 sonarrBypassIgnored: Boolean,
                                 sonarrSeasonMonitoring: String,
-                                sonarrLanguageProfileId: Int
+                                sonarrLanguageProfileId: Int,
+                                sonarrTagIds: Set[Int]
                               )
 
 case class RadarrConfiguration(
@@ -27,7 +28,8 @@ case class RadarrConfiguration(
                                 radarrApiKey: String,
                                 radarrQualityProfileId: Int,
                                 radarrRootFolder: String,
-                                radarrBypassIgnored: Boolean
+                                radarrBypassIgnored: Boolean,
+                                radarrTagIds: Set[Int]
                               )
 
 case class PlexConfiguration(
