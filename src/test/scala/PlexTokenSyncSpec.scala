@@ -55,7 +55,8 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     PlexConfiguration(
       plexWatchlistUrls = Set(),
       plexTokens = plexTokens,
-      skipFriendSync = false
+      skipFriendSync = false,
+      hasPlexPass = true
     ),
     DeleteConfiguration(
       movieDeleting = false,

@@ -194,6 +194,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
   private def createConfiguration(plexTokens: Set[String]): PlexConfiguration = PlexConfiguration(
     plexWatchlistUrls = Set(Uri.unsafeFromString("https://localhost:9090")),
     plexTokens = plexTokens,
-    skipFriendSync = false
+    skipFriendSync = false,
+    hasPlexPass = true
   )
 }

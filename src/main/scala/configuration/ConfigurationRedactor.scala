@@ -27,6 +27,7 @@ object ConfigurationRedactor {
       |    plexWatchlistUrls: ${config.plexConfiguration.plexWatchlistUrls.mkString(", ")}
       |    plexTokens: ${config.plexConfiguration.plexTokens.map(_ => "REDACTED").mkString(", ")}
       |    skipFriendSync: ${config.plexConfiguration.skipFriendSync}
+      |    hasPlexPass: ${config.plexConfiguration.hasPlexPass}
       |
       |  DeleteConfiguration:
       |    movieDeleting: ${config.deleteConfiguration.movieDeleting}
