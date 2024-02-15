@@ -134,7 +134,10 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
                        |  "rootFolderPath" : "/root/",
                        |  "addOptions" : {
                        |    "searchForMovie" : true
-                       |  }
+                       |  },
+                       |  "tags" : [
+                       |    2
+                       |  ]
                        |}""".stripMargin
     val movieToAdd2 =
       """{
@@ -144,7 +147,10 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |  "rootFolderPath" : "/root/",
         |  "addOptions" : {
         |    "searchForMovie" : true
-        |  }
+        |  },
+        |  "tags" : [
+        |    2
+        |  ]
         |}""".stripMargin
     val movieToAdd3 =
       """{
@@ -154,7 +160,10 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |  "rootFolderPath" : "/root/",
         |  "addOptions" : {
         |    "searchForMovie" : true
-        |  }
+        |  },
+        |  "tags" : [
+        |    2
+        |  ]
         |}""".stripMargin
     (httpClient.httpRequest _).expects(
       Method.GET,
