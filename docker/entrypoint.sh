@@ -91,4 +91,8 @@ if [ -n "$RADARR_TAGS" ]; then
   CMD+=("-Dradarr.tags=$RADARR_TAGS")
 fi
 
+if [ -n "$LOG_LEVEL" ]; then
+  CMD+=("-Dlog.level=$LOG_LEVEL")
+fi
+
 exec "${CMD[@]}" "${JAVA_OPTS[@]}"
