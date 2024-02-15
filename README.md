@@ -32,7 +32,7 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 
 ### Requirements
 
-* Plex Pass Subscription (For those not wanting to get a Plex Pass, see the section below on Plex Pass alternative)
+* Plex Pass Subscription (Recommended, otherwise see "Plex Pass Alternative" section below)
 * Sonarr v3 or higher
 * Radarr v3 or higher
 * Friends' Watchlists [Account Visibility](https://app.plex.tv/desktop/#!/settings/account) must be changed to 'Friends
@@ -119,7 +119,7 @@ The Plex Pass subscription is required to generate the RSS Feed URLs. Without a 
 
 If the app detects that you are not a Plex Pass user (i.e. the app tries to generate an RSS URL, and it fails), it will fall back into a periodic sync.
 
-The periodic sync will run every 21 minutes, ignoring the configuration for REFRESH_INTERVAL_SECONDS
+The periodic sync will run every 19 minutes, ignoring the configuration for REFRESH_INTERVAL_SECONDS
 
 All other settings will still be valid
 

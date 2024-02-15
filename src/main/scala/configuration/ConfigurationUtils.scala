@@ -252,7 +252,7 @@ object ConfigurationUtils {
 
     client.httpRequest(Method.POST, url, None, Some(body)).map {
       case Left(err) =>
-        logger.warn(s"Unable to generate an RSS feed. Do you have an active Plex Pass subscription? Error: $err")
+        logger.warn(s"Unable to generate an RSS feed: $err")
         None
       case Right(json) =>
         logger.debug("Got a result from Plex when generating RSS feed, attempting to decode")
