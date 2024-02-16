@@ -1,7 +1,7 @@
 
 import cats.effect._
 import cats.implicits.catsSyntaxTuple3Parallel
-import configuration.{Configuration, ConfigurationUtils, SystemPropertyReader}
+import configuration.{Configuration, ConfigurationUtils, FileAndSystemPropertyReader, SystemPropertyReader}
 import http.HttpClient
 import org.slf4j.LoggerFactory
 
@@ -18,40 +18,44 @@ object Server extends IOApp {
   }
 
   def run(args: List[String]): IO[ExitCode] = {
-    val configReader = SystemPropertyReader
+    val configReader = FileAndSystemPropertyReader
     val httpClient = new HttpClient
 
     for {
-      memoizedConfigIo <- ConfigurationUtils.create(configReader, httpClient).memoize
+      initialConfig <- ConfigurationUtils.create(configReader, httpClient)
+      configRef <- Ref.of[IO, Configuration](initialConfig)
       result <- (
-        pingTokenSync(memoizedConfigIo, httpClient),
-        plexTokenSync(memoizedConfigIo, httpClient),
-        plexTokenDeleteSync(memoizedConfigIo, httpClient)
+        pingTokenSync(configRef, httpClient),
+        plexTokenSync(configRef, httpClient),
+        plexTokenDeleteSync(configRef, httpClient)
       ).parTupled.as(ExitCode.Success)
     } yield result
   }
 
-  private def pingTokenSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
+  private def fetchLatestConfig(configRef: Ref[IO, Configuration]): IO[Configuration] =
+    configRef.get
+
+  private def pingTokenSync(configRef: Ref[IO, Configuration], httpClient: HttpClient): IO[Unit] =
     for {
-      config <- configIO
+      config <- fetchLatestConfig(configRef)
       _ <- PingTokenSync.run(config, httpClient)
       _ <- IO.sleep(24.hours)
-      _ <- pingTokenSync(configIO, httpClient)
+      _ <- pingTokenSync(configRef, httpClient)
     } yield ()
 
-  private def plexTokenSync(configIO: IO[Configuration], httpClient: HttpClient, firstRun: Boolean = true): IO[Unit] =
+  private def plexTokenSync(configRef: Ref[IO, Configuration], httpClient: HttpClient, firstRun: Boolean = true): IO[Unit] =
     for {
-      config <- configIO
+      config <- fetchLatestConfig(configRef)
       _ <- PlexTokenSync.run(config, httpClient, firstRun)
       _ <- IO.sleep(config.refreshInterval)
-      _ <- plexTokenSync(configIO, httpClient, firstRun = false)
+      _ <- plexTokenSync(configRef, httpClient, firstRun = false)
     } yield ()
 
-  private def plexTokenDeleteSync(configIO: IO[Configuration], httpClient: HttpClient): IO[Unit] =
+  private def plexTokenDeleteSync(configRef: Ref[IO, Configuration], httpClient: HttpClient): IO[Unit] =
     for {
-      config <- configIO
+      config <- fetchLatestConfig(configRef)
       _ <- PlexTokenDeleteSync.run(config, httpClient)
       _ <- IO.sleep(config.deleteConfiguration.deleteInterval)
-      _ <- plexTokenDeleteSync(configIO, httpClient)
+      _ <- plexTokenDeleteSync(configRef, httpClient)
     } yield ()
 }

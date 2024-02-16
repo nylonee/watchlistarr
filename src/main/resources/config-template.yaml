@@ -1,0 +1,40 @@
+## Watchlistarr Configuration
+## If you want to specify your own configuration, copy this file, and rename it to 'config.yaml'
+
+## How often do you want Watchlistarr to pull the latest from Plex?
+## In general, 10 seconds is okay.
+## If you're running this on a slower system (e.g. Raspberry Pi), you may want to increase this to 60 seconds.
+interval:
+  seconds: 60
+
+## Sonarr Configuration
+sonarr:
+  #baseUrl: "127.0.0.1:8989"
+  #apikey: "YOUR-API-KEY"
+  #qualityProfile: "Your Desired Sonarr Quality Profile"
+  #rootFolder: "/root/folder/location"
+  bypassIgnored: false
+  seasonMonitoring: all # Possible values under 'MonitorTypes' in sonarr.tv/docs/api
+  tags:
+    - watchlistarr
+
+## Radarr Configuration
+radarr:
+  #baseUrl: "127.0.0.1:7878"
+  #apikey: "YOUR-API-KEY"
+  #qualityProfile: "Your Desired Radarr Quality Profile"
+  #rootFolder: "/root/folder/location"
+  bypassIgnored: false
+  tags:
+    - watchlistarr
+
+## Plex Configuration
+plex:
+  #token: "YOUR-PLEX-TOKEN"
+  skipfriendsync: false # Don't sync friends watchlists, only your own
+
+delete:
+  movie: false
+  endedShow: false
+  continuingShow: false
+  interval.days: 7
