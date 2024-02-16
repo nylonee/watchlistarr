@@ -49,17 +49,23 @@ trait PlexUtils {
     }
   }.toList.sequence.map(_ => ())
 
-  protected def getSelfWatchlist(config: PlexConfiguration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] = config.plexTokens.map { token =>
+  protected def getSelfWatchlist(config: PlexConfiguration, client: HttpClient, containerStart: Int = 0): EitherT[IO, Throwable, Set[Item]] = config.plexTokens.map { token =>
+    val containerSize = 300
     val url = Uri
       .unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all")
       .withQueryParam("X-Plex-Token", token)
-      .withQueryParam("X-Plex-Container-Start", 0) // todo: pagination
-      .withQueryParam("X-Plex-Container-Size", 300)
+      .withQueryParam("X-Plex-Container-Start", containerStart)
+      .withQueryParam("X-Plex-Container-Size", containerSize)
 
     for {
       response <- EitherT(client.httpRequest(Method.GET, url))
-      result <- EitherT(response.as[TokenWatchlist].map(toItems(config, client)).sequence).leftMap(err => new Throwable(err))
-    } yield result
+      tokenWatchlist <- EitherT(IO.pure(response.as[TokenWatchlist])).leftMap(err => new Throwable(err))
+      result <- EitherT.liftF(toItems(config, client)(tokenWatchlist))
+      nextPage <- if (tokenWatchlist.MediaContainer.totalSize > containerStart + containerSize)
+        getSelfWatchlist(config, client, containerStart + containerSize)
+      else
+        EitherT.pure[IO, Throwable](Set.empty[Item])
+    } yield result ++ nextPage
   }.toList.sequence.map(_.toSet.flatten)
 
   protected def getOthersWatchlist(config: PlexConfiguration, client: HttpClient): EitherT[IO, Throwable, Set[Item]] =

@@ -1,3 +1,3 @@
 package plex
 
-private[plex] case class MediaContainer(Metadata: List[TokenWatchlistItem])
+private[plex] case class MediaContainer(Metadata: List[TokenWatchlistItem], totalSize: Int)
