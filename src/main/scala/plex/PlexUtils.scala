@@ -59,8 +59,9 @@ trait PlexUtils {
 
     for {
       response <- EitherT(client.httpRequest(Method.GET, url))
-      result <- EitherT(response.as[TokenWatchlist].map(toItems(config, client)).sequence).leftMap(err => new Throwable(err))
-      nextPage <- if (result.size == containerSize)
+      tokenWatchlist <- EitherT(IO.pure(response.as[TokenWatchlist])).leftMap(err => new Throwable(err))
+      result <- EitherT.liftF(toItems(config, client)(tokenWatchlist))
+      nextPage <- if (tokenWatchlist.MediaContainer.totalSize > containerStart + containerSize)
         getSelfWatchlist(config, client, containerStart + containerSize)
       else
         EitherT.pure[IO, Throwable](Set.empty[Item])
