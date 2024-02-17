@@ -19,6 +19,7 @@ val scalamockVersion = "5.2.0"
 val scalatestVersion = "3.2.17"
 val shapelessVersion = "2.3.10"
 val slf4jVersion = "2.0.9"
+val snakeYamlVersion = "2.0"
 val vaultVersion = "3.5.0"
 
 libraryDependencies ++= Seq(
@@ -40,6 +41,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "vault" % vaultVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeGenericExtrasVersion,
+  "org.yaml" % "snakeyaml" % snakeYamlVersion,
   "io.circe" %% "circe-parser" % circeVersion % Test,
   "org.scalamock" %% "scalamock" % scalamockVersion % Test,
   "org.scalatest" %% "scalatest" % scalatestVersion % Test

@@ -5,6 +5,7 @@ target/
 
 ### Environment file for local variables
 .env
+config/
 
 *.txt
 

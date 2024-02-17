@@ -2,11 +2,9 @@ FROM hseeberger/scala-sbt:eclipse-temurin-11.0.14.1_1.6.2_2.13.8 as build
 
 WORKDIR /app
 
-COPY / /
-RUN sbt update
+COPY . .
 
-COPY .. .
-RUN sbt compile stage
+RUN sbt update compile stage
 
 FROM openjdk:11-jre-slim
 

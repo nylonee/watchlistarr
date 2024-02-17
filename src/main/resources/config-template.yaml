@@ -1,0 +1,59 @@
+## Watchlistarr Configuration
+## Uncomment the lines you would like to configure, then save this file and restart Watchlistarr
+
+#################################################################
+## How often do you want Watchlistarr to pull the latest from Plex? In general, 10 seconds is okay.
+## If you're running this on a slower system (e.g. Raspberry Pi), you may want to increase this to 60 seconds.
+#################################################################
+
+#interval:
+#  seconds: 10
+
+
+#################################################################
+## Sonarr Configuration
+#################################################################
+
+#sonarr:
+#  baseUrl: "127.0.0.1:8989" # Base URL for Sonarr, including the 'http' and port and any configured urlbase
+#  apikey: "YOUR-API-KEY" # API key for Sonarr, found in your Sonarr UI -> General settings
+#  qualityProfile: "Your Desired Sonarr Quality Profile" # If not set, will grab the first one it finds on Sonarr
+#  rootFolder: "/root/folder/location" # Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr
+#  bypassIgnored: false
+#  seasonMonitoring: all # Possible values under 'MonitorTypes' in sonarr.tv/docs/api
+#  tags:
+#    - watchlistarr
+
+
+#################################################################
+## Radarr Configuration
+#################################################################
+
+#radarr:
+#  baseUrl: "127.0.0.1:7878" # Base URL for Radarr, including the 'http' and port and any configured urlbase
+#  apikey: "YOUR-API-KEY"
+#  qualityProfile: "Your Desired Radarr Quality Profile" # If not set, will grab the first one it finds on Radarr
+#  rootFolder: "/root/folder/location" # If not set, will grab the first one it finds on Radarr
+#  bypassIgnored: false # Boolean flag to bypass tv shows that are on the Sonarr Exclusion List
+#  tags:
+#    - watchlistarr
+
+
+#################################################################
+## Plex Configuration
+#################################################################
+
+#plex:
+#  token: "YOUR-PLEX-TOKEN" # Multiple tokens can be provided
+#  skipfriendsync: false # Don't sync friends watchlists, only your own
+
+
+#################################################################
+## Delete Sync Configuration
+#################################################################
+
+#delete:
+#  movie: false # If enabled, movies that are not watchlisted will be deleted from Radarr
+#  endedShow: false # If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr
+#  continuingShow: false # If enabled, shows that still have planned seasons and are not watchlisted will be deleted from Sonarr
+#  interval.days: 7 # Number of days to wait before deleting content from the arrs (Deleting must be enabled)
