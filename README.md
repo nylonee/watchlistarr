@@ -52,12 +52,12 @@ docker run \
   -e SONARR_API_KEY=YOUR_API_KEY \
   -e RADARR_API_KEY=YOUR_API_KEY \
   -e PLEX_TOKEN=YOUR_PLEX_TOKEN \
-  -e REFRESH_INTERVAL_SECONDS=5 \
+  -v config:/app/config \
   nylonee/watchlistarr
 ```
 
-For a full list of possible environment variables to configure the app with, see the Environment Variables section of
-this Readme
+This will create a `config.yaml` file with additional configuration,
+modifying this file and then restarting Watchlistarr is the recommended way of configuring additional settings
 
 Docker tag options:
 
@@ -79,6 +79,9 @@ java "-Dsonarr.apikey=YOUR_API_KEY"\
   -jar watchlistarr.jar
 ```
 
+This will create a `config.yaml` file with additional configuration,
+modifying this file and then restarting Watchlistarr is the recommended way of configuring additional settings
+
 #### Starting Watchlistarr on Windows startup
 
 Once you confirm that this command works, you may want to set up a script to auto-run this on startup of Windows. This
@@ -93,37 +96,21 @@ Save this file in the same directory as the .jar file, then create a shortcut to
 Windows startup folder. In the properties of the shortcut, set it to start minimized (Thanks Redditor u/DanCBooper for
 tip)
 
-#### Java variables
+### Configuration
 
-For a full list of options to pass in when running the application on native java,
-refer to the environment variables chart below, and cross-reference the key to the internal key
-in [entrypoint.sh](https://github.com/nylonee/watchlistarr/blob/main/docker/entrypoint.sh)
+Running Watchlistarr successfully for the first time will generate a `config.yaml` file with additional configuration.
+Modify this file to your heart's desire, then restart Watchlistarr
 
-### Environment Variables
+#### Enabling debug mode
+Sometimes, you'll need more information from the app. To enable debug mode in Docker, add the following line to your command:
+```
+-e LOG_LEVEL=DEBUG
+```
 
-| Key                            | Default               | Description                                                                                                                                                                                         |
-|--------------------------------|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SONARR_API_KEY*                |                       | API key for Sonarr, found in your Sonarr UI -> General settings                                                                                                                                     |
-| RADARR_API_KEY*                |                       | API key for Radarr, found in your Radarr UI -> General settings                                                                                                                                     |
-| PLEX_TOKEN*                    |                       | Token for Plex, retrieved via [this tutorial](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/). Note that multiple tokens can be provided, comma separated |
-| REFRESH_INTERVAL_SECONDS       | 60                    | Number of seconds to wait in between checking the watchlist                                                                                                                                         |
-| SONARR_BASE_URL                | http://localhost:8989 | Base URL for Sonarr, including the 'http' and port and any configured urlbase                                                                                                                       |
-| SONARR_QUALITY_PROFILE         |                       | Quality profile for Sonarr, found in your Sonarr UI -> Profiles settings. If not set, will grab the first one it finds on Sonarr                                                                    |
-| SONARR_ROOT_FOLDER             |                       | Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr                                                                                                                      |
-| SONARR_BYPASS_IGNORED          | false                 | Boolean flag to bypass tv shows that are on the Sonarr Exclusion List                                                                                                                               |
-| SONARR_SEASON_MONITORING       | all                   | Default monitoring for new seasons added to Sonarr. Full list of options are found in the [Sonarr API Docs](https://sonarr.tv/docs/api/#/Series/post_api_v3_series) under **MonitorTypes**          |
-| SONARR_TAGS                    |                       | Tags to assign to tv shows that are added via Watchlistarr, comma separated                                                                                                                         |
-| RADARR_BASE_URL                | http://127.0.0.1:7878 | Base URL for Radarr, including the 'http' and port and any configured urlbase                                                                                                                       |
-| RADARR_QUALITY_PROFILE         |                       | Quality profile for Radarr, found in your Radarr UI -> Profiles settings. If not set, will grab the first one it finds on Radarr                                                                    |
-| RADARR_ROOT_FOLDER             |                       | Root folder for Radarr. If not set, will grab the first one it finds on Radarr                                                                                                                      |
-| RADARR_BYPASS_IGNORED          | false                 | Boolean flag to bypass movies that are on the Radarr Exclusion List                                                                                                                                 |
-| RADARR_TAGS                    |                       | Tags to assign to movies that are added via Watchlistarr, comma separated                                                                                                                           |
-| SKIP_FRIEND_SYNC               | false                 | Boolean flag to toggle between only syncing your own content, vs syncing your own and all your friends content                                                                                      |
-| ALLOW_MOVIE_DELETING           | false                 | Boolean flag to enable/disable the full Watchlistarr sync for movies. If enabled, movies that are not watchlisted will be deleted from Radarr                                                       |
-| ALLOW_ENDED_SHOW_DELETING      | false                 | Boolean flag to enable/disable the full Watchlistarr sync for ended shows. If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr                  |
-| ALLOW_CONTINUING_SHOW_DELETING | false                 | Boolean flag to enable/disable the full Watchlistarr sync for continuing shows. If enabled, shows that still have planned seasons and are not watchlisted will be deleted from Sonarr               |
-| DELETE_INTERVAL_DAYS           | 7                     | Number of days to wait before deleting content from the arrs (Deleting must be enabled)                                                                                                             |
-| LOG_LEVEL                      | INFO                  | Level of logging, set to DEBUG for more verbose logs, or WARN for less logs                                                                                                                         |
+To enable debug mode in Java, add the following line:
+```
+"-Dlog.level=DEBUG"
+```
 
 ## Plex Pass Alternative
 
