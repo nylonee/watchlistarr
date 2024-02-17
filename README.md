@@ -56,9 +56,6 @@ docker run \
   nylonee/watchlistarr
 ```
 
-This will create a `config.yaml` file with additional configuration,
-modifying this file and then restarting Watchlistarr is the recommended way of configuring additional settings
-
 Docker tag options:
 
 * `latest` - Stable version, follows the Releases
@@ -78,9 +75,6 @@ java "-Dsonarr.apikey=YOUR_API_KEY"\
   -Xmx100m\
   -jar watchlistarr.jar
 ```
-
-This will create a `config.yaml` file with additional configuration,
-modifying this file and then restarting Watchlistarr is the recommended way of configuring additional settings
 
 #### Starting Watchlistarr on Windows startup
 
