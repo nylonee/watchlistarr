@@ -18,8 +18,8 @@ val logbackVersion = "1.4.11"
 val scalamockVersion = "5.2.0"
 val scalatestVersion = "3.2.17"
 val shapelessVersion = "2.3.10"
-val slf4jVersion = "2.0.9"
-val snakeYamlVersion = "2.0"
+val slf4jVersion = "2.0.12"
+val snakeYamlVersion = "2.2"
 val vaultVersion = "3.5.0"
 
 libraryDependencies ++= Seq(
@@ -51,6 +51,7 @@ enablePlugins(JavaAppPackaging)
 
 ThisBuild / assemblyMergeStrategy := {
   case "module-info.class" => MergeStrategy.discard
+  case PathList("META-INF", _*) => MergeStrategy.discard
   case x =>
     val oldStrategy = (ThisBuild / assemblyMergeStrategy).value
     oldStrategy(x)
