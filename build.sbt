@@ -51,6 +51,7 @@ enablePlugins(JavaAppPackaging)
 
 ThisBuild / assemblyMergeStrategy := {
   case "module-info.class" => MergeStrategy.discard
+  case PathList("META-INF", _*) => MergeStrategy.discard
   case x =>
     val oldStrategy = (ThisBuild / assemblyMergeStrategy).value
     oldStrategy(x)
