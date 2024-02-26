@@ -91,6 +91,24 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     result.head shouldBe Item("The Test", List("imdb://tt11347692", "tmdb://95837", "tvdb://372848"), "show")
   }
 
+
+  it should "successfully fetch an empty watchlist using the plex token" in {
+    val mockClient = mock[HttpClient]
+    val config = createConfiguration(Set("test-token"))
+    (mockClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all?X-Plex-Token=test-token&X-Plex-Container-Start=0&X-Plex-Container-Size=300"),
+      None,
+      None
+    ).returning(IO.pure(parse(Source.fromResource("empty-watchlist-from-token.json").getLines().mkString("\n")))).once()
+
+    val eitherResult = getSelfWatchlist(config, mockClient).value.unsafeRunSync()
+
+    eitherResult shouldBe a[Right[_, _]]
+    val result = eitherResult.getOrElse(Set.empty[Item])
+    result.size shouldBe 0
+  }
+
   it should "fetch the healthy part of a watchlist using the plex token" in {
     val mockClient = mock[HttpClient]
     val config = createConfiguration(Set("test-token"))
