@@ -11,7 +11,6 @@ import org.http4s.{Method, Uri}
 import org.slf4j.LoggerFactory
 import plex.RssFeedGenerated
 
-import scala.annotation.tailrec
 import scala.concurrent.duration._
 
 object ConfigurationUtils {
