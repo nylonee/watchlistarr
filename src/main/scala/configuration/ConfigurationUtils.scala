@@ -109,7 +109,10 @@ object ConfigurationUtils {
   private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int, Set[Int])] = {
     val apiKey = configReader.getConfigOption(Keys.sonarrApiKey).getOrElse(throwError("Unable to find sonarr API key"))
     val configuredUrl = configReader.getConfigOption(Keys.sonarrBaseUrl)
-    val possibleUrls: Seq[String] = configuredUrl.map("http://" + _).toSeq ++ configuredUrl.toSeq ++ possibleLocalHosts.map(_ + ":8989")
+    val possibleUrls: Seq[String] =
+      configuredUrl.map("http://" + _).toSeq ++
+        configuredUrl.toSeq ++
+        (possibleLocalHosts ++ "http://sonarr").map(_ + ":8989")
 
     for {
       url <- findCorrectUrl(client)(possibleUrls, apiKey)
@@ -146,7 +149,10 @@ object ConfigurationUtils {
   private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Set[Int])] = {
     val apiKey = configReader.getConfigOption(Keys.radarrApiKey).getOrElse(throwError("Unable to find radarr API key"))
     val configuredUrl = configReader.getConfigOption(Keys.radarrBaseUrl)
-    val possibleUrls: Seq[String] = configuredUrl.map("http://" + _).toSeq ++ configuredUrl.toSeq ++ possibleLocalHosts.map(_ + ":7878")
+    val possibleUrls: Seq[String] =
+      configuredUrl.map("http://" + _).toSeq ++
+        configuredUrl.toSeq ++
+        (possibleLocalHosts ++ "http://radarr").map(_ + ":8989")
 
     for {
       url <- findCorrectUrl(client)(possibleUrls, apiKey)
