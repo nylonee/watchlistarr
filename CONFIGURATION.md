@@ -46,6 +46,14 @@ docker run \
 The recommended way to configure Watchlistarr is to use a config file.
 If you have volume concerns, then use the Environment Variable alternative
 
+The order that Watchlistarr loads configuration is:
+```
+Default configuration (built-in)
+Overridden by Environment variables/properties
+Overridden by config.yaml
+```
+So the config.yaml file takes precedence over anything else set elsewhere.
+
 #### Config.yaml file configuration (Recommended)
 In order to use the config.yaml configuration, you will need to add a new line to your docker command:
 ```bash
@@ -168,7 +176,15 @@ Note: Different versions of Java and console and Operating Systems read the prop
 ### Configuring the Java application
 Note: The Watchlistarr Java application does not read Environment Variables
 
-Similar to Docker, there are two ways to configure the Java application. The recommended way is to use the config.yaml file (there should be one generated in the same directory as your watchlistarr.jar after your first run). For more details on how to use this config.yaml file, read the `Config.yaml file configuration` section above.
+Similar to Docker, there are two ways to configure the Java application.
+
+#### Configuring config.yaml in Java
+The recommended way is to use the config.yaml file (there should be one generated in the same directory as your watchlistarr.jar after your first run). For more details on how to use this config.yaml file, read the `Config.yaml file configuration` section above.
+
+If you'd like to provide a `config.yaml` file from a different location than the local directory, you can provide the location using `configPath`. For example:
+```bash
+java "-DconfigPath=config/config.yaml" -Xmx100m -jar watchlistarr.jar
+```
 
 #### Providing Java properties directly
 The second way to configure a Java application is to provide properties directly.

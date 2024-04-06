@@ -14,8 +14,7 @@ object FileAndSystemPropertyReader extends ConfigurationReader {
 
   private lazy val data: Map[String, String] = {
     val yaml = new Yaml()
-    val configDirPath = "config"
-    val configFile = new File(s"$configDirPath/config.yaml")
+    val configFile = new File(SystemPropertyReader.getConfigOption("configPath").getOrElse(s"config/config.yaml"))
 
     try {
       // Ensure parent config folder exists
