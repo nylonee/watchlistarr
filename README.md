@@ -26,7 +26,7 @@ Watchlistarr also supports a full delete sync with your watchlist. This means th
 a user
 removes an item off their watchlist, Watchlistarr can detect that and delete content from Sonarr/Radarr.**
 
-This feature is disabled by default, refer to the Environment Variables below to see the config required to enable it.
+Note: This feature is disabled by default, refer to the Environment Variables below to see the config required to enable it.
 Whether you've enabled this or not, you can enjoy a little "sneak peek"
 upon startup of the app, where the logs will list the movies/tv shows that are out of sync.
 
@@ -42,69 +42,7 @@ upon startup of the app, where the logs will list the movies/tv shows that are o
 * Plex Token (see [here](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))
 
 ## Getting Started
-
-### Docker
-
-The easiest way to try this code is using docker:
-
-```bash
-docker run \
-  -e SONARR_API_KEY=YOUR_API_KEY \
-  -e RADARR_API_KEY=YOUR_API_KEY \
-  -e PLEX_TOKEN=YOUR_PLEX_TOKEN \
-  -v config:/app/config \
-  nylonee/watchlistarr
-```
-
-Docker tag options:
-
-* `latest` - Stable version, follows the Releases
-* `beta` - Beta version, follows the main branch
-* `alpha` - Experimental version, follows the latest successful PR build
-
-### Java
-
-#### Running the Java command
-
-Running this using native java requires the fat jar, download the latest from the Releases tab, and run:
-
-```bash
-java "-Dsonarr.apikey=YOUR_API_KEY"\
-  "-Dradarr.apikey=YOUR_API_KEY"\
-  "-Dplex.token=YOUR_PLEX_TOKEN"\
-  -Xmx100m\
-  -jar watchlistarr.jar
-```
-
-#### Starting Watchlistarr on Windows startup
-
-Once you confirm that this command works, you may want to set up a script to auto-run this on startup of Windows. This
-can be done using a .bat file with the following contents:
-
-```
-@ECHO OFF
-java -Dsonarr.apikey=YOUR_API_KEY -Dradarr.apikey=YOUR_API_KEY -Dplex.token=YOUR_PLEX_TOKEN -Xmx100m -jar watchlistarr.jar
-```
-
-Save this file in the same directory as the .jar file, then create a shortcut to this .bat file and place it in the
-Windows startup folder. In the properties of the shortcut, set it to start minimized (Thanks Redditor u/DanCBooper for
-tip)
-
-### Configuration
-
-Running Watchlistarr successfully for the first time will generate a `config.yaml` file with additional configuration.
-Modify this file to your heart's desire, then restart Watchlistarr
-
-#### Enabling debug mode
-Sometimes, you'll need more information from the app. To enable debug mode in Docker, add the following line to your command:
-```
--e LOG_LEVEL=DEBUG
-```
-
-To enable debug mode in Java, add the following line:
-```
-"-Dlog.level=DEBUG"
-```
+See [Configuration](CONFIGURATION.md) for steps on getting started and configuring Watchlistarr
 
 ## Plex Pass Alternative
 

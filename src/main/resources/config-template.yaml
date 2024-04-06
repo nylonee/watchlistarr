@@ -15,7 +15,7 @@
 #################################################################
 
 #sonarr:
-#  baseUrl: "127.0.0.1:8989" # Base URL for Sonarr, including the 'http' and port and any configured urlbase. DEFAULT: "127.0.0.1:8989"
+#  baseUrl: "127.0.0.1:8989" # Base URL for Sonarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:8989"
 #  apikey: "YOUR-API-KEY" # API key for Sonarr, found in your Sonarr UI -> General settings
 #  qualityProfile: "Your Desired Sonarr Quality Profile" # If not set, will grab the first one it finds on Sonarr
 #  rootFolder: "/root/folder/location" # Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr
@@ -30,7 +30,7 @@
 #################################################################
 
 #radarr:
-#  baseUrl: "127.0.0.1:7878" # Base URL for Radarr, including the 'http' and port and any configured urlbase. DEFAULT: "127.0.0.1:7878"
+#  baseUrl: "127.0.0.1:7878" # Base URL for Radarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:7878"
 #  apikey: "YOUR-API-KEY"
 #  qualityProfile: "Your Desired Radarr Quality Profile" # If not set, will grab the first one it finds on Radarr
 #  rootFolder: "/root/folder/location" # If not set, will grab the first one it finds on Radarr. DEFAULT: false

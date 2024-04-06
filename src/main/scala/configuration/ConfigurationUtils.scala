@@ -17,6 +17,14 @@ object ConfigurationUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
+  private val possibleLocalHosts: Seq[String] = Seq(
+    "http://localhost",
+    "localhost",
+    "127.0.0.1",
+    "http://host.docker.internal",
+    "host.docker.internal"
+  )
+
   def create(configReader: ConfigurationReader, client: HttpClient): IO[Configuration] = {
     val config = for {
       sonarrConfig <- getSonarrConfig(configReader, client)
@@ -75,15 +83,34 @@ object ConfigurationUtils {
     }
   }
 
-  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int, Set[Int])] = {
-    val url = configReader.getConfigOption(Keys.sonarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
-      val default = "http://localhost:8989"
-      logger.warn(s"Unable to fetch sonarr baseUrl, using default $default")
-      Uri.unsafeFromString(default)
+  private def findCorrectUrl(client: HttpClient)(urls: Seq[String], apiKey: String): IO[Uri] =
+    urls match {
+      case Seq(url) =>
+        // We've reached the end of the list, let's skip the check and just pretend this is the good one
+        // We'll error later if it isn't
+        IO.pure(Uri.unsafeFromString(url))
+      case head :: tail =>
+        val url = Uri.unsafeFromString(head)
+        val maybeResponse = toArr(client)(url, apiKey, "health")
+
+        maybeResponse.flatMap {
+          case Right(_) =>
+            IO.pure(url)
+          case Left(_) =>
+            findCorrectUrl(client)(tail, apiKey)
+        }
     }
+
+  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int, Set[Int])] = {
     val apiKey = configReader.getConfigOption(Keys.sonarrApiKey).getOrElse(throwError("Unable to find sonarr API key"))
+    val ioUrl = configReader.getConfigOption(Keys.sonarrBaseUrl).flatMap(Uri.fromString(_).toOption).map(IO.pure).getOrElse {
+      val defaults = possibleLocalHosts.map(_ + ":8989")
+      logger.warn(s"Unable to fetch sonarr baseUrl, trying common hosts with port 8989")
+      findCorrectUrl(client)(defaults, apiKey)
+    }
 
     for {
+      url <- ioUrl
       rootFolder <- toArr(client)(url, apiKey, "rootFolder").map {
         case Right(res) =>
           logger.info("Successfully connected to Sonarr")
@@ -115,14 +142,15 @@ object ConfigurationUtils {
   }
 
   private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Set[Int])] = {
-    val url = configReader.getConfigOption(Keys.radarrBaseUrl).flatMap(Uri.fromString(_).toOption).getOrElse {
-      val default = "http://localhost:7878"
-      logger.warn(s"Unable to fetch radarr baseUrl, using default $default")
-      Uri.unsafeFromString(default)
-    }
     val apiKey = configReader.getConfigOption(Keys.radarrApiKey).getOrElse(throwError("Unable to find radarr API key"))
+    val ioUrl = configReader.getConfigOption(Keys.radarrBaseUrl).flatMap(Uri.fromString(_).toOption).map(IO.pure).getOrElse {
+      val defaults = possibleLocalHosts.map(_ + ":7878")
+      logger.warn(s"Unable to fetch radarr baseUrl, trying common hosts with port 7878")
+      findCorrectUrl(client)(defaults, apiKey)
+    }
 
     for {
+      url <- ioUrl
       rootFolder <- toArr(client)(url, apiKey, "rootFolder").map {
         case Right(res) =>
           logger.info("Successfully connected to Radarr")
