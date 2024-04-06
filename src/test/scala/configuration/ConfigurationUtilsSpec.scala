@@ -201,7 +201,18 @@ class ConfigurationUtilsSpec extends AnyFlatSpec with Matchers with MockFactory 
 
   private def createMockHttpClient(): HttpClient = {
     val mockHttpClient = mock[HttpClient]
-
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/health")),
+      Some("sonarr-api-key"),
+      None
+    ).returning(IO.pure(Right(Json.Null))).anyNumberOfTimes()
+    (mockHttpClient.httpRequest _).expects(
+      Method.GET,
+      Uri.unsafeFromString("http://localhost:7878").withPath(Uri.Path.unsafeFromString("/api/v3/health")),
+      Some("radarr-api-key"),
+      None
+    ).returning(IO.pure(Right(Json.Null))).anyNumberOfTimes()
     (mockHttpClient.httpRequest _).expects(
       Method.GET,
       Uri.unsafeFromString("http://localhost:8989").withPath(Uri.Path.unsafeFromString("/api/v3/qualityprofile")),
