@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build the Docker image
-        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG}
+        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG} --label=VERSION=${DOCKER_TAG}
       - name: Push Docker image
         run: |
           docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:latest
