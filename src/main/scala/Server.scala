@@ -1,8 +1,11 @@
 
 import cats.effect._
-import cats.implicits.catsSyntaxTuple3Parallel
-import configuration.{Configuration, ConfigurationUtils, FileAndSystemPropertyReader, SystemPropertyReader}
+import cats.implicits.catsSyntaxTuple4Parallel
+import com.comcast.ip4s.IpLiteralSyntax
+import configuration.{Configuration, ConfigurationUtils, FileAndSystemPropertyReader}
 import http.HttpClient
+import org.http4s.ember.server.EmberServerBuilder
+import org.http4s.server.middleware.CORS
 import org.slf4j.LoggerFactory
 
 import java.nio.channels.ClosedChannelException
@@ -25,12 +28,21 @@ object Server extends IOApp {
       initialConfig <- ConfigurationUtils.create(configReader, httpClient)
       configRef <- Ref.of[IO, Configuration](initialConfig)
       result <- (
+        server(configRef, httpClient),
         pingTokenSync(configRef, httpClient),
         plexTokenSync(configRef, httpClient),
         plexTokenDeleteSync(configRef, httpClient)
       ).parTupled.as(ExitCode.Success)
     } yield result
   }
+
+  private def server(configRef: Ref[IO, Configuration], client: HttpClient) = EmberServerBuilder
+    .default[IO]
+    .withHost(ipv4"0.0.0.0")
+    .withPort(port"3434")
+    .withHttpApp(CORS(Routes.service(configRef, client).orNotFound))
+    .build
+    .use(_ => IO.never)
 
   private def fetchLatestConfig(configRef: Ref[IO, Configuration]): IO[Configuration] =
     configRef.get
