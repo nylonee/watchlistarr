@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN sbt update compile stage
+RUN chmod a+rx /app/target/universal/stage/bin/*
 
 FROM openjdk:11-jre-slim
 
