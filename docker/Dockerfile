@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN sbt update compile stage
+RUN chmod a+rx /app/target/universal/stage/bin/*
 
 FROM openjdk:11-jre-slim
 
@@ -12,7 +13,7 @@ WORKDIR /app
 
 COPY --from=build /app/target/universal/stage /app
 
-COPY docker/entrypoint.sh /app/entrypoint.sh
-RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
+COPY --chmod=755 docker/entrypoint.sh /app/entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
