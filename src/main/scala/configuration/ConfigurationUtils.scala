@@ -29,20 +29,24 @@ object ConfigurationUtils {
     val config = for {
       sonarrConfig <- getSonarrConfig(configReader, client)
       refreshInterval = configReader.getConfigOption(Keys.intervalSeconds).flatMap(_.toIntOption).getOrElse(60).seconds
-      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder, sonarrLanguageProfileId, sonarrTagIds) = sonarrConfig
-      sonarrBypassIgnored = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
+      (sonarrBaseUrl, sonarrApiKey, sonarrQualityProfileId, sonarrRootFolder, sonarrLanguageProfileId, sonarrTagIds) =
+        sonarrConfig
+      sonarrBypassIgnored    = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
       sonarrSeasonMonitoring = configReader.getConfigOption(Keys.sonarrSeasonMonitoring).getOrElse("all")
       radarrConfig <- getRadarrConfig(configReader, client)
       (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder, radarrTagIds) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
-      plexTokens = getPlexTokens(configReader)
+      plexTokens          = getPlexTokens(configReader)
       skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
       plexWatchlistUrls <- getPlexWatchlistUrls(client)(configReader, plexTokens, skipFriendSync)
-      deleteMovies = configReader.getConfigOption(Keys.deleteMovies).flatMap(_.toBooleanOption).getOrElse(false)
+      deleteMovies     = configReader.getConfigOption(Keys.deleteMovies).flatMap(_.toBooleanOption).getOrElse(false)
       deleteEndedShows = configReader.getConfigOption(Keys.deleteEndedShow).flatMap(_.toBooleanOption).getOrElse(false)
-      deleteContinuingShows = configReader.getConfigOption(Keys.deleteContinuingShow).flatMap(_.toBooleanOption).getOrElse(false)
+      deleteContinuingShows = configReader
+        .getConfigOption(Keys.deleteContinuingShow)
+        .flatMap(_.toBooleanOption)
+        .getOrElse(false)
       deleteInterval = configReader.getConfigOption(Keys.deleteIntervalDays).flatMap(_.toIntOption).getOrElse(7).days
-      hasPlexPass = plexWatchlistUrls.nonEmpty
+      hasPlexPass    = plexWatchlistUrls.nonEmpty
     } yield Configuration(
       if (hasPlexPass) refreshInterval else 19.minutes,
       SonarrConfiguration(
@@ -106,10 +110,14 @@ object ConfigurationUtils {
         }
     }
 
-  private def getSonarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Int, Set[Int])] = {
+  private def getSonarrConfig(
+      configReader: ConfigurationReader,
+      client: HttpClient
+  ): IO[(Uri, String, Int, String, Int, Set[Int])] = {
     val apiKey = configReader.getConfigOption(Keys.sonarrApiKey).getOrElse(throwError("Unable to find sonarr API key"))
     val configuredUrl = configReader.getConfigOption(Keys.sonarrBaseUrl)
-    val possibleUrls: Seq[String] = configuredUrl.map("http://" + _).toSeq ++ configuredUrl.toSeq ++ possibleLocalHosts.map(_ + ":8989")
+    val possibleUrls: Seq[String] =
+      configuredUrl.map("http://" + _).toSeq ++ configuredUrl.toSeq ++ possibleLocalHosts.map(_ + ":8989")
 
     for {
       url <- findCorrectUrl(client)(possibleUrls, apiKey)
@@ -123,7 +131,7 @@ object ConfigurationUtils {
       }
       qualityProfileId <- toArr(client)(url, apiKey, "qualityprofile").map {
         case Right(res) =>
-          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+          val allQualityProfiles   = res.as[List[QualityProfile]].getOrElse(List.empty)
           val chosenQualityProfile = configReader.getConfigOption(Keys.sonarrQualityProfile)
           getQualityProfileId(allQualityProfiles, chosenQualityProfile)
         case Left(err) =>
@@ -139,14 +147,21 @@ object ConfigurationUtils {
         case Left(err) =>
           throwError(s"Unable to connect to Sonarr at $url, with error $err")
       }
-      tagIds <- configReader.getConfigOption(Keys.sonarrTags).map(getTagIdsFromConfig(client, url, apiKey)).getOrElse(IO.pure(Set.empty[Int]))
+      tagIds <- configReader
+        .getConfigOption(Keys.sonarrTags)
+        .map(getTagIdsFromConfig(client, url, apiKey))
+        .getOrElse(IO.pure(Set.empty[Int]))
     } yield (url, apiKey, qualityProfileId, rootFolder, languageProfileId, tagIds)
   }
 
-  private def getRadarrConfig(configReader: ConfigurationReader, client: HttpClient): IO[(Uri, String, Int, String, Set[Int])] = {
+  private def getRadarrConfig(
+      configReader: ConfigurationReader,
+      client: HttpClient
+  ): IO[(Uri, String, Int, String, Set[Int])] = {
     val apiKey = configReader.getConfigOption(Keys.radarrApiKey).getOrElse(throwError("Unable to find radarr API key"))
     val configuredUrl = configReader.getConfigOption(Keys.radarrBaseUrl)
-    val possibleUrls: Seq[String] = configuredUrl.map("http://" + _).toSeq ++ configuredUrl.toSeq ++ possibleLocalHosts.map(_ + ":7878")
+    val possibleUrls: Seq[String] =
+      configuredUrl.map("http://" + _).toSeq ++ configuredUrl.toSeq ++ possibleLocalHosts.map(_ + ":7878")
 
     for {
       url <- findCorrectUrl(client)(possibleUrls, apiKey)
@@ -160,32 +175,40 @@ object ConfigurationUtils {
       }
       qualityProfileId <- toArr(client)(url, apiKey, "qualityprofile").map {
         case Right(res) =>
-          val allQualityProfiles = res.as[List[QualityProfile]].getOrElse(List.empty)
+          val allQualityProfiles   = res.as[List[QualityProfile]].getOrElse(List.empty)
           val chosenQualityProfile = configReader.getConfigOption(Keys.radarrQualityProfile)
           getQualityProfileId(allQualityProfiles, chosenQualityProfile)
         case Left(err) =>
           throwError(s"Unable to connect to Radarr at $url, with error $err")
       }
-      tagIds <- configReader.getConfigOption(Keys.radarrTags).map(getTagIdsFromConfig(client, url, apiKey)).getOrElse(IO.pure(Set.empty[Int]))
+      tagIds <- configReader
+        .getConfigOption(Keys.radarrTags)
+        .map(getTagIdsFromConfig(client, url, apiKey))
+        .getOrElse(IO.pure(Set.empty[Int]))
     } yield (url, apiKey, qualityProfileId, rootFolder, tagIds)
   }
 
   private def getTagIdsFromConfig(client: HttpClient, url: Uri, apiKey: String)(tags: String): IO[Set[Int]] = {
     val tagsSplit = tags.split(',').map(_.trim).toSet
 
-    tagsSplit.map { tagName =>
-      val json = Json.obj(("label", Json.fromString(tagName.toLowerCase)))
-      logger.info(s"Fetching information for tag: $tagName")
-      toArr(client)(url, apiKey, "tag", Some(json)).map {
-        case Left(err) =>
-          logger.warn(s"Attempted to set a tag in an Arr app but got the error: $err")
-          None
-        case Right(result) =>
-          result.hcursor.get[Int]("id").toOption
+    tagsSplit
+      .map { tagName =>
+        val json = Json.obj(("label", Json.fromString(tagName.toLowerCase)))
+        logger.info(s"Fetching information for tag: $tagName")
+        toArr(client)(url, apiKey, "tag", Some(json)).map {
+          case Left(err) =>
+            logger.warn(s"Attempted to set a tag in an Arr app but got the error: $err")
+            None
+          case Right(result) =>
+            result.hcursor.get[Int]("id").toOption
+        }
       }
-    }.toList.sequence.map(_.collect {
-      case Some(r) => r
-    }).map(_.toSet)
+      .toList
+      .sequence
+      .map(_.collect { case Some(r) =>
+        r
+      })
+      .map(_.toSet)
   }
 
   private def getQualityProfileId(allProfiles: List[QualityProfile], maybeEnvVariable: Option[String]): Int =
@@ -199,9 +222,12 @@ object ConfigurationUtils {
         logger.debug("Multiple quality profiles found, selecting the first one in the list.")
         allProfiles.head.id
       case (_, Some(profileName)) =>
-        allProfiles.find(_.name.toLowerCase == profileName.toLowerCase).map(_.id).getOrElse(
-          throwError(s"Unable to find quality profile $profileName. Possible values are $allProfiles")
-        )
+        allProfiles
+          .find(_.name.toLowerCase == profileName.toLowerCase)
+          .map(_.id)
+          .getOrElse(
+            throwError(s"Unable to find quality profile $profileName. Possible values are $allProfiles")
+          )
     }
 
   private def selectRootFolder(allRootFolders: List[RootFolder], maybeEnvVariable: Option[String]): String =
@@ -209,41 +235,57 @@ object ConfigurationUtils {
       case (Nil, _) =>
         throwError("Could not find any root folders, check your Sonarr/Radarr settings")
       case (_, Some(path)) =>
-        allRootFolders.filter(_.accessible).find(r => normalizePath(r.path) == normalizePath(path)).map(_.path).getOrElse(
-          throwError(s"Unable to find root folder $path. Possible values are ${allRootFolders.filter(_.accessible).map(_.path)}")
-        )
+        allRootFolders
+          .filter(_.accessible)
+          .find(r => normalizePath(r.path) == normalizePath(path))
+          .map(_.path)
+          .getOrElse(
+            throwError(
+              s"Unable to find root folder $path. Possible values are ${allRootFolders.filter(_.accessible).map(_.path)}"
+            )
+          )
       case (_, None) =>
-        allRootFolders.find(_.accessible).map(_.path).getOrElse(
-          throwError("Found root folders, but they are not accessible by Sonarr/Radarr")
-        )
+        allRootFolders
+          .find(_.accessible)
+          .map(_.path)
+          .getOrElse(
+            throwError("Found root folders, but they are not accessible by Sonarr/Radarr")
+          )
     }
 
   private def normalizePath(path: String): String =
     (if (path.endsWith("/") && path.length > 1) path.dropRight(1) else path)
       .replace("//", "/")
 
-  private def getPlexWatchlistUrls(client: HttpClient)(configReader: ConfigurationReader, tokens: Set[String], skipFriendSync: Boolean): IO[Set[Uri]] = {
+  private def getPlexWatchlistUrls(
+      client: HttpClient
+  )(configReader: ConfigurationReader, tokens: Set[String], skipFriendSync: Boolean): IO[Set[Uri]] = {
     val watchlistsFromConfigDeprecated = Set(
       configReader.getConfigOption(Keys.plexWatchlist1),
       configReader.getConfigOption(Keys.plexWatchlist2)
-    ).collect {
-      case Some(url) => url
+    ).collect { case Some(url) =>
+      url
     }
 
-    val watchlistsFromTokenIo = tokens.map { token =>
-      for {
-        selfWatchlist <- getRssFromPlexToken(client)(token, "watchlist")
-        _ = logger.info(s"Generated watchlist RSS feed for self: $selfWatchlist")
-        otherWatchlist <- if (skipFriendSync)
-          IO.pure(None)
-        else {
-          getRssFromPlexToken(client)(token, "friendsWatchlist")
+    val watchlistsFromTokenIo = tokens
+      .map { token =>
+        for {
+          selfWatchlist <- getRssFromPlexToken(client)(token, "watchlist")
+          _ = logger.info(s"Generated watchlist RSS feed for self: $selfWatchlist")
+          otherWatchlist <-
+            if (skipFriendSync)
+              IO.pure(None)
+            else {
+              getRssFromPlexToken(client)(token, "friendsWatchlist")
+            }
+          _ = logger.info(s"Generated watchlist RSS feed for friends: $otherWatchlist")
+        } yield Set(selfWatchlist, otherWatchlist).collect { case Some(url) =>
+          url
         }
-        _ = logger.info(s"Generated watchlist RSS feed for friends: $otherWatchlist")
-      } yield Set(selfWatchlist, otherWatchlist).collect {
-        case Some(url) => url
       }
-    }.toList.sequence.map(_.flatten)
+      .toList
+      .sequence
+      .map(_.flatten)
 
     watchlistsFromTokenIo.map { watchlistsFromToken =>
       (watchlistsFromConfigDeprecated ++ watchlistsFromToken).toList match {
@@ -271,9 +313,11 @@ object ConfigurationUtils {
       "rss.plex.tv"
     ).map(Uri.Host.unsafeFromString)
 
-    val rawUri = Uri.fromString(url).getOrElse(
-      throwError(s"Plex watchlist $url is not a valid uri")
-    )
+    val rawUri = Uri
+      .fromString(url)
+      .getOrElse(
+        throwError(s"Plex watchlist $url is not a valid uri")
+      )
 
     val host = rawUri.host.getOrElse(
       throwError(s"Plex watchlist host not found in $rawUri")
@@ -290,7 +334,9 @@ object ConfigurationUtils {
     throw new IllegalArgumentException(message)
   }
 
-  private def toArr(client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String, payload: Option[Json] = None): IO[Either[Throwable, Json]] =
+  private def toArr(
+      client: HttpClient
+  )(baseUrl: Uri, apiKey: String, endpoint: String, payload: Option[Json] = None): IO[Either[Throwable, Json]] =
     payload match {
       case None =>
         client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey))

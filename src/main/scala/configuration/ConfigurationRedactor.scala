@@ -1,7 +1,7 @@
 package configuration
 
 object ConfigurationRedactor {
-  def redactToString(config: Configuration): String = {
+  def redactToString(config: Configuration): String =
     s"""
       |Configuration:
       |  refreshInterval: ${config.refreshInterval.toSeconds} seconds
@@ -36,5 +36,4 @@ object ConfigurationRedactor {
       |    deleteInterval: ${config.deleteConfiguration.deleteInterval.toDays} days
       |
       |""".stripMargin
-  }
 }
