@@ -15,14 +15,17 @@ trait SonarrUtils extends SonarrConversions {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  protected def fetchSeries(client: HttpClient)(apiKey: String, baseUrl: Uri, bypass: Boolean): EitherT[IO, Throwable, Set[Item]] =
+  protected def fetchSeries(
+      client: HttpClient
+  )(apiKey: String, baseUrl: Uri, bypass: Boolean): EitherT[IO, Throwable, Set[Item]] =
     for {
       shows <- getToArr[List[SonarrSeries]](client)(baseUrl, apiKey, "series")
-      exclusions <- if (bypass) {
-        EitherT.pure[IO, Throwable](List.empty[SonarrSeries])
-      } else {
-        getToArr[List[SonarrSeries]](client)(baseUrl, apiKey, "importlistexclusion")
-      }
+      exclusions <-
+        if (bypass) {
+          EitherT.pure[IO, Throwable](List.empty[SonarrSeries])
+        } else {
+          getToArr[List[SonarrSeries]](client)(baseUrl, apiKey, "importlistexclusion")
+        }
     } yield (shows.map(toItem) ++ exclusions.map(toItem)).toSet
 
   protected def addToSonarr(client: HttpClient)(config: SonarrConfiguration)(item: Item): IO[Unit] = {
@@ -50,7 +53,9 @@ trait SonarrUtils extends SonarrConversions {
     }
   }
 
-  protected def deleteFromSonarr(client: HttpClient, config: SonarrConfiguration)(item: Item): EitherT[IO, Throwable, Unit] = {
+  protected def deleteFromSonarr(client: HttpClient, config: SonarrConfiguration)(
+      item: Item
+  ): EitherT[IO, Throwable, Unit] = {
     val showId = item.getSonarrId.getOrElse {
       logger.warn(s"Unable to extract Sonarr ID from show to delete: $item")
       0L
@@ -73,16 +78,22 @@ trait SonarrUtils extends SonarrConversions {
       .map(_ => ())
   }
 
-  private def getToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =
+  private def getToArr[T: Decoder](
+      client: HttpClient
+  )(baseUrl: Uri, apiKey: String, endpoint: String): EitherT[IO, Throwable, T] =
     for {
-      response <- EitherT(client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey)))
+      response     <- EitherT(client.httpRequest(Method.GET, baseUrl / "api" / "v3" / endpoint, Some(apiKey)))
       maybeDecoded <- EitherT.pure[IO, Throwable](response.as[T])
       decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Sonarr"))
     } yield decoded
 
-  private def postToArr[T: Decoder](client: HttpClient)(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] =
+  private def postToArr[T: Decoder](
+      client: HttpClient
+  )(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] =
     for {
-      response <- EitherT(client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), Some(payload)))
+      response <- EitherT(
+        client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), Some(payload))
+      )
       maybeDecoded <- EitherT.pure[IO, Throwable](response.as[T])
       decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Sonarr"))
     } yield decoded

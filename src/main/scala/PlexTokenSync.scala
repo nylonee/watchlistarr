@@ -17,37 +17,54 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
     val runTokenSync = firstRun || !config.plexConfiguration.hasPlexPass
 
     val result = for {
-      selfWatchlist <- if (runTokenSync)
-        getSelfWatchlist(config.plexConfiguration, client)
-      else
-        EitherT.pure[IO, Throwable](Set.empty[Item])
+      selfWatchlist <-
+        if (runTokenSync)
+          getSelfWatchlist(config.plexConfiguration, client)
+        else
+          EitherT.pure[IO, Throwable](Set.empty[Item])
       _ = if (runTokenSync)
         logger.info(s"Found ${selfWatchlist.size} items on user's watchlist using the plex token")
-      othersWatchlist <- if (config.plexConfiguration.skipFriendSync || !runTokenSync)
-        EitherT.pure[IO, Throwable](Set.empty[Item])
-      else
-        getOthersWatchlist(config.plexConfiguration, client)
-      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
+      othersWatchlist <-
+        if (config.plexConfiguration.skipFriendSync || !runTokenSync)
+          EitherT.pure[IO, Throwable](Set.empty[Item])
+        else
+          getOthersWatchlist(config.plexConfiguration, client)
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](
+        config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_))
+      )
       watchlistData = watchlistDatas.flatten.toSet
-      _ = if (runTokenSync) logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
-      movies <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, config.radarrConfiguration.radarrBypassIgnored)
-      series <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, config.sonarrConfiguration.sonarrBypassIgnored)
+      _ = if (runTokenSync)
+        logger.info(s"Found ${othersWatchlist.size} items on other available watchlists using the plex token")
+      movies <- fetchMovies(client)(
+        config.radarrConfiguration.radarrApiKey,
+        config.radarrConfiguration.radarrBaseUrl,
+        config.radarrConfiguration.radarrBypassIgnored
+      )
+      series <- fetchSeries(client)(
+        config.sonarrConfiguration.sonarrApiKey,
+        config.sonarrConfiguration.sonarrBaseUrl,
+        config.sonarrConfiguration.sonarrBypassIgnored
+      )
       allIds = movies ++ series
       _ <- missingIds(client)(config)(allIds, selfWatchlist ++ othersWatchlist ++ watchlistData)
     } yield ()
 
-    result.leftMap {
-      err =>
+    result
+      .leftMap { err =>
         logger.warn(s"An error occurred: $err")
         err
-    }.value.map(_.getOrElse(()))
+      }
+      .value
+      .map(_.getOrElse(()))
   }
 
-  private def missingIds(client: HttpClient)(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): EitherT[IO, Throwable, Set[Unit]] = {
+  private def missingIds(
+      client: HttpClient
+  )(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): EitherT[IO, Throwable, Set[Unit]] = {
     for {
       watchlistedItem <- watchlist
       maybeExistingItem = existingItems.exists(_.matches(watchlistedItem))
-      category = watchlistedItem.category
+      category          = watchlistedItem.category
       task = EitherT.fromEither[IO]((maybeExistingItem, category) match {
         case (true, c) =>
           logger.debug(s"$c \"${watchlistedItem.title}\" already exists in Sonarr/Radarr")
@@ -58,7 +75,9 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
             logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr")
             Right(addToSonarr(client)(config.sonarrConfiguration)(watchlistedItem))
           } else {
-            logger.debug(s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr, but we do not have the tvdb ID so will skip adding")
+            logger.debug(
+              s"Found show \"${watchlistedItem.title}\" which does not exist yet in Sonarr, but we do not have the tvdb ID so will skip adding"
+            )
             Right(IO.unit)
           }
         case (false, "movie") =>
@@ -66,7 +85,9 @@ object PlexTokenSync extends PlexUtils with SonarrUtils with RadarrUtils {
             logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr")
             Right(addToRadarr(client)(config.radarrConfiguration)(watchlistedItem))
           } else {
-            logger.debug(s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr, but we do not have the tmdb ID so will skip adding")
+            logger.debug(
+              s"Found movie \"${watchlistedItem.title}\" which does not exist yet in Radarr, but we do not have the tmdb ID so will skip adding"
+            )
             Right(IO.unit)
           }
 

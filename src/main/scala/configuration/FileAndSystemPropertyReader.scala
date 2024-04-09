@@ -13,7 +13,7 @@ object FileAndSystemPropertyReader extends ConfigurationReader {
   private val logger = LoggerFactory.getLogger(getClass)
 
   private lazy val data: Map[String, String] = {
-    val yaml = new Yaml()
+    val yaml       = new Yaml()
     val configFile = new File(SystemPropertyReader.getConfigOption("configPath").getOrElse(s"config/config.yaml"))
 
     try {
@@ -27,9 +27,8 @@ object FileAndSystemPropertyReader extends ConfigurationReader {
           try {
             Files.copy(resourceStream, Paths.get(configFile.toURI), StandardCopyOption.REPLACE_EXISTING)
             logger.info(s"Created config file in ${configFile.getPath}")
-          } finally {
+          } finally
             resourceStream.close()
-          }
         } else {
           logger.debug("config-template.yaml resource not found")
         }
@@ -37,7 +36,7 @@ object FileAndSystemPropertyReader extends ConfigurationReader {
 
       if (configFile.exists()) {
         val inputStream = new FileInputStream(configFile)
-        val result = yaml.load[util.Map[String, Object]](inputStream).asScala
+        val result      = yaml.load[util.Map[String, Object]](inputStream).asScala
         inputStream.close()
         flattenYaml(Map.from(result))
       } else {

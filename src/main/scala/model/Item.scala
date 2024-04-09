@@ -15,8 +15,8 @@ case class Item(title: String, guids: List[String], category: String, ended: Opt
 
   def matches(that: Any): Boolean = that match {
     case Item(_, theirGuids, c, _) if c == this.category =>
-      theirGuids.foldLeft(false) {
-        case (acc, guid) => acc || guids.contains(guid)
+      theirGuids.foldLeft(false) { case (acc, guid) =>
+        acc || guids.contains(guid)
       }
     case _ => false
   }

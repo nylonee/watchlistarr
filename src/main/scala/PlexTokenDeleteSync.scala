@@ -16,23 +16,39 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
   def run(config: Configuration, client: HttpClient): IO[Unit] = {
     val result = for {
       selfWatchlist <- getSelfWatchlist(config.plexConfiguration, client)
-      othersWatchlist <- if (config.plexConfiguration.skipFriendSync) EitherT.pure[IO, Throwable](Set.empty[Item]) else getOthersWatchlist(config.plexConfiguration, client)
-      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_)))
+      othersWatchlist <-
+        if (config.plexConfiguration.skipFriendSync) EitherT.pure[IO, Throwable](Set.empty[Item])
+        else getOthersWatchlist(config.plexConfiguration, client)
+      watchlistDatas <- EitherT[IO, Throwable, List[Set[Item]]](
+        config.plexConfiguration.plexWatchlistUrls.map(fetchWatchlistFromRss(client)).toList.sequence.map(Right(_))
+      )
       watchlistData = watchlistDatas.flatten.toSet
-      moviesWithoutExclusions <- fetchMovies(client)(config.radarrConfiguration.radarrApiKey, config.radarrConfiguration.radarrBaseUrl, bypass = true)
-      seriesWithoutExclusions <- fetchSeries(client)(config.sonarrConfiguration.sonarrApiKey, config.sonarrConfiguration.sonarrBaseUrl, bypass = true)
+      moviesWithoutExclusions <- fetchMovies(client)(
+        config.radarrConfiguration.radarrApiKey,
+        config.radarrConfiguration.radarrBaseUrl,
+        bypass = true
+      )
+      seriesWithoutExclusions <- fetchSeries(client)(
+        config.sonarrConfiguration.sonarrApiKey,
+        config.sonarrConfiguration.sonarrBaseUrl,
+        bypass = true
+      )
       allIdsWithoutExclusions = moviesWithoutExclusions ++ seriesWithoutExclusions
       _ <- missingIdsOnPlex(client)(config)(allIdsWithoutExclusions, selfWatchlist ++ othersWatchlist ++ watchlistData)
     } yield ()
 
-    result.leftMap {
-      err =>
+    result
+      .leftMap { err =>
         logger.warn(s"An error occurred: $err")
         err
-    }.value.map(_.getOrElse(()))
+      }
+      .value
+      .map(_.getOrElse(()))
   }
 
-  private def missingIdsOnPlex(client: HttpClient)(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): EitherT[IO, Throwable, Set[Unit]] = {
+  private def missingIdsOnPlex(
+      client: HttpClient
+  )(config: Configuration)(existingItems: Set[Item], watchlist: Set[Item]): EitherT[IO, Throwable, Set[Unit]] = {
     for {
       item <- existingItems
       maybeExistingItem = watchlist.exists(_.matches(item))
@@ -53,13 +69,13 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private def deleteMovie(client: HttpClient, config: Configuration)(movie: Item): EitherT[IO, Throwable, Unit] =
     if (config.deleteConfiguration.movieDeleting) {
-        deleteFromRadarr(client, config.radarrConfiguration)(movie)
+      deleteFromRadarr(client, config.radarrConfiguration)(movie)
     } else {
       logger.info(s"Found movie \"${movie.title}\" which is not watchlisted on Plex")
       EitherT.pure[IO, Throwable](())
     }
 
-  private def deleteSeries(client: HttpClient, config: Configuration)(show: Item): EitherT[IO, Throwable, Unit] = {
+  private def deleteSeries(client: HttpClient, config: Configuration)(show: Item): EitherT[IO, Throwable, Unit] =
     if (show.ended.contains(true) && config.deleteConfiguration.endedShowDeleting) {
       deleteFromSonarr(client, config.sonarrConfiguration)(show)
     } else if (show.ended.contains(false) && config.deleteConfiguration.continuingShowDeleting) {
@@ -68,6 +84,5 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
       logger.info(s"Found show \"${show.title}\" which is not watchlisted on Plex")
       EitherT[IO, Throwable, Unit](IO.pure(Right(())))
     }
-  }
 
 }

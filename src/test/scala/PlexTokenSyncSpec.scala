@@ -1,5 +1,3 @@
-
-
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import configuration.{Configuration, DeleteConfiguration, PlexConfiguration, RadarrConfiguration, SonarrConfiguration}
@@ -20,7 +18,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
   "PlexTokenSync.run" should "do a single sync with all required fields provided" in {
 
     val mockHttpClient = mock[HttpClient]
-    val config = createConfiguration(plexTokens = Set("plex-token"))
+    val config         = createConfiguration(plexTokens = Set("plex-token"))
     defaultPlexMock(mockHttpClient)
     defaultRadarrMock(mockHttpClient)
     defaultSonarrMock(mockHttpClient)
@@ -31,8 +29,8 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
   }
 
   private def createConfiguration(
-                                   plexTokens: Set[String]
-                                 ): Configuration = Configuration(
+      plexTokens: Set[String]
+  ): Configuration = Configuration(
     refreshInterval = 10.seconds,
     SonarrConfiguration(
       sonarrBaseUrl = Uri.unsafeFromString("https://localhost:8989"),
@@ -67,26 +65,40 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
   )
 
   private def defaultPlexMock(httpClient: HttpClient): HttpClient = {
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://metadata.provider.plex.tv/library/sections/watchlist/all?X-Plex-Token=plex-token&X-Plex-Container-Start=0&X-Plex-Container-Size=300"),
-      None,
-      None
-    ).returning(IO.pure(parse(Source.fromResource("self-watchlist-from-token.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d?X-Plex-Token=plex-token"),
-      None,
-      None
-    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/617d3ab142705b2183b1b20b?X-Plex-Token=plex-token"),
-      None,
-      None
-    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
-    val query = GraphQLQuery(
-      """query GetAllFriends {
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString(
+          "https://metadata.provider.plex.tv/library/sections/watchlist/all?X-Plex-Token=plex-token&X-Plex-Container-Start=0&X-Plex-Container-Size=300"
+        ),
+        None,
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("self-watchlist-from-token.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString(
+          "https://discover.provider.plex.tv/library/metadata/5df46a38237002001dce338d?X-Plex-Token=plex-token"
+        ),
+        None,
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString(
+          "https://discover.provider.plex.tv/library/metadata/617d3ab142705b2183b1b20b?X-Plex-Token=plex-token"
+        ),
+        None,
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n"))))
+      .once()
+    val query = GraphQLQuery("""query GetAllFriends {
         |        allFriendsV2 {
         |          user {
         |            id
@@ -94,36 +106,57 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |          }
         |        }
         |      }""".stripMargin)
-    (httpClient.httpRequest _).expects(
-      Method.POST,
-      Uri.unsafeFromString("https://community.plex.tv/api"),
-      Some("plex-token"),
-      Some(query.asJson)
-    ).returning(IO.pure(parse(Source.fromResource("plex-get-all-friends.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.POST,
-      Uri.unsafeFromString("https://community.plex.tv/api"),
-      Some("plex-token"),
-      *
-    ).returning(IO.pure(parse(Source.fromResource("plex-get-watchlist-from-friend.json").getLines().mkString("\n")))).twice()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5d77688b9ab54400214e789b?X-Plex-Token=plex-token"),
-      None,
-      None
-    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5d77688b594b2b001e68f2f0?X-Plex-Token=plex-token"),
-      None,
-      None
-    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).anyNumberOfTimes()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://discover.provider.plex.tv/library/metadata/5d77688b9ab54400214e789b?X-Plex-Token=plex-token"),
-      None,
-      None
-    ).returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n")))).once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.POST,
+        Uri.unsafeFromString("https://community.plex.tv/api"),
+        Some("plex-token"),
+        Some(query.asJson)
+      )
+      .returning(IO.pure(parse(Source.fromResource("plex-get-all-friends.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.POST,
+        Uri.unsafeFromString("https://community.plex.tv/api"),
+        Some("plex-token"),
+        *
+      )
+      .returning(IO.pure(parse(Source.fromResource("plex-get-watchlist-from-friend.json").getLines().mkString("\n"))))
+      .twice()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString(
+          "https://discover.provider.plex.tv/library/metadata/5d77688b9ab54400214e789b?X-Plex-Token=plex-token"
+        ),
+        None,
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString(
+          "https://discover.provider.plex.tv/library/metadata/5d77688b594b2b001e68f2f0?X-Plex-Token=plex-token"
+        ),
+        None,
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n"))))
+      .anyNumberOfTimes()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString(
+          "https://discover.provider.plex.tv/library/metadata/5d77688b9ab54400214e789b?X-Plex-Token=plex-token"
+        ),
+        None,
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("single-item-plex-metadata2.json").getLines().mkString("\n"))))
+      .once()
     httpClient
   }
 
@@ -166,52 +199,73 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
         |    2
         |  ]
         |}""".stripMargin
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
-      Some("radarr-api-key"),
-      None
-    ).returning(IO.pure(parse(Source.fromResource("radarr.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://localhost:7878/api/v3/exclusions"),
-      Some("radarr-api-key"),
-      None
-    ).returning(IO.pure(parse(Source.fromResource("exclusions.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.POST,
-      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
-      Some("radarr-api-key"),
-      parse(movieToAdd).toOption
-    ).returning(IO.pure(parse("{}"))).once()
-    (httpClient.httpRequest _).expects(
-      Method.POST,
-      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
-      Some("radarr-api-key"),
-      parse(movieToAdd2).toOption
-    ).returning(IO.pure(parse("{}"))).once()
-    (httpClient.httpRequest _).expects(
-      Method.POST,
-      Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
-      Some("radarr-api-key"),
-      parse(movieToAdd3).toOption
-    ).returning(IO.pure(parse("{}"))).once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+        Some("radarr-api-key"),
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("radarr.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString("https://localhost:7878/api/v3/exclusions"),
+        Some("radarr-api-key"),
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("exclusions.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.POST,
+        Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+        Some("radarr-api-key"),
+        parse(movieToAdd).toOption
+      )
+      .returning(IO.pure(parse("{}")))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.POST,
+        Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+        Some("radarr-api-key"),
+        parse(movieToAdd2).toOption
+      )
+      .returning(IO.pure(parse("{}")))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.POST,
+        Uri.unsafeFromString("https://localhost:7878/api/v3/movie"),
+        Some("radarr-api-key"),
+        parse(movieToAdd3).toOption
+      )
+      .returning(IO.pure(parse("{}")))
+      .once()
     httpClient
   }
 
   private def defaultSonarrMock(httpClient: HttpClient): HttpClient = {
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://localhost:8989/api/v3/series"),
-      Some("sonarr-api-key"),
-      None
-    ).returning(IO.pure(parse(Source.fromResource("sonarr.json").getLines().mkString("\n")))).once()
-    (httpClient.httpRequest _).expects(
-      Method.GET,
-      Uri.unsafeFromString("https://localhost:8989/api/v3/importlistexclusion"),
-      Some("sonarr-api-key"),
-      None
-    ).returning(IO.pure(parse(Source.fromResource("importlistexclusion.json").getLines().mkString("\n")))).once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString("https://localhost:8989/api/v3/series"),
+        Some("sonarr-api-key"),
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("sonarr.json").getLines().mkString("\n"))))
+      .once()
+    (httpClient.httpRequest _)
+      .expects(
+        Method.GET,
+        Uri.unsafeFromString("https://localhost:8989/api/v3/importlistexclusion"),
+        Some("sonarr-api-key"),
+        None
+      )
+      .returning(IO.pure(parse(Source.fromResource("importlistexclusion.json").getLines().mkString("\n"))))
+      .once()
     httpClient
   }
 
