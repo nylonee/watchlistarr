@@ -33,19 +33,23 @@ trait PlexUtils {
     }
 
   protected def ping(client: HttpClient)(config: PlexConfiguration): IO[Unit] =
-    config.plexTokens.map { token =>
-      val url = Uri
-        .unsafeFromString("https://plex.tv/api/v2/ping")
-        .withQueryParam("X-Plex-Token", token)
-        .withQueryParam("X-Plex-Client-Identifier", "watchlistarr")
+    config.plexTokens
+      .map { token =>
+        val url = Uri
+          .unsafeFromString("https://plex.tv/api/v2/ping")
+          .withQueryParam("X-Plex-Token", token)
+          .withQueryParam("X-Plex-Client-Identifier", "watchlistarr")
 
-      client.httpRequest(Method.GET, url).map {
-        case Right(_) =>
-          logger.info(s"Pinged plex.tv to update access token expiry")
-        case Left(err) =>
-          logger.warn(s"Unable to ping plex.tv to update access token expiry: $err")
+        client.httpRequest(Method.GET, url).map {
+          case Right(_) =>
+            logger.info(s"Pinged plex.tv to update access token expiry")
+          case Left(err) =>
+            logger.warn(s"Unable to ping plex.tv to update access token expiry: $err")
+        }
       }
-    }.toList.sequence.map(_ => ())
+      .toList
+      .sequence
+      .map(_ => ())
 
   protected def getSelfWatchlist(
       config: PlexConfiguration,
