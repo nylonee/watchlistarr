@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'
           cache: 'sbt'
       - name: sbt validation
-        run: sbt "scalafmtCheckAll; dependencyUpdatesFailBuild; unusedCompileDependenciesTest; undeclaredCompileDependenciesTest; test"
+        run: sbt "scalafmtSbtCheck; scalafmtCheckAll; dependencyUpdatesFailBuild; unusedCompileDependenciesTest; undeclaredCompileDependenciesTest; test"
       - name: Build fat JAR
         run: sbt assembly
       - name: Rename fat JAR
