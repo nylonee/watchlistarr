@@ -42,9 +42,9 @@ trait PlexUtils {
 
       client.httpRequest(Method.GET, url).map {
         case Right(_) =>
-          logger.info(s"Refreshed the access token expiry")
+          logger.info(s"Pinged plex.tv to update access token expiry")
         case Left(err) =>
-          logger.warn(s"Unable to ping plex.tv: $err")
+          logger.warn(s"Unable to ping plex.tv to update access token expiry: $err")
       }
     }
   }.toList.sequence.map(_ => ())
