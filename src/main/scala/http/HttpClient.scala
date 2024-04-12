@@ -31,18 +31,18 @@ class HttpClient {
       }
 
   def httpRequest(
-                   method: Method,
-                   url: Uri,
-                   apiKey: Option[String] = None,
-                   payload: Option[Json] = None
-                 ): IO[Either[Throwable, Json]] = IO.fromFuture(IO(cache.get(method, url, apiKey, payload)))
+      method: Method,
+      url: Uri,
+      apiKey: Option[String] = None,
+      payload: Option[Json] = None
+  ): IO[Either[Throwable, Json]] = IO.fromFuture(IO(cache.get(method, url, apiKey, payload)))
 
   private def makeHttpRequest(
-                               method: Method,
-                               url: Uri,
-                               apiKey: Option[String] = None,
-                               payload: Option[Json] = None
-                             ): IO[Either[Throwable, Json]] = {
+      method: Method,
+      url: Uri,
+      apiKey: Option[String] = None,
+      payload: Option[Json] = None
+  ): IO[Either[Throwable, Json]] = {
     val host = s"${url.host.getOrElse(Uri.Host.unsafeFromString("127.0.0.1")).value}"
 
     val baseRequest = Request[IO](method = method, uri = url)
