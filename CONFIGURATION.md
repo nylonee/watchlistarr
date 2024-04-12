@@ -8,6 +8,24 @@ docker run -e SONARR_API_KEY=YOUR_API_KEY -e RADARR_API_KEY=YOUR_API_KEY -e PLEX
 ```
 Note: If you are adding new environment variables or other configuration, add it before the `nylonee/watchlistarr` part
 
+### Docker-compose variant
+```
+version: '3.8'
+services:
+  watchlistarr:
+    image: nylonee/watchlistarr
+    environment:
+      SONARR_API_KEY: YOUR_API_KEY
+      RADARR_API_KEY: YOUR_API_KEY
+      PLEX_TOKEN: YOUR_PLEX_TOKEN
+    volumes:
+      - config:/app/config
+    restart: unless-stopped
+
+volumes:
+  config:
+```
+
 In most consoles, you are able to add a \ to denote a breakline, which makes this command easier to read and manipulate. For example:
 ```bash
 docker run \
