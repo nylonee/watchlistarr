@@ -24,7 +24,7 @@ jobs:
           images: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}
           tags: |
-            ${{ github.event.inputs.DOCKER_TAG }}
+            type=sha
             beta
           labels: |
             VERSION="${{ github.event.inputs.DOCKER_TAG }}"
