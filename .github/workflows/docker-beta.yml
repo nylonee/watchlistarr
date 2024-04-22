@@ -8,15 +8,13 @@ env:
   APP_NAME: watchlistarr
   DOCKER_FILE: docker/Dockerfile
   DOCKER_PLATFORMS: "linux/arm64/v8,linux/amd64"
+  DOCKER_TAG: $(date +%s)
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up environment
-        run: echo "DOCKER_TAG=$(date +%s)" >> $GITHUB_ENV
-
 
       - name: Docker Setup QEMU
         uses: docker/setup-qemu-action@v2.1.0
@@ -39,5 +37,5 @@ jobs:
           file: ${{ env.DOCKER_FILE }}
           platforms: ${{ env.DOCKER_PLATFORMS }}
           push: true
-          tags: ${DOCKER_TAG},beta
-          labels: VERSION=${DOCKER_TAG}
+          tags: ${{env.DOCKER_TAG}},beta
+          labels: VERSION=${{env.DOCKER_TAG}}

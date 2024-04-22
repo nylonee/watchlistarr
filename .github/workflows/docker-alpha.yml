@@ -38,6 +38,6 @@ jobs:
           context: .
           file: ${{ env.DOCKER_FILE }}
           platforms: ${{ env.DOCKER_PLATFORMS }}
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${DOCKER_TAG},alpha
           labels: VERSION=${DOCKER_TAG}
