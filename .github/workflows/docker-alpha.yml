@@ -9,6 +9,7 @@ env:
   DOCKER_FILE: docker/Dockerfile
   DOCKER_PLATFORMS: "linux/arm64/v8,linux/amd64"
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +18,17 @@ jobs:
       - name: Set up environment
         run: echo "DOCKER_TAG=$(date +%s)" >> $GITHUB_ENV
 
+      - name: Docker Metadata action
+        id: meta
+        uses: docker/metadata-action@v4.3.0
+        with:
+          images: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}
+          tags: |
+            ${{ github.event.inputs.DOCKER_TAG }}
+            alpha
+          labels: |
+            VERSION="${{ github.event.inputs.DOCKER_TAG }}"
 
       - name: Docker Setup QEMU
         uses: docker/setup-qemu-action@v2.1.0
@@ -39,5 +51,5 @@ jobs:
           file: ${{ env.DOCKER_FILE }}
           platforms: ${{ env.DOCKER_PLATFORMS }}
           push: true
-          tags: ${DOCKER_TAG},alpha
-          labels: VERSION=${DOCKER_TAG}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
