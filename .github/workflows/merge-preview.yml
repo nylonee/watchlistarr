@@ -1,8 +1,10 @@
 # .github/workflows/merge-preview.yml
 name: "Merge preview"
+
 on:
   issue_comment:
     types: [created]
+
 jobs:
   preview:
     runs-on: ubuntu-latest
