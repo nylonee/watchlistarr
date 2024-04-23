@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         persist-credentials: false
-        github_token:  ${{ secrets.PAT_TOKEN }}
+        token: ${{ secrets.PAT_TOKEN }}
     - uses: nwtgck/actions-merge-preview@develop
       with:
         github-token: ${{ secrets.PAT_TOKEN }}
