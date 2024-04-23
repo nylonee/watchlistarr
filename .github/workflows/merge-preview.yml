@@ -12,7 +12,6 @@ jobs:
       # https://github.com/orgs/community/discussions/25702
     - uses: actions/checkout@v2
       with:
-        persist-credentials: false
         token: ${{ secrets.PAT_TOKEN }}
     - uses: nwtgck/actions-merge-preview@develop
       with:
