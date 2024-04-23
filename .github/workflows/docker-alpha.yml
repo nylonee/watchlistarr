@@ -1,7 +1,7 @@
 name: Update Docker alpha tag
 
 on:
-  pull_request:
+  push:
     branches: [actions-merge-preview/**]
 
 env:
