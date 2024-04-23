@@ -1,0 +1,15 @@
+# .github/workflows/merge-preview.yml
+name: "Merge preview"
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  preview:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: nwtgck/actions-merge-preview@develop
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
