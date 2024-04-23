@@ -1,8 +1,8 @@
 name: Update Docker alpha tag
 
 on:
-  pull_request:
-    branches: [ "main" ]
+  push:
+    branches: ["actions-merge-preview/**"]
 
 jobs:
 
