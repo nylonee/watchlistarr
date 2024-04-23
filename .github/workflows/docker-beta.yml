@@ -14,8 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up environment
-        run: echo "DOCKER_TAG=$(date +%s)" >> $GITHUB_ENV
 
       - name: Docker Metadata action
         id: meta
@@ -26,8 +24,6 @@ jobs:
           tags: |
             type=sha
             beta
-          labels: |
-            VERSION="${{ github.event.inputs.DOCKER_TAG }}"
 
       - name: Docker Setup QEMU
         uses: docker/setup-qemu-action@v2.1.0
