@@ -4,26 +4,48 @@ on:
   push:
     branches: ["actions-merge-preview/**"]
 
+env:
+  APP_NAME: watchlistarr
+  DOCKER_FILE: docker/Dockerfile
+  DOCKER_PLATFORMS: "linux/arm64/v8,linux/amd64"
+
+
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
-
     steps:
       - uses: actions/checkout@v3
-      - name: Set up environment
-        run: echo "DOCKER_TAG=$(date +%s)" >> $GITHUB_ENV
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build the Docker image
-        run: docker build . --file docker/Dockerfile --tag nylonee/watchlistarr:${DOCKER_TAG} --label=VERSION=${DOCKER_TAG}
-      - name: Push Docker image
-        run: |
-          docker tag nylonee/watchlistarr:${DOCKER_TAG} nylonee/watchlistarr:alpha
-          docker push nylonee/watchlistarr:${DOCKER_TAG}
-          docker push nylonee/watchlistarr:alpha
+
+      - name: Docker Metadata action
+        id: meta
+        uses: docker/metadata-action@v4.3.0
+        with:
+          images: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}
+          tags: |
+            type=sha
+            alpha
+
+      - name: Docker Setup QEMU
+        uses: docker/setup-qemu-action@v2.1.0
+    
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v2.5.0
+        with:
+          buildkitd-flags: --debug
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          file: ${{ env.DOCKER_FILE }}
+          platforms: ${{ env.DOCKER_PLATFORMS }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
