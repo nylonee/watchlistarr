@@ -7,9 +7,12 @@ on:
 
 jobs:
   preview:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
+      # https://github.com/orgs/community/discussions/25702
     - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
     - uses: nwtgck/actions-merge-preview@develop
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.PAT_TOKEN }}
