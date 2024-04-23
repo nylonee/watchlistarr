@@ -16,3 +16,4 @@ jobs:
     - uses: nwtgck/actions-merge-preview@develop
       with:
         github-token: ${{ secrets.PAT_TOKEN }}
+        github_token:  ${{ secrets.PAT_TOKEN }}
