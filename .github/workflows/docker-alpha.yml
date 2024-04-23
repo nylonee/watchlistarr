@@ -2,7 +2,9 @@ name: Update Docker alpha tag
 
 on:
   push:
-    branches: ["actions-merge-preview/**"]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 env:
   APP_NAME: watchlistarr
