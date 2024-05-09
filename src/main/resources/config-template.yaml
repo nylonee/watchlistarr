@@ -34,6 +34,7 @@
 #  apikey: "YOUR-API-KEY"
 #  qualityProfile: "Your Desired Radarr Quality Profile" # If not set, will grab the first one it finds on Radarr
 #  rootFolder: "/root/folder/location" # If not set, will grab the first one it finds on Radarr. DEFAULT: false
+#  minimumAvailability: "released" # Defines when your Radarr should look for this particular item. DEFAULT: "released". POSSIBLE VALUES: "tba", "announced", "inCinemas", "released", "deleted" 
 #  bypassIgnored: false # Boolean flag to bypass movies that are on the Radarr Exclusion List
 #  tags:
 #    - watchlistarr
