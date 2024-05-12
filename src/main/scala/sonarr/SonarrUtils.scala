@@ -24,7 +24,7 @@ trait SonarrUtils extends SonarrConversions {
         if (bypass) {
           EitherT.pure[IO, Throwable](List.empty[SonarrSeries])
         } else {
-          getToArr[List[SonarrSeries]](client)(baseUrl, apiKey, "importlistexclusion")
+          fetchExclusionListFromSonarr(client)(apiKey, baseUrl)
         }
     } yield (shows.map(toItem) ++ exclusions.map(toItem)).toSet
 
@@ -66,6 +66,27 @@ trait SonarrUtils extends SonarrConversions {
         logger.info(s"Deleted ${item.title} from Sonarr")
         r
       }
+  }
+
+  protected def fetchExclusionListFromSonarr(client: HttpClient)(
+      apiKey: String,
+      baseUrl: Uri,
+      page: Int = 1
+  ): EitherT[IO, Throwable, List[SonarrSeries]] = {
+    val pageSize = 100
+    val url = (baseUrl / "api" / "v3" / "importlistexclusion" / "paged")
+      .withQueryParam("page", page)
+      .withQueryParam("pageSize", pageSize)
+
+    for {
+      response            <- EitherT(client.httpRequest(Method.GET, url, Some(apiKey)))
+      importListExclusion <- EitherT(IO.pure(response.as[SonarrPagedSeries])).leftMap(err => new Throwable(err))
+      nextPage <-
+        if (importListExclusion.totalRecords > page * pageSize)
+          fetchExclusionListFromSonarr(client)(apiKey, baseUrl, page + 1)
+        else
+          EitherT.pure[IO, Throwable](List.empty[SonarrSeries])
+    } yield importListExclusion.records ++ nextPage
   }
 
   private def deleteToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, id: Long): EitherT[IO, Throwable, Unit] = {

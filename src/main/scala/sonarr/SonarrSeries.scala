@@ -7,3 +7,12 @@ private[sonarr] case class SonarrSeries(
     id: Long,
     ended: Option[Boolean]
 )
+
+private[sonarr] case class SonarrPagedSeries(
+    page: Int,
+    pageSize: Int,
+    sortKey: String,
+    sortDirection: String,
+    totalRecords: Int,
+    records: List[SonarrSeries]
+)
