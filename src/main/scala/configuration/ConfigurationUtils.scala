@@ -46,7 +46,7 @@ object ConfigurationUtils {
         .flatMap(_.toBooleanOption)
         .getOrElse(false)
       deleteInterval = configReader.getConfigOption(Keys.deleteIntervalDays).flatMap(_.toIntOption).getOrElse(7).days
-      deleteFiles = configReader.getConfigOption(Keys.deleteFiles).flatMap(_.toBooleanOption).getOrElse(true)
+      deleteFiles    = configReader.getConfigOption(Keys.deleteFiles).flatMap(_.toBooleanOption).getOrElse(true)
       hasPlexPass    = plexWatchlistUrls.nonEmpty
     } yield Configuration(
       if (hasPlexPass) refreshInterval else 19.minutes,

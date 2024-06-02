@@ -68,7 +68,9 @@ trait SonarrUtils extends SonarrConversions {
       }
   }
 
-  private def deleteToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, id: Long, deleteFiles: Boolean): EitherT[IO, Throwable, Unit] = {
+  private def deleteToArr(
+      client: HttpClient
+  )(baseUrl: Uri, apiKey: String, id: Long, deleteFiles: Boolean): EitherT[IO, Throwable, Unit] = {
     val urlWithQueryParams = (baseUrl / "api" / "v3" / "series" / id)
       .withQueryParam("deleteFiles", deleteFiles)
       .withQueryParam("addImportListExclusion", false)
