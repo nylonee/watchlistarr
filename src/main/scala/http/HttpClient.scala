@@ -1,21 +1,43 @@
 package http
 
 import cats.effect.IO
+import cats.effect.unsafe.implicits.global
 import io.circe.Json
 import org.http4s.circe._
 import org.http4s.client.middleware.FollowRedirect
 import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.{Header, Method, Request, Uri}
 import org.typelevel.ci.CIString
+import com.github.blemale.scaffeine.{AsyncLoadingCache, Scaffeine}
+
+import scala.concurrent.duration._
 
 class HttpClient {
 
-  val client = EmberClientBuilder
+  private val client = EmberClientBuilder
     .default[IO]
     .build
     .map(FollowRedirect(5))
 
+  private val cacheTtl = 5.seconds
+
+  private val cache: AsyncLoadingCache[(Method, Uri, Option[String], Option[Json]), Either[Throwable, Json]] =
+    Scaffeine()
+      .recordStats()
+      .expireAfterWrite(cacheTtl)
+      .maximumSize(1000)
+      .buildAsyncFuture { case (method, url, apiKey, payload) =>
+        makeHttpRequest(method, url, apiKey, payload).unsafeToFuture()
+      }
+
   def httpRequest(
+      method: Method,
+      url: Uri,
+      apiKey: Option[String] = None,
+      payload: Option[Json] = None
+  ): IO[Either[Throwable, Json]] = IO.fromFuture(IO(cache.get(method, url, apiKey, payload)))
+
+  private def makeHttpRequest(
       method: Method,
       url: Uri,
       apiKey: Option[String] = None,
