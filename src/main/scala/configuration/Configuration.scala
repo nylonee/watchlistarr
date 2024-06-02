@@ -43,5 +43,6 @@ case class DeleteConfiguration(
     movieDeleting: Boolean,
     endedShowDeleting: Boolean,
     continuingShowDeleting: Boolean,
-    deleteInterval: FiniteDuration
+    deleteInterval: FiniteDuration,
+    deleteFiles: Boolean
 )

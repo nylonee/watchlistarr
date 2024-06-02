@@ -69,7 +69,7 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private def deleteMovie(client: HttpClient, config: Configuration)(movie: Item): EitherT[IO, Throwable, Unit] =
     if (config.deleteConfiguration.movieDeleting) {
-      deleteFromRadarr(client, config.radarrConfiguration)(movie)
+      deleteFromRadarr(client, config.radarrConfiguration, config.deleteConfiguration.deleteFiles)(movie)
     } else {
       logger.info(s"Found movie \"${movie.title}\" which is not watchlisted on Plex")
       EitherT.pure[IO, Throwable](())
@@ -77,9 +77,9 @@ object PlexTokenDeleteSync extends PlexUtils with SonarrUtils with RadarrUtils {
 
   private def deleteSeries(client: HttpClient, config: Configuration)(show: Item): EitherT[IO, Throwable, Unit] =
     if (show.ended.contains(true) && config.deleteConfiguration.endedShowDeleting) {
-      deleteFromSonarr(client, config.sonarrConfiguration)(show)
+      deleteFromSonarr(client, config.sonarrConfiguration, config.deleteConfiguration.deleteFiles)(show)
     } else if (show.ended.contains(false) && config.deleteConfiguration.continuingShowDeleting) {
-      deleteFromSonarr(client, config.sonarrConfiguration)(show)
+      deleteFromSonarr(client, config.sonarrConfiguration, config.deleteConfiguration.deleteFiles)(show)
     } else {
       logger.info(s"Found show \"${show.title}\" which is not watchlisted on Plex")
       EitherT[IO, Throwable, Unit](IO.pure(Right(())))
