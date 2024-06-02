@@ -34,6 +34,7 @@ object ConfigurationRedactor {
       |    endedShowDeleting: ${config.deleteConfiguration.endedShowDeleting}
       |    continuingShowDeleting: ${config.deleteConfiguration.continuingShowDeleting}
       |    deleteInterval: ${config.deleteConfiguration.deleteInterval.toDays} days
+      |    deleteFiles: ${config.deleteConfiguration.deleteFiles}
       |
       |""".stripMargin
 }

@@ -60,7 +60,8 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       movieDeleting = false,
       endedShowDeleting = false,
       continuingShowDeleting = false,
-      deleteInterval = 7.days
+      deleteInterval = 7.days,
+      deleteFiles = true
     )
   )
 

@@ -91,3 +91,6 @@
 
 ## Number of days to wait before deleting content from the arrs (Deleting must be enabled). DEFAULT: 7
 #  interval.days: 7
+
+## Choose whether you want to delete the files as well, or only the entry in Sonarr/Radarr. DEFAULT: true
+#  deleteFiles: true
