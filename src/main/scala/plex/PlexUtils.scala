@@ -19,8 +19,10 @@ trait PlexUtils {
   implicit val customConfig: extras.Configuration =
     extras.Configuration.default.withDefaults
 
-  protected def fetchWatchlistFromRss(client: HttpClient)(url: Uri): IO[Set[Item]] =
-    client.httpRequest(Method.GET, url).map {
+  protected def fetchWatchlistFromRss(client: HttpClient)(url: Uri): IO[Set[Item]] = {
+    val jsonFormatUrl = url.withQueryParam("format", "json")
+
+    client.httpRequest(Method.GET, jsonFormatUrl).map {
       case Left(err) =>
         logger.warn(s"Unable to fetch watchlist from Plex: $err")
         Set.empty
@@ -31,6 +33,7 @@ trait PlexUtils {
           Set.empty
         }
     }
+  }
 
   protected def ping(client: HttpClient)(config: PlexConfiguration): IO[Unit] =
     config.plexTokens
