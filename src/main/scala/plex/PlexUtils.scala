@@ -6,7 +6,7 @@ import cats.implicits.toTraverseOps
 import configuration.PlexConfiguration
 import http.HttpClient
 import model.{GraphQLQuery, Item}
-import org.http4s.{Method, QueryParam, Uri}
+import org.http4s.{Method, Uri}
 import org.slf4j.LoggerFactory
 import io.circe.generic.extras
 import io.circe.generic.extras.auto._
