@@ -9,10 +9,13 @@ import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.{Header, Method, Request, Uri}
 import org.typelevel.ci.CIString
 import com.github.blemale.scaffeine.{AsyncLoadingCache, Scaffeine}
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 
 class HttpClient {
+
+  private val logger = LoggerFactory.getLogger(getClass)
 
   private val client = EmberClientBuilder
     .default[IO]
@@ -61,6 +64,13 @@ class HttpClient {
     )
     val requestWithPayload = payload.fold(requestWithApiKey)(p => requestWithApiKey.withEntity(p))
 
-    client.use(_.expect[Json](requestWithPayload).attempt)
+    logger.debug(s"HTTP Request: ${requestWithPayload.toString()}")
+
+    val responseIO = client.use(_.expect[Json](requestWithPayload).attempt)
+
+    responseIO.map { response =>
+      logger.debug(s"HTTP Response: $response")
+      response
+    }
   }
 }
