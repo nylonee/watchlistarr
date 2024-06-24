@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory
 import io.circe.generic.extras
 import io.circe.generic.extras.auto._
 import io.circe.syntax.EncoderOps
+import org.http4s.client.UnexpectedStatus
 
 trait PlexUtils {
 
@@ -19,18 +20,24 @@ trait PlexUtils {
   implicit val customConfig: extras.Configuration =
     extras.Configuration.default.withDefaults
 
-  protected def fetchWatchlistFromRss(client: HttpClient)(url: Uri): IO[Set[Item]] =
-    client.httpRequest(Method.GET, url).map {
+  protected def fetchWatchlistFromRss(client: HttpClient)(url: Uri): IO[Set[Item]] = {
+    val jsonFormatUrl = url.withQueryParam("format", "json")
+
+    client.httpRequest(Method.GET, jsonFormatUrl).map {
+      case Left(UnexpectedStatus(s, _, _)) if s.code == 500 =>
+        logger.debug(s"Unable to fetch watchlist from Plex, see https://github.com/nylonee/watchlistarr/issues/161")
+        Set.empty
       case Left(err) =>
         logger.warn(s"Unable to fetch watchlist from Plex: $err")
         Set.empty
       case Right(json) =>
         logger.debug("Found Json from Plex watchlist, attempting to decode")
         json.as[Watchlist].map(_.items).getOrElse {
-          logger.warn("Unable to fetch watchlist from Plex - decoding failure. Returning empty list instead")
+          logger.warn("Unable to fetch watchlist from Plex - decoding failure")
           Set.empty
         }
     }
+  }
 
   protected def ping(client: HttpClient)(config: PlexConfiguration): IO[Unit] =
     config.plexTokens

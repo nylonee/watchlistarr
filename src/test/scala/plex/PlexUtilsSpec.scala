@@ -23,7 +23,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     (mockClient.httpRequest _)
       .expects(
         Method.GET,
-        Uri.unsafeFromString("http://localhost:9090"),
+        Uri.unsafeFromString("http://localhost:9090?format=json"),
         None,
         None
       )
@@ -40,7 +40,7 @@ class PlexUtilsSpec extends AnyFlatSpec with Matchers with PlexUtils with MockFa
     (mockClient.httpRequest _)
       .expects(
         Method.GET,
-        Uri.unsafeFromString("http://localhost:9090"),
+        Uri.unsafeFromString("http://localhost:9090?format=json"),
         None,
         None
       )

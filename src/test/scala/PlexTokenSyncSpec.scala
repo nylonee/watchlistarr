@@ -23,7 +23,7 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
     defaultRadarrMock(mockHttpClient)
     defaultSonarrMock(mockHttpClient)
 
-    val sync: Unit = PlexTokenSync.run(config, mockHttpClient, firstRun = true).unsafeRunSync()
+    val sync: Unit = PlexTokenSync.run(config, mockHttpClient, runFullSync = true).unsafeRunSync()
 
     sync shouldBe ()
   }
@@ -60,7 +60,8 @@ class PlexTokenSyncSpec extends AnyFlatSpec with Matchers with MockFactory {
       movieDeleting = false,
       endedShowDeleting = false,
       continuingShowDeleting = false,
-      deleteInterval = 7.days
+      deleteInterval = 7.days,
+      deleteFiles = true
     )
   )
 

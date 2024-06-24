@@ -51,7 +51,7 @@ trait RadarrUtils extends RadarrConversions {
     }
   }
 
-  protected def deleteFromRadarr(client: HttpClient, config: RadarrConfiguration)(
+  protected def deleteFromRadarr(client: HttpClient, config: RadarrConfiguration, deleteFiles: Boolean)(
       item: Item
   ): EitherT[IO, Throwable, Unit] = {
     val movieId = item.getRadarrId.getOrElse {
@@ -59,7 +59,7 @@ trait RadarrUtils extends RadarrConversions {
       0L
     }
 
-    deleteToArr(client)(config.radarrBaseUrl, config.radarrApiKey, movieId)
+    deleteToArr(client)(config.radarrBaseUrl, config.radarrApiKey, movieId, deleteFiles)
       .map { r =>
         logger.info(s"Deleted ${item.title} from Radarr")
         r
@@ -86,9 +86,11 @@ trait RadarrUtils extends RadarrConversions {
       decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Radarr"))
     } yield decoded
 
-  private def deleteToArr(client: HttpClient)(baseUrl: Uri, apiKey: String, id: Long): EitherT[IO, Throwable, Unit] = {
+  private def deleteToArr(
+      client: HttpClient
+  )(baseUrl: Uri, apiKey: String, id: Long, deleteFiles: Boolean): EitherT[IO, Throwable, Unit] = {
     val urlWithQueryParams = (baseUrl / "api" / "v3" / "movie" / id)
-      .withQueryParam("deleteFiles", true)
+      .withQueryParam("deleteFiles", deleteFiles)
       .withQueryParam("addImportExclusion", false)
 
     EitherT(client.httpRequest(Method.DELETE, urlWithQueryParams, Some(apiKey)))

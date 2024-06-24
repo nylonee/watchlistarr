@@ -1,13 +1,11 @@
 ## Watchlistarr Configuration
 ## Uncomment the lines you would like to configure, then save this file and restart Watchlistarr
 
-#################################################################
-## How often do you want Watchlistarr to pull the latest from Plex? In general, 10 seconds is okay.
-## If you're running this on a slower system (e.g. Raspberry Pi), you may want to increase this to 60 seconds.
-#################################################################
-
 #interval:
-#  seconds: 10 # DEFAULT: 60
+## How often do you want Watchlistarr to pull the latest from Plex? In general, 10-30 seconds is okay.
+## If you're running this on a slower system (e.g. Raspberry Pi), you may want to increase this
+## Note: If you do not have Plex Pass, this will be overridden to ~19 minute syncs, see README
+#  seconds: 10
 
 
 #################################################################
@@ -15,12 +13,26 @@
 #################################################################
 
 #sonarr:
-#  baseUrl: "127.0.0.1:8989" # Base URL for Sonarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:8989"
-#  apikey: "YOUR-API-KEY" # API key for Sonarr, found in your Sonarr UI -> General settings
-#  qualityProfile: "Your Desired Sonarr Quality Profile" # If not set, will grab the first one it finds on Sonarr
-#  rootFolder: "/root/folder/location" # Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr
-#  bypassIgnored: false # Boolean flag to bypass tv shows that are on the Sonarr Exclusion List. DEFAULT: false
-#  seasonMonitoring: all # Possible values under 'MonitorTypes' in sonarr.tv/docs/api. DEFAULT: all
+## Base URL for Sonarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:8989"
+#  baseUrl: "127.0.0.1:8989"
+
+## API key for Sonarr, found in your Sonarr UI -> General settings
+#  apikey: "YOUR-API-KEY"
+
+## If qualityProfile is not set, Watchlistarr will grab the first one it finds on Sonarr
+#  qualityProfile: "Your Desired Sonarr Quality Profile"
+
+## Root folder for Sonarr. If not set, will grab the first one it finds on Sonarr
+#  rootFolder: "/root/folder/location"
+
+## Boolean flag to bypass tv shows that are on the Sonarr Exclusion List. DEFAULT: false
+#  bypassIgnored: false
+
+## The monitoring option tells Sonarr what episodes to monitor. (e.g. last season only, all, etc.)
+## All possible values are under 'MonitorTypes' in sonarr.tv/docs/api. DEFAULT: all
+#  seasonMonitoring: all
+
+## The tag to attach to the show when sending to Sonarr
 #  tags:
 #    - watchlistarr
 
@@ -30,12 +42,25 @@
 #################################################################
 
 #radarr:
-#  baseUrl: "127.0.0.1:7878" # Base URL for Radarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:7878"
+## Base URL for Radarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:7878"
+#  baseUrl: "127.0.0.1:7878"
+
+## API key for Radarr, found in your Radarr UI -> General settings
 #  apikey: "YOUR-API-KEY"
-#  qualityProfile: "Your Desired Radarr Quality Profile" # If not set, will grab the first one it finds on Radarr
-#  rootFolder: "/root/folder/location" # If not set, will grab the first one it finds on Radarr. DEFAULT: false
-#  minimumAvailability: "released" # Defines when your Radarr should look for this particular item. DEFAULT: "released". POSSIBLE VALUES: "tba", "announced", "inCinemas", "released", "deleted" 
-#  bypassIgnored: false # Boolean flag to bypass movies that are on the Radarr Exclusion List
+
+## If not set, will grab the first one it finds on Radarr
+#  qualityProfile: "Your Desired Radarr Quality Profile"
+
+## If not set, will grab the first one it finds on Radarr
+#  rootFolder: "/root/folder/location"
+
+## Defines when your Radarr should look for this particular item. DEFAULT: "released". POSSIBLE VALUES: "tba", "announced", "inCinemas", "released", "deleted" 
+#  minimumAvailability: "released" 
+
+## Boolean flag to bypass movies that are on the Radarr Exclusion List
+#  bypassIgnored: false
+
+## The tag to attach to the show when sending to Radarr
 #  tags:
 #    - watchlistarr
 
@@ -45,16 +70,30 @@
 #################################################################
 
 #plex:
-#  token: "YOUR-PLEX-TOKEN" # Multiple tokens can be provided
-#  skipfriendsync: false # Don't sync friends watchlists, only your own. DEFAULT: false (e.g. sync everybody's watchlists)
+## Multiple tokens can be provided
+#  token: "YOUR-PLEX-TOKEN"
+
+## Don't sync friends watchlists, only your own. DEFAULT: false (e.g. sync everybody's watchlists)
+#  skipfriendsync: false
 
 
 #################################################################
 ## Delete Sync Configuration
 #################################################################
 
+## WARNING: This WILL delete your content off Sonarr/Radarr INCLUDING files if
 #delete:
-#  movie: false # If enabled, movies that are not watchlisted will be deleted from Radarr. DEFAULT: false
-#  endedShow: false # If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr. DEFAULT: false
-#  continuingShow: false # If enabled, shows that still have planned seasons and are not watchlisted will be deleted from Sonarr. DEFAULT: false
-#  interval.days: 7 # Number of days to wait before deleting content from the arrs (Deleting must be enabled). DEFAULT: 7
+## If enabled, movies that are not watchlisted will be deleted from Radarr. DEFAULT: false
+#  movie: false
+
+## If enabled, shows that have no more planned seasons and are not watchlisted will be deleted from Sonarr. DEFAULT: false
+#  endedShow: false
+
+## If enabled, shows that still have planned seasons and are not watchlisted will be deleted from Sonarr. DEFAULT: false
+#  continuingShow: false
+
+## Number of days to wait before deleting content from the arrs (Deleting must be enabled). DEFAULT: 7
+#  interval.days: 7
+
+## Choose whether you want to delete the files as well, or only the entry in Sonarr/Radarr. DEFAULT: true
+#  deleteFiles: true

@@ -28,4 +28,5 @@ private[configuration] object Keys {
   val deleteMovies         = "delete.movie"
   val deleteEndedShow      = "delete.endedShow"
   val deleteContinuingShow = "delete.continuingShow"
+  val deleteFiles          = "delete.deleteFiles"
 }
