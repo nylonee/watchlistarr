@@ -54,6 +54,9 @@
 ## If not set, will grab the first one it finds on Radarr
 #  rootFolder: "/root/folder/location"
 
+## Defines when your Radarr should look for this particular item. DEFAULT: "released". POSSIBLE VALUES: "tba", "announced", "inCinemas", "released", "deleted" 
+#  minimumAvailability: "released" 
+
 ## Boolean flag to bypass movies that are on the Radarr Exclusion List
 #  bypassIgnored: false
 

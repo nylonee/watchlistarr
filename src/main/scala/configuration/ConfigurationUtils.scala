@@ -35,8 +35,9 @@ object ConfigurationUtils {
       sonarrSeasonMonitoring = configReader.getConfigOption(Keys.sonarrSeasonMonitoring).getOrElse("all")
       radarrConfig <- getRadarrConfig(configReader, client)
       (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder, radarrTagIds) = radarrConfig
-      radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
-      plexTokens          = getPlexTokens(configReader)
+      radarrMinimumAvailability = configReader.getConfigOption(Keys.radarrMinimumAvailability).getOrElse("released")
+      radarrBypassIgnored       = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
+      plexTokens                = getPlexTokens(configReader)
       skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
       plexWatchlistUrls <- getPlexWatchlistUrls(client)(configReader, plexTokens, skipFriendSync)
       deleteMovies     = configReader.getConfigOption(Keys.deleteMovies).flatMap(_.toBooleanOption).getOrElse(false)
@@ -65,6 +66,7 @@ object ConfigurationUtils {
         radarrApiKey,
         radarrQualityProfileId,
         radarrRootFolder,
+        radarrMinimumAvailability,
         radarrBypassIgnored,
         radarrTagIds
       ),

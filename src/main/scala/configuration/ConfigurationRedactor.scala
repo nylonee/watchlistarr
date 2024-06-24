@@ -20,6 +20,7 @@ object ConfigurationRedactor {
       |    radarrApiKey: REDACTED
       |    radarrQualityProfileId: ${config.radarrConfiguration.radarrQualityProfileId}
       |    radarrRootFolder: ${config.radarrConfiguration.radarrRootFolder}
+      |    radarrMinimumAvailability: ${config.radarrConfiguration.radarrMinimumAvailability}
       |    radarrBypassIgnored: ${config.radarrConfiguration.radarrBypassIgnored}
       |    radarrTagIds: ${config.radarrConfiguration.radarrTagIds.mkString(",")}
       |

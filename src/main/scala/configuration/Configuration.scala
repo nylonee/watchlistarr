@@ -28,6 +28,7 @@ case class RadarrConfiguration(
     radarrApiKey: String,
     radarrQualityProfileId: Int,
     radarrRootFolder: String,
+    radarrMinimumAvailability: String,
     radarrBypassIgnored: Boolean,
     radarrTagIds: Set[Int]
 )
