@@ -55,9 +55,9 @@ object Server extends IOApp {
     } yield ()
 
   private def plexFullSync(
-                             configRef: Ref[IO, Configuration],
-                             httpClient: HttpClient
-                           ): IO[Unit] =
+      configRef: Ref[IO, Configuration],
+      httpClient: HttpClient
+  ): IO[Unit] =
     for {
       config <- fetchLatestConfig(configRef)
       _      <- PlexTokenSync.run(config, httpClient, runFullSync = true)
