@@ -1,6 +1,6 @@
 import cats.effect._
-import cats.implicits.catsSyntaxTuple3Parallel
-import configuration.{Configuration, ConfigurationUtils, FileAndSystemPropertyReader, SystemPropertyReader}
+import cats.implicits.catsSyntaxTuple4Parallel
+import configuration.{Configuration, ConfigurationUtils, FileAndSystemPropertyReader}
 import http.HttpClient
 import org.slf4j.LoggerFactory
 
@@ -25,8 +25,9 @@ object Server extends IOApp {
       configRef     <- Ref.of[IO, Configuration](initialConfig)
       result <- (
         pingTokenSync(configRef, httpClient),
-        plexTokenSync(configRef, httpClient),
-        plexTokenDeleteSync(configRef, httpClient)
+        plexRssSync(configRef, httpClient),
+        plexTokenDeleteSync(configRef, httpClient),
+        plexFullSync(configRef, httpClient)
       ).parTupled.as(ExitCode.Success)
     } yield result
   }
@@ -42,16 +43,26 @@ object Server extends IOApp {
       _      <- pingTokenSync(configRef, httpClient)
     } yield ()
 
-  private def plexTokenSync(
+  private def plexRssSync(
       configRef: Ref[IO, Configuration],
-      httpClient: HttpClient,
-      firstRun: Boolean = true
+      httpClient: HttpClient
   ): IO[Unit] =
     for {
       config <- fetchLatestConfig(configRef)
-      _      <- PlexTokenSync.run(config, httpClient, firstRun)
+      _      <- PlexTokenSync.run(config, httpClient, runFullSync = false)
       _      <- IO.sleep(config.refreshInterval)
-      _      <- plexTokenSync(configRef, httpClient, firstRun = false)
+      _      <- plexRssSync(configRef, httpClient)
+    } yield ()
+
+  private def plexFullSync(
+      configRef: Ref[IO, Configuration],
+      httpClient: HttpClient
+  ): IO[Unit] =
+    for {
+      config <- fetchLatestConfig(configRef)
+      _      <- PlexTokenSync.run(config, httpClient, runFullSync = true)
+      _      <- IO.sleep(19.minutes)
+      _      <- plexFullSync(configRef, httpClient)
     } yield ()
 
   private def plexTokenDeleteSync(configRef: Ref[IO, Configuration], httpClient: HttpClient): IO[Unit] =
