@@ -1,7 +1,7 @@
 ## Watchlistarr Configuration
 ## Uncomment the lines you would like to configure, then save this file and restart Watchlistarr
 
-#interval:
+interval:
 ## How often do you want Watchlistarr to pull the latest from Plex? In general, 10-30 seconds is okay.
 ## If you're running this on a slower system (e.g. Raspberry Pi), you may want to increase this
 ## Note: If you do not have Plex Pass, this will be overridden to ~19 minute syncs, see README
@@ -12,7 +12,7 @@
 ## Sonarr Configuration
 #################################################################
 
-#sonarr:
+sonarr:
 ## Base URL for Sonarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:8989"
 #  baseUrl: "127.0.0.1:8989"
 
@@ -41,7 +41,7 @@
 ## Radarr Configuration
 #################################################################
 
-#radarr:
+radarr:
 ## Base URL for Radarr, including the 'http' and port and any configured urlbase. DEFAULT: "localhost:7878"
 #  baseUrl: "127.0.0.1:7878"
 
@@ -66,7 +66,7 @@
 ## Plex Configuration
 #################################################################
 
-#plex:
+plex:
 ## Multiple tokens can be provided
 #  token: "YOUR-PLEX-TOKEN"
 
@@ -79,7 +79,7 @@
 #################################################################
 
 ## WARNING: This WILL delete your content off Sonarr/Radarr INCLUDING files if
-#delete:
+delete:
 ## If enabled, movies that are not watchlisted will be deleted from Radarr. DEFAULT: false
 #  movie: false
 
