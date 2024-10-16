@@ -13,6 +13,8 @@ import io.circe.generic.extras.auto._
 import io.circe.syntax.EncoderOps
 import org.http4s.client.UnexpectedStatus
 
+import java.util.UUID
+
 trait PlexUtils {
 
   private val logger = LoggerFactory.getLogger(getClass)
@@ -21,7 +23,10 @@ trait PlexUtils {
     extras.Configuration.default.withDefaults
 
   protected def fetchWatchlistFromRss(client: HttpClient)(url: Uri): IO[Set[Item]] = {
-    val jsonFormatUrl = url.withQueryParam("format", "json")
+    val randomUUID = UUID.randomUUID().toString.take(12)
+    val jsonFormatUrl = url
+      .withQueryParam("format", "json")
+      .withQueryParam("cache_buster", randomUUID)
 
     client.httpRequest(Method.GET, jsonFormatUrl).map {
       case Left(UnexpectedStatus(s, _, _)) if s.code == 500 =>
