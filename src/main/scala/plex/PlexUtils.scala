@@ -23,10 +23,10 @@ trait PlexUtils {
     extras.Configuration.default.withDefaults
 
   protected def fetchWatchlistFromRss(client: HttpClient)(url: Uri): IO[Set[Item]] = {
-    val randomUUID = UUID.randomUUID().toString.take(5)
+    val randomUUID = UUID.randomUUID().toString.take(12)
     val jsonFormatUrl = url
       .withQueryParam("format", "json")
-      .withQueryParam(randomUUID, randomUUID)
+      .withQueryParam("cache_buster", randomUUID)
 
     client.httpRequest(Method.GET, jsonFormatUrl).map {
       case Left(UnexpectedStatus(s, _, _)) if s.code == 500 =>
