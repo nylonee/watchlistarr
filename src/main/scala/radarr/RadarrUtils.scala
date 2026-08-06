@@ -35,6 +35,7 @@ trait RadarrUtils extends RadarrConversions {
       item.getTmdbId.getOrElse(0L),
       config.radarrQualityProfileId,
       config.radarrRootFolder,
+      minimumAvailability = config.radarrAvailability,
       tags = config.radarrTagIds.toList
     )
 
@@ -76,7 +77,8 @@ trait RadarrUtils extends RadarrConversions {
 
   private def postToArr[T: Decoder](
       client: HttpClient
-  )(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] =
+  )(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] = {
+    logger.info(s"Sending JSON to Radarr: $payload")
     for {
       response <- EitherT(
         client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), Some(payload))
@@ -84,6 +86,7 @@ trait RadarrUtils extends RadarrConversions {
       maybeDecoded <- EitherT.pure[IO, Throwable](response.as[T])
       decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Radarr"))
     } yield decoded
+  }
 
   private def deleteToArr(
       client: HttpClient

@@ -52,8 +52,7 @@ class HttpClient {
       .withHeaders(
         Header.Raw(CIString("Accept"), "application/json"),
         Header.Raw(CIString("Content-Type"), "application/json"),
-        Header.Raw(CIString("User-Agent"), "watchlistarr/1.0"),
-        Header.Raw(CIString("Host"), host)
+        Header.Raw(CIString("User-Agent"), "watchlistarr/1.0")
       )
     val requestWithApiKey = apiKey.fold(baseRequest)(key =>
       baseRequest.withHeaders(

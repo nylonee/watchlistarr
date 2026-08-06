@@ -91,7 +91,8 @@ trait SonarrUtils extends SonarrConversions {
 
   private def postToArr[T: Decoder](
       client: HttpClient
-  )(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] =
+  )(baseUrl: Uri, apiKey: String, endpoint: String)(payload: Json): EitherT[IO, Throwable, T] = {
+    logger.info(s"Sending JSON to Sonarr: $payload")
     for {
       response <- EitherT(
         client.httpRequest(Method.POST, baseUrl / "api" / "v3" / endpoint, Some(apiKey), Some(payload))
@@ -99,4 +100,5 @@ trait SonarrUtils extends SonarrConversions {
       maybeDecoded <- EitherT.pure[IO, Throwable](response.as[T])
       decoded <- EitherT.fromOption[IO](maybeDecoded.toOption, new Throwable("Unable to decode response from Sonarr"))
     } yield decoded
+  }
 }

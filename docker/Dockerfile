@@ -1,13 +1,18 @@
-FROM hseeberger/scala-sbt:eclipse-temurin-11.0.14.1_1.6.2_2.13.8 as build
+FROM hseeberger/scala-sbt:eclipse-temurin-11.0.14.1_1.6.2_2.13.8 AS build
 
 WORKDIR /app
 
+# Copy project definition first for caching
+COPY project ./project
+COPY build.sbt ./
+
+# Copy the rest of the source code
 COPY . .
 
 RUN sbt update compile stage
 RUN chmod a+rx /app/target/universal/stage/bin/*
 
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:11-jre-jammy
 
 WORKDIR /app
 

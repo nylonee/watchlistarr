@@ -20,7 +20,18 @@ object Server extends IOApp {
     val configReader = FileAndSystemPropertyReader
     val httpClient   = new HttpClient
 
+    val version = IO {
+      val props = new java.util.Properties()
+      val stream = getClass.getClassLoader.getResourceAsStream("version.properties")
+      if (stream != null) {
+        try props.load(stream) finally stream.close()
+      }
+      props.getProperty("version", "unknown")
+    }
+
     for {
+      v             <- version
+      _             <- IO(logger.info(s"watchlistarr v$v starting"))
       initialConfig <- ConfigurationUtils.create(configReader, httpClient)
       configRef     <- Ref.of[IO, Configuration](initialConfig)
       result <- (

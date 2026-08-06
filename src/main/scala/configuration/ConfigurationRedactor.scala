@@ -21,6 +21,7 @@ object ConfigurationRedactor {
       |    radarrQualityProfileId: ${config.radarrConfiguration.radarrQualityProfileId}
       |    radarrRootFolder: ${config.radarrConfiguration.radarrRootFolder}
       |    radarrBypassIgnored: ${config.radarrConfiguration.radarrBypassIgnored}
+      |    radarrAvailability: ${config.radarrConfiguration.radarrAvailability.getOrElse("not set")}
       |    radarrTagIds: ${config.radarrConfiguration.radarrTagIds.mkString(",")}
       |
       |  PlexConfiguration:

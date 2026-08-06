@@ -34,7 +34,7 @@ object ConfigurationUtils {
       sonarrBypassIgnored    = configReader.getConfigOption(Keys.sonarrBypassIgnored).exists(_.toBoolean)
       sonarrSeasonMonitoring = configReader.getConfigOption(Keys.sonarrSeasonMonitoring).getOrElse("all")
       radarrConfig <- getRadarrConfig(configReader, client)
-      (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder, radarrTagIds) = radarrConfig
+      (radarrBaseUrl, radarrApiKey, radarrQualityProfileId, radarrRootFolder, radarrTagIds, radarrAvailability) = radarrConfig
       radarrBypassIgnored = configReader.getConfigOption(Keys.radarrBypassIgnored).exists(_.toBoolean)
       plexTokens          = getPlexTokens(configReader)
       skipFriendSync = configReader.getConfigOption(Keys.skipFriendSync).flatMap(_.toBooleanOption).getOrElse(false)
@@ -64,6 +64,7 @@ object ConfigurationUtils {
         radarrBaseUrl,
         radarrApiKey,
         radarrQualityProfileId,
+        radarrAvailability,
         radarrRootFolder,
         radarrBypassIgnored,
         radarrTagIds
@@ -159,7 +160,7 @@ object ConfigurationUtils {
   private def getRadarrConfig(
       configReader: ConfigurationReader,
       client: HttpClient
-  ): IO[(Uri, String, Int, String, Set[Int])] = {
+  ): IO[(Uri, String, Int, String, Set[Int], Option[String])] = {
     val apiKey = configReader.getConfigOption(Keys.radarrApiKey).getOrElse(throwError("Unable to find radarr API key"))
     val configuredUrl = configReader.getConfigOption(Keys.radarrBaseUrl)
     val possibleUrls: Seq[String] =
@@ -187,7 +188,8 @@ object ConfigurationUtils {
         .getConfigOption(Keys.radarrTags)
         .map(getTagIdsFromConfig(client, url, apiKey))
         .getOrElse(IO.pure(Set.empty[Int]))
-    } yield (url, apiKey, qualityProfileId, rootFolder, tagIds)
+      availability = configReader.getConfigOption(Keys.radarrAvailability).map(_.trim).filter(_.nonEmpty)
+    } yield (url, apiKey, qualityProfileId, rootFolder, tagIds, availability)
   }
 
   private def getTagIdsFromConfig(client: HttpClient, url: Uri, apiKey: String)(tags: String): IO[Set[Int]] = {

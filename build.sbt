@@ -3,7 +3,14 @@ ThisBuild / scalaVersion := "2.13.12"
 lazy val root = (project in file("."))
   .settings(
     name                 := "watchlistarr",
-    assembly / mainClass := Some("Server")
+    version              := "0.2.7",
+    assembly / mainClass := Some("Server"),
+    Compile / resourceGenerators += Def.task {
+      val file = (Compile / resourceManaged).value / "version.properties"
+      val content = s"version=${version.value}\n"
+      IO.write(file, content)
+      Seq(file)
+    }.taskValue
   )
 
 val caseInsensitiveVersion    = "1.4.0"

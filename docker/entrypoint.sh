@@ -35,6 +35,10 @@ if [ -n "$RADARR_ROOT_FOLDER" ]; then
   CMD+=("-Dradarr.rootFolder=$RADARR_ROOT_FOLDER")
 fi
 
+if [ -n "$RADARR_AVAILABILITY" ]; then
+  CMD+=("-Dradarr.availability=$RADARR_AVAILABILITY")
+fi
+
 if [ -n "$PLEX_WATCHLIST_URL_1" ]; then
   CMD+=("-Dplex.watchlist1=$PLEX_WATCHLIST_URL_1")
 fi

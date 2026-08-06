@@ -14,6 +14,7 @@ private[configuration] object Keys {
   val radarrBaseUrl        = "radarr.baseUrl"
   val radarrApiKey         = "radarr.apikey"
   val radarrQualityProfile = "radarr.qualityProfile"
+  val radarrAvailability   = "radarr.availability"
   val radarrRootFolder     = "radarr.rootFolder"
   val radarrBypassIgnored  = "radarr.bypassIgnored"
   val radarrTags           = "radarr.tags"
